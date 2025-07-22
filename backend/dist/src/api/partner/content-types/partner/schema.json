@@ -1,0 +1,17 @@
+{
+    "collectionName": "partners",
+    "info": {
+        "singularName": "partner",
+        "pluralName": "partners",
+        "displayName": "Partner"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "name": { "type": "string", "required": true },
+        "logo": { "type": "media", "multiple": false, "required": true },
+        "url": { "type": "string" },
+        "description": { "type": "text" }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "collectionName": "company_infos",
+    "info": {
+        "singularName": "company-info",
+        "pluralName": "company-infos",
+        "displayName": "Company Info"
+    },
+    "options": {
+        "draftAndPublish": true
+    },
+    "attributes": {
+        "story": { "type": "text" },
+        "mission": { "type": "text" },
+        "vision": { "type": "text" }
+    }
+}
