@@ -1,10 +1,7 @@
-import { useTranslation } from 'next-i18next';
-
 export default function ProductsPage() {
-  const { t } = useTranslation('common');
   return (
     <main className="w-full min-h-screen px-0 py-0 bg-white text-brand-primary">
-      <h1 className="text-3xl font-bold mb-6">{t('products')}</h1>
+      <h1 className="text-3xl font-bold mb-6">Products</h1>
       <section className="mb-20">
         <h2 className="text-4xl font-extrabold text-center text-tactlink-primary mb-12 tracking-tight">Features</h2>
         <div className="max-w-3xl mx-auto space-y-28">

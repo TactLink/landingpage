@@ -27,6 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Placeholder: just return success
     return res.status(200).json({ message: 'Demo request received', to: countryEmail });
   } catch (error) {
-    return res.status(500).json({ message: 'Error processing request', error: error.message });
+    const message = error instanceof Error ? error.message : String(error);
+    return res.status(500).json({ message: 'Error processing request', error: message });
   }
 } 

@@ -1,10 +1,7 @@
-import { useTranslation } from 'next-i18next';
-
 export default function AboutPage() {
-  const { t } = useTranslation('common');
   return (
     <main className="w-full min-h-screen px-0 py-0 bg-white text-brand-primary">
-      <h1 className="text-4xl font-extrabold text-center text-tactlink-primary mb-12 tracking-tight">{t('about')}</h1>
+      <h1 className="text-4xl font-extrabold text-center text-tactlink-primary mb-12 tracking-tight">About</h1>
       <section className="mb-20">
         <div className="max-w-3xl mx-auto bg-tactlink-light rounded-2xl shadow-lg p-10 flex flex-col items-center mb-16">
           <h2 className="text-2xl font-bold text-tactlink-primary mb-4 text-center">Our Story</h2>

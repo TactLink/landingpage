@@ -1,11 +1,9 @@
 "use client";
 
-import { useTranslation } from 'next-i18next';
 import Image from "next/image";
 import { useState } from "react";
 
 export default function HomePage() {
-  const { t } = useTranslation('common');
   // Placeholder partners
   const partners = [
     { id: 'sbf', name: 'SBF', logo: '/Logo-SBF.svg', url: 'https://www.sbf.org.sg/' },

@@ -1,17 +1,15 @@
 "use client";
-import { useTranslation } from 'next-i18next';
 
 export default function Footer() {
-  const { t } = useTranslation('common');
   return (
     <footer className="w-full bg-brand-primary text-brand-white py-8 mt-16">
       <div className="max-w-7xl mx-auto px-4 flex flex-col gap-6">
         {/* Footer navigation menu */}
         <nav className="flex flex-col md:flex-row justify-center md:justify-start gap-4 md:gap-8 mb-4">
-          <a href="/" className="hover:underline text-sm">{t('home')}</a>
-          <a href="/about" className="hover:underline text-sm">{t('about')}</a>
-          <a href="/products" className="hover:underline text-sm">{t('products')}</a>
-          <a href="/request-demo" className="bg-brand-accent text-brand-primary px-4 py-2 rounded hover:bg-brand-primary hover:text-brand-white transition font-bold text-sm">{t('requestDemo')}</a>
+          <a href="/" className="hover:underline text-sm">Home</a>
+          <a href="/about" className="hover:underline text-sm">About</a>
+          <a href="/products" className="hover:underline text-sm">Products</a>
+          <a href="/request-demo" className="bg-brand-accent text-brand-primary px-4 py-2 rounded hover:bg-brand-primary hover:text-brand-white transition font-bold text-sm">Request Demo</a>
         </nav>
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
