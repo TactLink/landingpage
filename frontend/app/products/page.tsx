@@ -68,7 +68,7 @@ export default function ProductsPage() {
                     </button>
                   </div>
                 </div>
-              </div>
+            </div>
             </div>
           </div>
           {/* For Associations & Events */}
@@ -149,8 +149,8 @@ export default function ProductsPage() {
                     </button>
                   </div>
                 </div>
-              </div>
-            </div>
+          </div>
+          </div>
           </div>
         </div>
       </section>
