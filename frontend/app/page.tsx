@@ -6,8 +6,8 @@ import { useState } from "react";
 export default function HomePage() {
   // Placeholder partners
   const partners = [
-    { id: 'sbf', name: 'SBF', logo: '/Logo-SBF.svg', url: 'https://www.sbf.org.sg/' },
-    { id: 'ybln', name: 'YBLN', logo: '/Logo-YBLN.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
+    { id: 'sbf', name: 'SBF', logo: '/logo-sbf.svg', url: 'https://www.sbf.org.sg/' },
+    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
   ];
   // FAQ
   const faqs = [
