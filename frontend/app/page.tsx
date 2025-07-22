@@ -5,6 +5,15 @@ import { useState, useRef, useEffect } from "react";
 
 export default function HomePage() {
   // Placeholder partners
+  const originalPartners = [
+    { id: 'sbf', name: 'SBF', logo: '/logo-sbf.svg', url: 'https://www.sbf.org.sg/' },
+    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
+    { id: 'jci', name: 'JCI', logo: '/logo-jci.jpg', url: 'https://jci.cc/' },
+    { id: 'lions', name: 'Lions', logo: '/logo-lions.jpg', url: 'https://www.lionsclubs.org/' },
+    { id: 'sbfa', name: 'SBFA', logo: '/logo-sbfa.jpg', url: 'https://sbfa.org.sg/' },
+    { id: 'toastmaster', name: 'Toastmaster', logo: '/logo-toastmaster.png', url: 'https://www.toastmasters.org/' },
+  ];
+  // Use only the original partners array:
   const partners = [
     { id: 'sbf', name: 'SBF', logo: '/logo-sbf.svg', url: 'https://www.sbf.org.sg/' },
     { id: 'ybln', name: 'YBLN', logo: '/logo-ybln.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
@@ -23,32 +32,7 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const partnerBarRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return; // Only run on client
-    if (window.innerWidth >= 768) return; // Only auto-scroll on mobile
-
-    const el = partnerBarRef.current;
-    if (!el) return;
-
-    let animationFrame: number;
-    const scrollStep = 1;
-
-    function animate() {
-      if (!el) return;
-      if (el.scrollWidth > el.clientWidth) {
-        if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
-          el.scrollLeft = 0; // Loop back to start
-        } else {
-          el.scrollLeft += scrollStep;
-        }
-      }
-      animationFrame = requestAnimationFrame(animate);
-    }
-
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, []);
+  // Remove the entire useEffect for auto-scroll and related debug code.
 
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
@@ -79,25 +63,30 @@ export default function HomePage() {
       {/* PARTNERS BAR */}
       <section className="w-full bg-gradient-to-b from-[#cfa086] to-[#cfa08600] py-6 px-0">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center text-black font-semibold text-[16px] uppercase tracking-widest mb-2 ">Our Key Partnerships</div>
-          <div ref={partnerBarRef} className="flex justify-center items-center gap-4 overflow-x-auto scrollbar-hide py-2 relative snap-x snap-mandatory touch-pan-x scroll-smooth md:pointer-events-auto pointer-events-none">
-            {/* Left fade boxes */}
-            <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
-            <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
-            <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
-            {/* Partner logos */}
-            {partners.map((partner) => (
-              <div key={partner.id} className="flex flex-col items-center w-24 h-24 justify-center snap-center">
-                <a href={partner.url || '#'} target={partner.url ? '_blank' : undefined} rel={partner.url ? 'noopener noreferrer' : undefined} className="bg-white rounded-xl shadow p-0 flex items-center justify-center w-24 h-24">
-                  <img src={partner.logo} alt={partner.name} className="h-16 w-16 object-contain" />
-                </a>
-              </div>
-            ))}
-            {/* Right fade boxes */}
-            <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
-            <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
-            <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
-          </div>
+          <div className="text-center text-black font-semibold text-[16px] uppercase tracking-widest mb-2">Our Key Partnerships</div>
+          <div className="md:hidden text-center text-xs text-gray-500 mb-2">Scroll to see our partners</div>
+        </div>
+        <div
+          ref={partnerBarRef}
+          className="w-screen flex justify-start items-center gap-4 overflow-x-auto scrollbar-hide py-2 relative snap-x snap-mandatory scroll-smooth touch-pan-x md:pointer-events-auto"
+          style={{ minWidth: 0, position: 'relative', left: '50%', right: '50%', transform: 'translateX(-50%)' }}
+        >
+          {/* Left fade boxes */}
+          <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
+          <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
+          <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
+          {/* Partner logos */}
+          {partners.map((partner, idx) => (
+            <div key={idx} className="flex flex-col items-center w-24 h-24 justify-center">
+              <a href={partner.url || '#'} target={partner.url ? '_blank' : undefined} rel={partner.url ? 'noopener noreferrer' : undefined} className="bg-white rounded-xl shadow p-0 flex items-center justify-center w-24 h-24">
+                <img src={partner.logo} alt={partner.name} className="h-16 w-16 object-contain" />
+              </a>
+            </div>
+          ))}
+          {/* Right fade boxes */}
+          <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
+          <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
+          <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
         </div>
       </section>
 
