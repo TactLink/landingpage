@@ -68,8 +68,8 @@ export default function HomePage() {
         </div>
         <div
           ref={partnerBarRef}
-          className="w-screen flex justify-start items-center gap-4 overflow-x-auto scrollbar-hide py-2 relative snap-x snap-mandatory scroll-smooth touch-pan-x md:pointer-events-auto"
-          style={{ minWidth: 0, position: 'relative', left: '50%', right: '50%', transform: 'translateX(-50%)' }}
+          className="flex justify-start items-center gap-4 overflow-x-auto scrollbar-hide py-2 relative touch-pan-x scroll-smooth md:pointer-events-auto w-screen left-1/2 -translate-x-1/2 md:w-full md:left-0 md:translate-x-0 md:max-w-7xl md:mx-auto"
+          style={{ minWidth: 0 }}
         >
           {/* Left fade boxes */}
           <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
