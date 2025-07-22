@@ -15,8 +15,8 @@ export default function HomePage() {
   ];
   // Use only the original partners array:
   const partners = [
-    { id: 'sbf', name: 'SBF', logo: '/logo-sbf.svg', url: 'https://www.sbf.org.sg/' },
-    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
+    { id: 'sbf', name: 'SBF', logo: '/logo-sbf1.svg', url: 'https://www.sbf.org.sg/' },
+    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln1.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
     { id: 'jci', name: 'JCI', logo: '/logo-jci.jpg', url: 'https://jci.cc/' },
     { id: 'lions', name: 'Lions', logo: '/logo-lions.jpg', url: 'https://www.lionsclubs.org/' },
     { id: 'sbfa', name: 'SBFA', logo: '/logo-sbfa.jpg', url: 'https://sbfa.org.sg/' },
