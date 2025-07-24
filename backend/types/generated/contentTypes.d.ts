@@ -410,66 +410,6 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
-export interface ApiCompanyInfoCompanyInfo extends Struct.CollectionTypeSchema {
-  collectionName: 'company_infos';
-  info: {
-    displayName: 'Company Info';
-    pluralName: 'company-infos';
-    singularName: 'company-info';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::company-info.company-info'
-    > &
-      Schema.Attribute.Private;
-    mission: Schema.Attribute.Text;
-    publishedAt: Schema.Attribute.DateTime;
-    story: Schema.Attribute.Text;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    vision: Schema.Attribute.Text;
-  };
-}
-
-export interface ApiCountryEmailCountryEmail
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'country_emails';
-  info: {
-    displayName: 'Country Email';
-    pluralName: 'country-emails';
-    singularName: 'country-email';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    country: Schema.Attribute.String & Schema.Attribute.Required;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::country-email.country-email'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   collectionName: 'faqs';
   info: {
@@ -490,36 +430,6 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     question: Schema.Attribute.String & Schema.Attribute.Required;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiFeatureFeature extends Struct.CollectionTypeSchema {
-  collectionName: 'features';
-  info: {
-    displayName: 'Feature';
-    pluralName: 'features';
-    singularName: 'feature';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    description: Schema.Attribute.Text;
-    icon: Schema.Attribute.Media;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::feature.feature'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -547,44 +457,14 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
       'api::partner.partner'
     > &
       Schema.Attribute.Private;
-    logo: Schema.Attribute.Media & Schema.Attribute.Required;
+    logo: Schema.Attribute.Media<'images' | 'videos' | 'audios' | 'files'> &
+      Schema.Attribute.Required;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     url: Schema.Attribute.String;
-  };
-}
-
-export interface ApiTeamMemberTeamMember extends Struct.CollectionTypeSchema {
-  collectionName: 'team_members';
-  info: {
-    displayName: 'Team Member';
-    pluralName: 'team-members';
-    singularName: 'team-member';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    bio: Schema.Attribute.Text;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::team-member.team-member'
-    > &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    photo: Schema.Attribute.Media;
-    publishedAt: Schema.Attribute.DateTime;
-    role: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
   };
 }
 
@@ -1098,12 +978,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
-      'api::company-info.company-info': ApiCompanyInfoCompanyInfo;
-      'api::country-email.country-email': ApiCountryEmailCountryEmail;
       'api::faq.faq': ApiFaqFaq;
-      'api::feature.feature': ApiFeatureFeature;
       'api::partner.partner': ApiPartnerPartner;
-      'api::team-member.team-member': ApiTeamMemberTeamMember;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

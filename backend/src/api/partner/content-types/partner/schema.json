@@ -1,4 +1,5 @@
 {
+  "kind": "collectionType",
   "collectionName": "partners",
   "info": {
     "singularName": "partner",
@@ -8,10 +9,28 @@
   "options": {
     "draftAndPublish": true
   },
+  "pluginOptions": {},
   "attributes": {
-    "name": { "type": "string", "required": true },
-    "logo": { "type": "media", "multiple": false, "required": true },
-    "url": { "type": "string" },
-    "description": { "type": "text" }
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "videos",
+        "audios",
+        "files"
+      ]
+    },
+    "url": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
   }
-} 
+}

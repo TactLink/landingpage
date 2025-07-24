@@ -2,26 +2,12 @@
 
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { fetchStrapiCollection, STRAPI_URL } from "../lib/strapi";
 
 export default function HomePage() {
   // Placeholder partners
-  const originalPartners = [
-    { id: 'sbf', name: 'SBF', logo: '/logo-sbf.svg', url: 'https://www.sbf.org.sg/' },
-    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
-    { id: 'jci', name: 'JCI', logo: '/logo-jci.jpg', url: 'https://jci.cc/' },
-    { id: 'lions', name: 'Lions', logo: '/logo-lions.jpg', url: 'https://www.lionsclubs.org/' },
-    { id: 'sbfa', name: 'SBFA', logo: '/logo-sbfa.jpg', url: 'https://sbfa.org.sg/' },
-    { id: 'toastmaster', name: 'Toastmaster', logo: '/logo-toastmaster.png', url: 'https://www.toastmasters.org/' },
-  ];
-  // Use only the original partners array:
-  const partners = [
-    { id: 'sbf', name: 'SBF', logo: '/logo-sbf1.svg', url: 'https://www.sbf.org.sg/' },
-    { id: 'ybln', name: 'YBLN', logo: '/logo-ybln1.jpeg', url: 'https://www.sbf.org.sg/about-us/our-communities/business-networks/young-business-leaders-network' },
-    { id: 'jci', name: 'JCI', logo: '/logo-jci.jpg', url: 'https://jci.cc/' },
-    { id: 'lions', name: 'Lions', logo: '/logo-lions.jpg', url: 'https://www.lionsclubs.org/' },
-    { id: 'sbfa', name: 'SBFA', logo: '/logo-sbfa.jpg', url: 'https://sbfa.org.sg/' },
-    { id: 'toastmaster', name: 'Toastmaster', logo: '/logo-toastmaster.png', url: 'https://www.toastmasters.org/' },
-  ];
+  const [partners, setPartners] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   // FAQ
   const faqs = [
     { q: "What is TactLink?", a: "TactLink is a smart directory and networking platform for associations and events." },
@@ -31,6 +17,18 @@ export default function HomePage() {
   ];
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const partnerBarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    async function loadPartners() {
+      try {
+        const data = await fetchStrapiCollection("partners", { populate: "*" });
+        setPartners(data);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPartners();
+  }, []);
 
   // Remove the entire useEffect for auto-scroll and related debug code.
 
@@ -68,25 +66,32 @@ export default function HomePage() {
         </div>
         <div
           ref={partnerBarRef}
-          className="flex justify-start items-center gap-4 overflow-x-auto scrollbar-hide py-2 relative touch-pan-x scroll-smooth md:pointer-events-auto w-screen left-1/2 -translate-x-1/2 md:w-full md:left-0 md:translate-x-0 md:max-w-7xl md:mx-auto"
+          className="flex items-center gap-4 overflow-x-auto scrollbar-hide py-2 w-full md:justify-center md:max-w-7xl md:mx-auto"
           style={{ minWidth: 0 }}
         >
-          {/* Left fade boxes */}
-          <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
-          <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
-          <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
-          {/* Partner logos */}
-          {partners.map((partner, idx) => (
-            <div key={idx} className="flex flex-col items-center w-24 h-24 justify-center">
-              <a href={partner.url || '#'} target={partner.url ? '_blank' : undefined} rel={partner.url ? 'noopener noreferrer' : undefined} className="bg-white rounded-xl shadow p-0 flex items-center justify-center w-24 h-24">
-                <img src={partner.logo} alt={partner.name} className="h-16 w-16 object-contain" />
-              </a>
-            </div>
-          ))}
-          {/* Right fade boxes */}
-          <div className="w-24 h-24 rounded-xl bg-white opacity-80" />
-          <div className="w-24 h-24 rounded-xl bg-white opacity-50" />
-          <div className="w-24 h-24 rounded-xl bg-white opacity-20" />
+          {loading ? (
+            <div className="text-gray-400 text-center w-full">Loading partners...</div>
+          ) : (
+            partners.map((partner, idx) => {
+              const logoUrl = partner.logo?.url
+                ? partner.logo.url.startsWith("http")
+                  ? partner.logo.url
+                  : `${STRAPI_URL}${partner.logo.url}`
+                : undefined;
+              return (
+                <div key={partner.id || idx} className="flex flex-col items-center w-24 h-24 justify-center">
+                  <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow p-0 flex items-center justify-center w-24 h-24">
+                    {logoUrl ? (
+                      <img src={logoUrl} alt={partner.name || 'Partner'} className="h-16 w-16 object-contain" />
+                    ) : (
+                      <span className="text-xs text-gray-400">No Logo</span>
+                    )}
+                  </a>
+                </div>
+              );
+            })
+          )}
+          <div className="w-12 h-24 rounded-xl bg-white opacity-10 hidden md:block" />
         </div>
       </section>
 
