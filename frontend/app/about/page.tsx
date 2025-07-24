@@ -26,14 +26,6 @@ export default function AboutPage() {
             <p className="mb-4 text-black text-lg">Traditional networking was broken. Information was static, easily lost, and failed to bridge the gap for international collaboration. We saw colleagues and friends, full of potential, unable to connect effectively simply because the tools were outdated.</p>
             <p className="mb-4 text-black text-lg">This shared frustration became our inspiration. We envisioned a world where networking was seamless, intelligent, and dynamic. That vision is TactLink—a digital solution born from a real-world need, built for a global community of forward-thinkers.</p>
           </div>
-          {/* Image Column */}
-          <div className="flex-1 flex justify-center items-center min-h-[300px]">
-            <div className="w-[320px] h-[320px] md:w-[400px] md:h-[400px] bg-gray-200 rounded-3xl flex items-center justify-center">
-              {/* Image placeholder for Our Story */}
-              {/* <Image src="/about-story.png" alt="Our Story" fill className="object-cover rounded-3xl" /> */}
-              <span className="text-gray-400">[Image Placeholder]</span>
-            </div>
-          </div>
         </div>
       </section>
 

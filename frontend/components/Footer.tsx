@@ -29,7 +29,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-start gap-2 ml-auto">
           <div className="">&copy; {new Date().getFullYear()} <span className="text-brand-accent font-bold">TactLink</span>. All rights reserved.</div>
-          <div className="">123 Main Street, Bangkok, Thailand</div>
+          <div className="">14 Arumugam Road, #03-06 LTC Building C, Singapore 409959</div>
         </div>
         </div>
         {/* 1st column: copyright and address */}

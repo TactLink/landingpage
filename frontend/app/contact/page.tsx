@@ -24,10 +24,10 @@ export default function ContactPage() {
       <div className="max-w-4xl mx-auto px-4 flex flex-col md:gap-8 mt-8 pb-16">
         {/* HQ contact */}
         <div className="bg-white rounded-xl p-8 shadow flex flex-col gap-3">
-          <span className="font-bold text-xl text-brand-primary">Headquarters</span>
-          <span>Email: hq@tactlink.com</span>
-          <span>Tel: +66 2 123 4567</span>
-          <span>Address: 123 Main Street, Bangkok, Thailand 10110</span>
+          <span className="font-bold text-xl text-brand-primary">Headquarter (Singapore)</span>
+          <span>Email: info@tactlink.com</span>
+          <span>Tel: +65 87141991</span>
+          <span>Address: 14 Arumugam Road, #03-06 LTC Building C, Singapore 409959</span>
         </div>
         {/* Country contacts label */}
         <div className="font-bold text-lg text-brand-primary mt-8 mb-1">Country Contacts</div>
@@ -35,23 +35,19 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="bg-brand-light rounded-xl p-6 shadow flex flex-col gap-2">
             <span className="font-bold text-lg text-brand-primary">Thailand</span>
-            <span>Email: thailand@tactlink.com</span>
+            <span>Email: info.thailand@tactlink.com</span>
           </div>
           <div className="bg-brand-light rounded-xl p-6 shadow flex flex-col gap-2">
             <span className="font-bold text-lg text-brand-primary">Cambodia</span>
-            <span>Email: cambodia@tactlink.com</span>
+            <span>Email: info.cambodia@tactlink.com</span>
           </div>
           <div className="bg-brand-light rounded-xl p-6 shadow flex flex-col gap-2">
             <span className="font-bold text-lg text-brand-primary">Malaysia</span>
-            <span>Email: malaysia@tactlink.com</span>
+            <span>Email: info.malaysia@tactlink.com</span>
           </div>
           <div className="bg-brand-light rounded-xl p-6 shadow flex flex-col gap-2">
             <span className="font-bold text-lg text-brand-primary">Indonesia</span>
-            <span>Email: indonesia@tactlink.com</span>
-          </div>
-          <div className="bg-brand-light rounded-xl p-6 shadow flex flex-col gap-2">
-            <span className="font-bold text-lg text-brand-primary">Singapore</span>
-            <span>Email: singapore@tactlink.com</span>
+            <span>Email: infoindonesia@tactlink.com</span>
           </div>
         </div>
       </div>

@@ -410,6 +410,42 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiDemoRequestDemoRequest extends Struct.CollectionTypeSchema {
+  collectionName: 'demo_requests';
+  info: {
+    displayName: 'demo-request';
+    pluralName: 'demo-requests';
+    singularName: 'demo-request';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    country: Schema.Attribute.Enumeration<
+      ['Cambodia', 'Indonesia', 'Malaysia', 'Singapore', 'Thailand', 'Other']
+    >;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    email: Schema.Attribute.Email;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::demo-request.demo-request'
+    > &
+      Schema.Attribute.Private;
+    memberSize: Schema.Attribute.Integer;
+    name: Schema.Attribute.String;
+    organization: Schema.Attribute.String;
+    phone: Schema.Attribute.String;
+    publishedAt: Schema.Attribute.DateTime;
+    role: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   collectionName: 'faqs';
   info: {
@@ -978,6 +1014,7 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::demo-request.demo-request': ApiDemoRequestDemoRequest;
       'api::faq.faq': ApiFaqFaq;
       'api::partner.partner': ApiPartnerPartner;
       'plugin::content-releases.release': PluginContentReleasesRelease;

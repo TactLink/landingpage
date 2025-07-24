@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "demo_requests",
+  "info": {
+    "singularName": "demo-request",
+    "pluralName": "demo-requests",
+    "displayName": "demo-request"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
+    },
+    "organization": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "memberSize": {
+      "type": "integer"
+    },
+    "country": {
+      "type": "enumeration",
+      "enum": [
+        "Cambodia",
+        "Indonesia",
+        "Malaysia",
+        "Singapore",
+        "Thailand",
+        "Other"
+      ]
+    }
+  }
+}
