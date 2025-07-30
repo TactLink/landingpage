@@ -3,17 +3,17 @@ export default ({ env }) => ({
     config: {
       provider: 'nodemailer',
       providerOptions: {
-        host: 'smtp.mailgun.org',
-        port: 587,
+        host: env('SMTP_HOST', 'smtp.mailgun.org'),
+        port: env.int('SMTP_PORT', 587),
         auth: {
-          user: 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org',
-          pass: '2ce89a481663acb2941897c622800bbb-45de04af-cfe22994',
+          user: env('SMTP_USERNAME', 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org'),
+          pass: env('SMTP_PASSWORD', '2ce89a481663acb2941897c622800bbb-45de04af-cfe22994'),
         },
-        secure: false,
+        secure: env.bool('SMTP_SECURE', false),
       },
       settings: {
-        defaultFrom: 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org',
-        defaultReplyTo: 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org',
+        defaultFrom: env('SMTP_FROM', 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org'),
+        defaultReplyTo: env('SMTP_REPLY_TO', 'tactlink@sandbox9731a2a5156a4eb99fb34cbb7d9f1be6.mailgun.org'),
       },
     },
   },
