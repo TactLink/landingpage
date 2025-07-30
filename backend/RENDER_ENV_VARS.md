@@ -29,6 +29,13 @@ TRANSFER_TOKEN_SALT=wLP9HzGJVfvcNuqX2Ei0Ldzcb2MI2ocJNMYJI/TeOnA=
 NODE_ENV=production
 ```
 
+### **Cloudinary (for persistent file storage):**
+```
+CLOUDINARY_NAME=your_cloud_name
+CLOUDINARY_KEY=your_api_key
+CLOUDINARY_SECRET=your_api_secret
+```
+
 ## 🚀 **Deployment Steps**
 
 1. **Go to Render Dashboard**
@@ -44,6 +51,7 @@ NODE_ENV=production
 - **No More Auto-Reset**: Database is persistent in Supabase
 - **Connection Pooling**: Better performance and reliability
 - **SSL Certificate Issues**: Fixed self-signed certificate problems
+- **Missing Files**: Uploaded files (logos, images) will be persistent in Cloudinary
 
 ## 🔍 **Verification**
 
@@ -51,8 +59,9 @@ After deployment, check:
 1. **Render Logs**: Look for "Database connection established"
 2. **Supabase Dashboard**: Check "Table Editor" for Strapi tables
 3. **Strapi Admin**: Access admin panel and create test content
-4. **Restart Test**: Restart Render service and verify data persists
+4. **File Uploads**: Upload a test image - should use Cloudinary URL
+5. **Restart Test**: Restart Render service and verify data persists
 
 ## 🎯 **Result**
 
-Your Strapi will now have persistent data storage! 🎉 
+Your Strapi will now have persistent data storage and file uploads! 🎉 
