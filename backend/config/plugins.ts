@@ -4,12 +4,12 @@ export default ({ env }) => ({
   
   upload: {
     config: {
-      provider: '@strapi/provider-upload-cloudinary',
-      providerOptions: {
+      provider: env('CLOUDINARY_NAME') ? '@strapi/provider-upload-cloudinary' : '@strapi/provider-upload-local',
+      providerOptions: env('CLOUDINARY_NAME') ? {
         cloud_name: env('CLOUDINARY_NAME'),
         api_key: env('CLOUDINARY_KEY'),
         api_secret: env('CLOUDINARY_SECRET'),
-      },
+      } : {},
       actionOptions: {
         upload: {},
         delete: {},
