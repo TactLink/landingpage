@@ -16,7 +16,6 @@ DATABASE_PORT=5432
 DATABASE_NAME=postgres
 DATABASE_USERNAME=postgres.jfudrxydxczsdsktqvcv
 DATABASE_PASSWORD=Xo1ZnmjfSseF6qNx
-DATABASE_SSL=true
 DATABASE_SCHEMA=public
 ```
 
@@ -44,6 +43,7 @@ NODE_ENV=production
 - **Data Persistence**: Your Strapi data will now survive Render restarts
 - **No More Auto-Reset**: Database is persistent in Supabase
 - **Connection Pooling**: Better performance and reliability
+- **SSL Certificate Issues**: Fixed self-signed certificate problems
 
 ## 🔍 **Verification**
 
