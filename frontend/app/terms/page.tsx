@@ -841,12 +841,6 @@ export default function TermsPage() {
             </div>
           </section>
         </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-sm text-gray-500 text-center">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
-        </div>
       </div>
     </main>
   );
