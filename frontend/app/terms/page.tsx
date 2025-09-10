@@ -42,13 +42,13 @@ export default function TermsPage() {
               <p>
                 <strong>"API"</strong> means application programming interfaces
                 including but not limited to:
-                <ul className="ml-6 mt-2 space-y-1">
-                  <li>Facebook – login;</li>
-                  <li>Google – login;</li>
-                  <li>Linkedin – login; and</li>
-                  <li>Firebase – Dynamic Links;</li>
-                </ul>
               </p>
+              <ul className="ml-6 mt-2 space-y-1">
+                <li>Facebook – login;</li>
+                <li>Google – login;</li>
+                <li>Linkedin – login; and</li>
+                <li>Firebase – Dynamic Links;</li>
+              </ul>
               <p>
                 <strong>"Contents"</strong> means such content including without
                 limitation contact list, business card list, email, data, user's
