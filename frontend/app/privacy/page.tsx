@@ -6,7 +6,7 @@ export default function PrivacyPage() {
           TACTLINK PRIVACY POLICY
         </h1>
 
-        <div className="mb-8 p-6 bg-blue-50 border-l-4 border-blue-400">
+        <div className="mb-8 p-6 bg-yellow-50 border-l-4 border-yellow-400">
           <p className="text-gray-700">
             Before using our Tactlink Application and Services, please carefully
             read our Privacy Policy. YOUR BROWSING, ACCESSING OR USING OUR
@@ -674,12 +674,6 @@ export default function PrivacyPage() {
               </p>
             </div>
           </section>
-        </div>
-
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-sm text-gray-500 text-center">
-            Last updated: {new Date().toLocaleDateString()}
-          </p>
         </div>
       </div>
     </main>
