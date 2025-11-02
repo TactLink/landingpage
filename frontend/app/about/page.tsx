@@ -1,4 +1,10 @@
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | TactLink",
+  description: "Learn about TactLink's mission to transform networking while contributing to a global solution. We believe in the power of connection and a sustainable future.",
+};
 
 export default function AboutPage() {
   return (

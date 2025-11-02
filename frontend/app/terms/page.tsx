@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Terms & Conditions | TactLink",
+  description: "Read the official Terms & Conditions for using TactLink. This page outlines user rights, responsibilities, and our intellectual property protections.",
+};
+
 export default function TermsPage() {
   return (
     <main className="w-full min-h-screen px-4 py-12 bg-white text-brand-primary">

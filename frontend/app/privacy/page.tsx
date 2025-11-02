@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | TactLink",
+  description: "Our Privacy Policy explains how TactLink collects, uses, and protects your data. We are committed to transparency as a data governor social platform.",
+};
+
 export default function PrivacyPage() {
   return (
     <main className="w-full min-h-screen px-4 py-12 bg-white text-brand-primary">

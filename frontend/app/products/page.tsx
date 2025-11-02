@@ -1,4 +1,10 @@
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Our Products | TactLink",
+  description: "Discover the TactLink platform, the integrated solution for modern networking. Manage contacts, empower your association, and enhance events with our smart tools.",
+};
 
 export default function ProductsPage() {
   return (

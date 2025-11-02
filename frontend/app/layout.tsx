@@ -12,8 +12,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "TactLink: Smart Directory & Association Networking Tools",
-  description: "Built for Associations. Network smarter with custom digital business cards and a powerful, searchable smart directory for all your members.",
+  title: "TactLink | Reimagine Networking with Smart Directory",
+  description: "TactLink's revolutionary smart directory and name card app transforms professional networking. Go paperless, foster collaboration, and grow your community. Learn more.",
   icons: {
     icon: "/tactlink_favicon.ico",
   },
