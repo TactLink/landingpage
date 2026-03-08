@@ -483,6 +483,19 @@ export interface ApiPartnerPartner extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
+    country: Schema.Attribute.Enumeration<
+      [
+        'Global',
+        'Thailand',
+        'Singapore',
+        'Indonesia',
+        'Malaysia',
+        'Cambodia',
+        'Vietnam',
+        'Philippines',
+      ]
+    > &
+      Schema.Attribute.DefaultTo<'Global'>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

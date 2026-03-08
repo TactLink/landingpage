@@ -31,6 +31,20 @@
     },
     "description": {
       "type": "text"
+    },
+    "country": {
+      "type": "enumeration",
+      "enum": [
+        "Global",
+        "Thailand",
+        "Singapore",
+        "Indonesia",
+        "Malaysia",
+        "Cambodia",
+        "Vietnam",
+        "Philippines"
+      ],
+      "default": "Global"
     }
   }
 }

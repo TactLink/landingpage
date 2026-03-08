@@ -5,8 +5,8 @@ import { useState, useRef, useEffect } from "react";
 import { fetchStrapiCollection, STRAPI_URL } from "../lib/strapi";
 
 export default function HomePage() {
-  // Placeholder partners
-  const [partners, setPartners] = useState<any[]>([]);
+  const [localPartners, setLocalPartners] = useState<any[]>([]);
+  const [globalPartners, setGlobalPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   // FAQ
   const faqs = [
@@ -18,16 +18,80 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const partnerBarRef = useRef<HTMLDivElement>(null);
 
+  // Crossfade keywords
+  const keywords = [
+    "Associations",
+    "Trade Groups",
+    "Institutions",
+    "Communities",
+    "Social Clubs"
+  ];
+  const [currentKeywordIndex, setCurrentKeywordIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setFade(false); // slide away
+      setTimeout(() => {
+        setCurrentKeywordIndex((prev) => (prev + 1) % keywords.length);
+        setFade(true); // slide in
+      }, 300); // Shorter out-animation delay
+    }, 3500); // Change word every 3.5 seconds
+
+    return () => clearInterval(timer);
+  }, [keywords.length]);
+
+  const scrollLocalPartners = (direction: 'left' | 'right') => {
+    if (partnerBarRef.current) {
+      const { scrollLeft, clientWidth } = partnerBarRef.current;
+      const scrollAmount = clientWidth * 0.8; // Scroll by 80% of container width
+      partnerBarRef.current.scrollTo({
+        left: direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   useEffect(() => {
     async function loadPartners() {
       try {
-        const data = await fetchStrapiCollection("partners", { populate: "*" });
-        setPartners(data);
+        setLoading(true);
+        // Get the current country from localStorage (default to Global)
+        const activeCountry = localStorage.getItem('tactlink_country') || "Global";
+
+        // 1. Fetch all partners without filtering
+        const data = await fetchStrapiCollection("partners", {
+          populate: "*"
+        });
+
+        // 2. Split them into local vs global
+        const locals: any[] = [];
+        const globals: any[] = [];
+
+        if (data && data.length > 0) {
+          data.forEach((p: any) => {
+            if (p.country === activeCountry) {
+              locals.push(p);
+            } else {
+              globals.push(p);
+            }
+          });
+        }
+
+        setLocalPartners(locals);
+        setGlobalPartners(globals);
+      } catch (err) {
+        console.error("Failed to load partners:", err);
       } finally {
         setLoading(false);
       }
     }
+
     loadPartners();
+
+    // Listen for country changes from Navbar
+    window.addEventListener('countryChange', loadPartners);
+    return () => window.removeEventListener('countryChange', loadPartners);
   }, []);
 
   // Remove the entire useEffect for auto-scroll and related debug code.
@@ -35,214 +99,898 @@ export default function HomePage() {
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
       {/* HERO SECTION */}
-      <section className="w-full bg-gradient-to-b from-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-24 py-16 md:py-28 relative overflow-hidden">
-        <div className="flex-1 z-10">
-          <h1 className="font-extrabold mb-4 md:mb-6 leading-tight text-[36px] md:text-[70px] text-white">Networking, <span className="text-brand-accent block md:inline">Reimagined</span></h1>
-          <h2 className="font-bold mb-4 md:mb-6 text-[20px] md:text-[30px] text-white">Smart directory & association networking tools</h2>
-          <p className="mb-6 md:mb-8 max-w-xl text-[14px] md:text-[16px] text-white">Move beyond paper business cards. We provide a dynamic digital business card and a smart directory to keep your professional network connected, searchable, and always up-to-date, fostering collaboration and growth.</p>
-          <a href="/products" className="w-full flex justify-center md:justify-start">
-            <span className="inline-block mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-              Try For Free
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-            </span>
-          </a>
+      <section className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-8 md:py-16 relative overflow-hidden min-h-[85vh]">
+        <div className="flex-1 z-10 md:pr-12">
+          {/* Eyebrow / Trust Signal */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
+            <span className="flex items-center text-yellow-400 text-sm">★★★★★</span>
+            <span className="text-sm font-medium text-white/90 tracking-wide">Trusted by 20+ leading organizations</span>
+          </div>
+
+          <h1 className="font-extrabold mb-4 leading-[1.1] text-[40px] md:text-[56px] lg:text-[64px] text-white min-h-[100px] md:min-h-[140px]">
+            The Ultimate Platform for{' '}
+            <div className="overflow-hidden inline-block align-bottom relative h-[48px] md:h-[64px] lg:h-[72px]">
+              <span
+                className={`text-brand-accent block transition-all duration-300 ease-in-out ${fade ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}
+              >
+                {keywords[currentKeywordIndex]}
+              </span>
+            </div>
+          </h1>
+          <p className="mb-8 max-w-xl text-[16px] md:text-[18px] text-white/90 leading-relaxed font-light">
+            Turn your static member list into a thriving, interactive digital community. Automate networking, streamline contact management, and unlock new value for your members instantly.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+            <a href="/products" className="w-full sm:w-auto flex justify-center">
+              <span className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
+                Start Free Trial
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+              </span>
+            </a>
+            <a href="/contact" className="w-full sm:w-auto flex justify-center text-white/80 hover:text-white font-medium px-4 py-3 transition-colors">
+              Request a Guided Demo
+            </a>
+          </div>
         </div>
-        <div className="flex-1 flex justify-center items-center mt-12 md:mt-0 z-10">
-          {/* Device mockup placeholder replaced with hero image */}
-          <div className="w-[320px] h-[640px] rounded-3xl flex items-center justify-center relative overflow-hidden">
-            <Image src="/hero.png" alt="Hero" layout="fill" objectFit="cover" className="rounded-3xl" priority />
+
+        <div className="flex-1 flex justify-center items-center mt-12 md:mt-0 w-full relative h-[550px] md:h-[600px] group [perspective:1000px] scale-90 lg:scale-100 origin-center md:origin-right">
+          {/* Background glowing orb */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-brand-accent opacity-20 rounded-full blur-[120px] animate-pulse"></div>
+
+          {/* Web Dashboard Replica (Background) */}
+          <div className="hidden md:flex absolute right-[-60px] lg:right-[-100px] top-1/2 -translate-y-1/2 w-[600px] lg:w-[700px] h-[400px] lg:h-[450px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-10 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
+            {/* Top Nav */}
+            <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-[#2a3166] rounded flex items-center justify-center transform rotate-45"><div className="w-2 h-2 bg-yellow-400 rounded-sm"></div></div>
+                  <span className="font-bold text-gray-800 text-sm">Platform Admin</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-48 h-8 rounded bg-gray-100 flex items-center px-2 border border-gray-200">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                  <span className="text-gray-400 text-xs ml-2">Search</span>
+                </div>
+                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-xs text-gray-600 font-bold ml-2">U</div>
+              </div>
+            </div>
+
+            <div className="flex flex-1 overflow-hidden">
+              {/* Sidebar */}
+              <div className="w-48 h-full border-r border-gray-200 bg-[#fafafa] p-4 flex flex-col gap-6 shrink-0 hidden lg:flex">
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-2 font-semibold">General</div>
+                  <div className="flex items-center gap-2 bg-[#f1f5f9] text-gray-800 p-2 rounded-md font-medium text-xs mb-1">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2z" /></svg>
+                    Dashboard
+                  </div>
+                  <div className="flex items-center gap-2 text-gray-500 p-2 rounded-md font-medium text-xs hover:bg-gray-100 cursor-pointer">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    Users
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] text-gray-400 uppercase tracking-wider mb-2 font-semibold">Other</div>
+                  <div className="flex items-center justify-between text-gray-500 p-2 rounded-md font-medium text-xs hover:bg-gray-100 cursor-pointer">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                      Settings
+                    </div>
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Main Content */}
+              <div className="flex-1 p-6 bg-white overflow-hidden flex flex-col">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-900">Dashboard</h3>
+                  <div className="bg-[#1e255a] text-white px-4 py-1.5 rounded text-xs font-semibold cursor-pointer">Download</div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex gap-4 mb-6 border-b border-gray-100 pb-2">
+                  <div className="bg-gray-100 text-gray-800 px-3 py-1 rounded text-[10px] font-bold">Overview</div>
+                  <div className="text-gray-400 px-3 py-1 text-[10px] font-semibold">Analytics</div>
+                  <div className="text-gray-400 px-3 py-1 text-[10px] font-semibold">Reports</div>
+                </div>
+
+                {/* Dashboard Widgets */}
+                <div className="flex gap-4 flex-1 overflow-hidden">
+                  {/* Chart Widget */}
+                  <div className="flex-[2] border border-gray-200 rounded-xl p-4 flex flex-col relative overflow-hidden group">
+                    <div className="text-xs font-bold text-gray-800 mb-4">Overview</div>
+                    <div className="flex-1 border-l border-b border-gray-200 relative flex items-end justify-between px-2 pt-4">
+                      {/* Fake Y Axis */}
+                      <div className="absolute left-[-20px] top-0 bottom-0 flex flex-col justify-between text-[8px] text-gray-400 py-1">
+                        <span>600</span><span>450</span><span>300</span><span>150</span><span>0</span>
+                      </div>
+                      {/* Bars */}
+                      {[15, 45, 52, 85, 20, 25, 22, 28, 25, 30, 60, 60].map((h, i) => (
+                        <div key={i} className="w-5 bg-[#1e255a] rounded-t-sm group-hover:bg-[#2cbdf4] transition-colors duration-500 delay-[calculate-from-index]" style={{ height: `${h}%`, transitionDelay: `${i * 30}ms` }}></div>
+                      ))}
+                    </div>
+                    <div className="flex justify-between text-[8px] text-gray-400 mt-2 px-2">
+                      <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span><span>Jul</span><span>Aug</span><span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                    </div>
+                  </div>
+
+                  {/* List Widget */}
+                  <div className="flex-1 border border-gray-200 rounded-xl p-4 flex flex-col">
+                    <div className="text-xs font-bold text-gray-800 mb-1">Recent new members</div>
+                    <div className="text-[9px] text-gray-500 mb-4">56 users joined your association this month</div>
+                    <div className="flex flex-col gap-3 flex-1 overflow-hidden">
+                      {[
+                        { i: 'OM', n: 'Olivia Martin', e: 'olivia.martin@email.com' },
+                        { i: 'JL', n: 'Jackson Lee', e: 'jackson.lee@email.com' },
+                        { i: 'IN', n: 'Isabella Nguyen', e: 'isabella.nguyen@email.com' },
+                        { i: 'WK', n: 'William Kim', e: 'will@email.com' }
+                      ].map((u, i) => (
+                        <div key={i} className="flex gap-2 items-center">
+                          <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-[8px] font-bold text-gray-600 shrink-0">{u.i}</div>
+                          <div className="overflow-hidden">
+                            <div className="text-[10px] font-bold text-gray-900 truncate">{u.n}</div>
+                            <div className="text-[9px] text-gray-400 truncate">{u.e}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Floating Mobile UI Mockup (Mini Program Replica) */}
+          <div className="relative md:absolute md:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] h-[600px] md:w-[320px] md:h-[650px] bg-[#ffffff] rounded-[48px] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[12px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col flex-shrink-0 overflow-hidden group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100">
+
+            {/* Dynamic Island / Camera Notch */}
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100] flex items-center justify-end px-2">
+              <div className="w-2.5 h-2.5 bg-[#0a0a0a] rounded-full border border-white/5"></div>
+            </div>
+
+            {/* Dark Blue Header */}
+            <div className="w-full bg-[#1e255a] pt-12 pb-16 px-6 relative rounded-b-[36px] shadow-sm overflow-hidden z-20">
+              {/* Subtle background pattern to match screenshot */}
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
+              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M6 12L12 6L18 12L12 18L6 12Z\' fill=\'white\'/%3E%3Cpath d=\'M0 0H24V24H0V0Z\' fill=\'transparent\'/%3E%3C/svg%3E")', backgroundSize: '40px 40px', backgroundPosition: 'center' }}></div>
+
+              <div className="flex justify-between items-center mb-6 relative z-10">
+                <svg className="w-5 h-5 text-brand-accent cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                <svg className="w-6 h-6 text-brand-accent cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+              </div>
+              <h2 className="text-white text-[28px] font-bold mb-3 tracking-wide relative z-10">Hello, John!</h2>
+              <p className="text-white/90 text-[12px] leading-relaxed pr-4 relative z-10">
+                Welcome to the mini program page where you can interact with different associations, giving you instant access to any services, content, and tools in one place.
+              </p>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex-1 px-5 pt-8 pb-32 overflow-hidden bg-white">
+              <h3 className="text-gray-900 font-bold mb-4 text-[15px] tracking-tight">Here are your associations:</h3>
+
+              <div className="grid grid-cols-2 gap-3">
+                {/* Card 1: Global Trade Council (Yellowish) */}
+                <div className="bg-[#fef9c3] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-square shadow-sm hover:shadow-md transition cursor-pointer relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-yellow-400/5 group-hover:bg-yellow-400/20 transition"></div>
+                  {/* Subtle globe/shield watermark */}
+                  <svg className="absolute w-28 h-28 text-yellow-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
+                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto z-10 text-center">Global Trade Council</span>
+                </div>
+
+                {/* Card 2: Founders Network (Bluish) */}
+                <div className="bg-[#b4c6ff] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-square shadow-sm hover:shadow-md transition cursor-pointer group">
+                  <div className="font-black text-[28px] text-[#2cbdf4] tracking-tighter mb-1 mt-auto group-hover:scale-110 transition">FN<span className="text-[#f15e61]">.</span></div>
+                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto text-center">Founders Network</span>
+                </div>
+
+                {/* Card 3: Film Club (Greenish) */}
+                <div className="bg-[#b9e5aa] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-[9/10] shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                  <div className="absolute uppercase text-white/30 font-black text-4xl rotate-12 -translate-y-4 font-mono group-hover:scale-110 transition">FILM<br />CLUB</div>
+                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto z-10 text-center">Film Club</span>
+                </div>
+
+                {/* Vertical Wrapper for Card 4 & 5 */}
+                <div className="flex flex-col gap-3">
+                  {/* Card 4: Health Society (Peach) */}
+                  <div className="bg-[#ffdac1] rounded-[24px] p-3 flex flex-col items-center justify-center h-[90px] shadow-sm hover:shadow-md transition cursor-pointer group">
+                    <svg className="w-10 h-10 text-[#f15e61] mb-1 group-hover:scale-110 transition shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /><path d="M11 7h2v3h3v2h-3v3h-2v-3H8v-2h3z" fill="white" /></svg>
+                    <span className="font-bold text-[#1a1f4c] text-[12px] text-center leading-tight">Health Society</span>
+                  </div>
+
+                  {/* Card 5: Add New (Grey) */}
+                  <div className="bg-[#e2e8f0] rounded-[20px] p-2 flex flex-col items-center justify-center flex-1 shadow-inner hover:bg-gray-300 transition cursor-pointer border border-transparent border-t-white/50">
+                    <svg className="w-6 h-6 text-gray-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                    <span className="text-gray-500 text-[12px] font-medium">Add new</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Floating Nav Bar */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[92%] h-[68px] bg-[#4a558a] rounded-[34px] flex justify-between items-center px-[6px] shadow-[0_20px_40px_rgba(0,0,0,0.3)] z-30">
+              <div className="flex flex-col items-center justify-center w-[25%] h-[56px] bg-white rounded-[28px] text-[#4a558a] shadow-sm cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                <span className="text-[10px] font-bold tracking-tight">Portal</span>
+              </div>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                <span className="text-[10px] font-medium tracking-tight">Chat</span>
+              </div>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                <span className="text-[10px] font-medium tracking-tight">Events</span>
+              </div>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                <span className="text-[10px] font-medium tracking-tight">Tickets</span>
+              </div>
+            </div>
           </div>
         </div>
         {/* Decorative background shapes */}
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-brand-accent opacity-20 rounded-full blur-3xl z-0" />
-        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-brand-accent opacity-10 rounded-full blur-3xl z-0" />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-accent opacity-10 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none z-0" />
       </section>
 
-      {/* PARTNERS BAR */}
-      <section className="w-full bg-gradient-to-b from-[#cfa086] to-[#cfa08600] py-6 px-0">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center text-black font-semibold text-[16px] uppercase tracking-widest mb-2">Our Key Partnerships</div>
-          <div className="md:hidden text-center text-xs text-gray-500 mb-2">Scroll to see our partners</div>
+      {/* THE WHY SECTION */}
+      <section className="w-full py-24 px-6 bg-white border-b border-gray-100">
+        <div className="max-w-5xl mx-auto text-center mb-16">
+          <h2 className="font-extrabold text-[36px] md:text-[48px] text-brand-primary mb-6 leading-tight">
+            Stop managing your members on spreadsheets.
+          </h2>
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            Traditional associations rely on scattered tools—Excel sheets for directories, WhatsApp for announcements, and manual bank transfers for renewals. TactLink unifies your entire community infrastructure into one seamless digital ecosystem.
+          </p>
         </div>
-        <div
-          ref={partnerBarRef}
-          className="flex items-center gap-4 overflow-x-auto scrollbar-hide py-2 w-full md:justify-center md:max-w-7xl md:mx-auto"
-          style={{ minWidth: 0 }}
-        >
-          {loading ? (
-            <div className="text-gray-400 text-center w-full">Loading partners...</div>
-          ) : (
-            partners.map((partner, idx) => {
-              const logoUrl = partner.logo?.url
-                ? partner.logo.url.startsWith("http")
-                  ? partner.logo.url
-                  : `${STRAPI_URL}${partner.logo.url}`
-                : undefined;
-              return (
-                <div key={partner.id || idx} className="flex flex-col items-center w-24 h-24 justify-center">
-                  <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow p-0 flex items-center justify-center w-24 h-24">
-                    {logoUrl ? (
-                      <img src={logoUrl} alt={partner.name || 'Partner'} className="h-16 w-16 object-contain" />
-                    ) : (
-                      <span className="text-xs text-gray-400">No Logo</span>
-                    )}
-                  </a>
-                </div>
-              );
-            })
-          )}
-          <div className="w-12 h-24 rounded-xl bg-white opacity-10 hidden md:block" />
+
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* The Old Way */}
+          <div className="bg-red-50 rounded-3xl p-8 md:p-10 border border-red-100 relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-2 h-full bg-red-400"></div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">The Old Way</h3>
+            </div>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-4 text-gray-600">
+                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span className="text-base leading-relaxed"><b>Disconnected Profiles</b>: Members can't easily find or interact with each other in a centralized way.</span>
+              </li>
+              <li className="flex items-start gap-4 text-gray-600">
+                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span className="text-base leading-relaxed"><b>Manual Renewals</b>: Exhausting back-and-forth chasing bank receipts and updating database rows by hand.</span>
+              </li>
+              <li className="flex items-start gap-4 text-gray-600">
+                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                <span className="text-base leading-relaxed"><b>Static Events</b>: Clunky paper tickets, printed lists, and disorganized generic networking sessions.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* The TactLink Way */}
+          <div className="bg-[#f0f9ff] rounded-3xl p-8 md:p-10 border border-blue-100 relative overflow-hidden group shadow-lg shadow-brand-accent/20">
+            <div className="absolute top-0 left-0 w-2 h-full bg-brand-accent"></div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 rounded-full bg-[#e0f2fe] flex items-center justify-center text-brand-accent shrink-0">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">The TactLink Way</h3>
+            </div>
+            <ul className="space-y-6">
+              <li className="flex items-start gap-4 text-gray-700">
+                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span className="text-base leading-relaxed"><b>Live Member Directory</b>: Searchable, categorized, dynamic digital profiles that encourage instant networking.</span>
+              </li>
+              <li className="flex items-start gap-4 text-gray-700">
+                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span className="text-base leading-relaxed"><b>Automated Administration</b>: Collect membership fees via app, auto-approve roles, and export pristine data.</span>
+              </li>
+              <li className="flex items-start gap-4 text-gray-700">
+                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span className="text-base leading-relaxed"><b>Interactive Experiences</b>: Gamified networking with the Digital Fishbowl and dedicated in-app event portals.</span>
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
+
+      {/* PARTNERS BAR: LOCAL */}
+      <section className="w-full py-16 px-4 bg-[#f8f9fc]">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="font-extrabold text-[30px] md:text-[40px] text-brand-primary">
+              Trusted By Global Change-Makers
+            </h2>
+            <div className="w-24 h-1 bg-brand-accent mx-auto mt-4 rounded-full"></div>
+          </div>
+
+          <div className="relative group max-w-full">
+            <button
+              onClick={() => scrollLocalPartners('left')}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white shadow-lg rounded-full p-2 text-gray-500 hover:text-brand-primary hidden md:block opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            </button>
+            <div
+              ref={partnerBarRef}
+              className="flex items-center gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory py-4 px-2 w-full mx-auto md:justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            >
+              {loading ? (
+                <div className="text-gray-400 text-center w-full min-w-full">Loading partners...</div>
+              ) : localPartners.length > 0 ? (
+                localPartners.map((partner, idx) => {
+                  const logoUrl = partner.logo?.url
+                    ? partner.logo.url.startsWith("http")
+                      ? partner.logo.url
+                      : `${STRAPI_URL}${partner.logo.url}`
+                    : undefined;
+                  return (
+                    <div key={partner.id || idx} className="flex flex-col items-center flex-shrink-0 snap-center">
+                      <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-2xl shadow border border-gray-100 p-4 flex items-center justify-center w-36 h-36 hover:shadow-lg transition">
+                        {logoUrl ? (
+                          <img src={logoUrl} alt={partner.name || 'Partner'} className="h-24 w-24 object-contain" />
+                        ) : (
+                          <span className="text-xs text-gray-400">No Logo</span>
+                        )}
+                      </a>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center text-gray-500 w-full py-8 text-lg min-w-full">
+                  We are expanding our local network! Check out our international partners below.
+                </div>
+              )}
+            </div>
+            <button
+              onClick={() => scrollLocalPartners('right')}
+              className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white shadow-lg rounded-full p-2 text-gray-500 hover:text-brand-primary hidden md:block opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* PARTNERS BAR: GLOBAL */}
+      <section className="w-full bg-gradient-to-b from-[#f8f9fc] to-white py-12 px-0 overflow-hidden border-b border-gray-100">
+        <div className="max-w-7xl mx-auto mb-6 px-4">
+          <div className="text-center text-gray-500 font-bold text-[14px] uppercase tracking-widest">Also Part of a Growing Global Network</div>
+        </div>
+        <div className="relative flex overflow-x-hidden">
+          {/* This is a simple scrolling marquee placeholder. In a production app, you might want to use keyframes in CSS for smooth infinite scroll */}
+          <div className="flex animate-marquee whitespace-nowrap w-max">
+            {loading ? null : [...Array(10)].map((_, copy) => (
+              <div key={copy} className="flex gap-8 px-4 items-center">
+                {globalPartners.map((partner, idx) => {
+                  const logoUrl = partner.logo?.url
+                    ? partner.logo.url.startsWith("http")
+                      ? partner.logo.url
+                      : `${STRAPI_URL}${partner.logo.url}`
+                    : undefined;
+                  return (
+                    <div key={`global-${copy}-${partner.id || idx}`} className="inline-flex flex-col items-center justify-center">
+                      <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-sm p-2 flex items-center justify-center w-20 h-20 opacity-80 hover:opacity-100 transition grayscale hover:grayscale-0">
+                        {logoUrl ? (
+                          <img src={logoUrl} alt={partner.name || 'Global Partner'} className="h-12 w-12 object-contain" />
+                        ) : (
+                          <span className="text-[10px] text-gray-400">Logo</span>
+                        )}
+                      </a>
+                    </div>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
 
       {/* FEATURES SECTION */}
-      <section className="w-full py-20 px-4 md:px-0">
-        <div className="max-w-7xl mx-auto flex flex-col gap-24">
-          {/* For Individuals */}
-          <div>
-            <h2 className="font-extrabold text-brand-primary mb-12 text-center text-[30px] text-black">For Individuals</h2>
-            <div className="flex flex-col gap-16">
-              {/* Dynamic Digital Identities for Every Connection */}
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 md:p-8">
-                  <img src="/feature1.png" alt="Dynamic Digital Identities" className="w-full h-auto object-contain rounded-3xl shadow-inner" style={{boxShadow: 'inset 0 4px 24px 0 rgba(0,0,0,0.10)'}} />
-                </div>
-                <div className="w-full md:w-1/2 md:pl-12 md:p-8">
-                  <div className="text-[16px] uppercase tracking-widest text-brand-primary mb-1 font-semibold">Digital Namecard</div>
-                  <h3 className="font-bold mb-3 text-[30px] text-black">Dynamic Digital Identities for Every Connection</h3>
-                  <p className="mb-2 text-[16px] text-black">Why limit yourself to one namecard? Create a distinct digital identity for every facet of your professional life. Whether you're at a conference, a casual meet-up, or a formal client meeting, effortlessly share the most relevant digital namecard via a single QR code. Need to share your business and personal contact details? Share both simultaneously with one scan, ensuring you always make the right impression and never miss an opportunity.</p>
-                  <div className="w-full flex justify-center md:justify-start">
-                    <a href="/products" className="mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-                      Get Started Now
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                    </a>
+      {/* FEATURES SECTION (ZIG-ZAG) */}
+      <section className="w-full py-24 px-6 md:px-0 bg-white">
+        <div className="max-w-7xl mx-auto flex flex-col gap-32">
+
+          {/* Feature 1: Live Directory (Text Left, Image Right) */}
+          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            <div className="w-full md:w-1/2 flex flex-col items-start">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f0f9ff] text-brand-accent text-sm font-bold mb-6 border border-blue-100">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-1.13a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
+                Community Hub
+              </div>
+              <h3 className="font-extrabold mb-6 text-[32px] md:text-[40px] text-gray-900 leading-tight">
+                A living, breathing <span className="text-brand-accent">member directory.</span>
+              </h3>
+              <p className="mb-6 text-lg text-gray-600 leading-relaxed font-normal">
+                Give your members a centralized hub to discover, connect, and collaborate with one another. Each member gets a rich digital namecard that they can update in real-time.
+              </p>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Search and filter members by industry or role
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Beautiful digital namecards for every user
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Secure, private ecosystem for verified members
+                </li>
+              </ul>
+            </div>
+
+            <div className="w-full md:w-1/2 relative">
+              <div className="w-full aspect-square bg-[#f8fafc] rounded-[40px] border border-gray-200 shadow-2xl relative overflow-hidden flex items-center justify-center">
+                <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-blue-50 to-brand-accent/10 rounded-full blur-2xl"></div>
+
+                {/* Directory Flow - Two Overlapping Phones */}
+
+                {/* Background Phone: Directory List */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-[75%] -translate-y-1/2 w-[240px] h-[500px] bg-[#fafafa] rounded-[24px] shadow-lg border-[4px] border-white ring-1 ring-gray-200 opacity-80 transform -rotate-6 flex flex-col overflow-hidden">
+                  <div className="flex items-center justify-between p-3 bg-white border-b border-gray-100">
+                    <div className="w-20 h-3 bg-gray-200 rounded"></div>
+                  </div>
+                  <div className="p-3">
+                    <div className="w-full h-8 bg-white border border-gray-200 rounded-lg mb-3"></div>
+                    <div className="flex flex-col gap-3">
+                      {[
+                        { name: 'Alex Mercer', c: 'bg-blue-600', l: 'AM' },
+                        { name: 'Sarah Jenkins', c: 'bg-emerald-600', l: 'SJ' },
+                        { name: 'Dr. Robert Clark', c: 'bg-gray-800', l: 'RC' },
+                        { name: 'Emily Chen', c: 'bg-orange-500', l: 'EC' },
+                      ].map((m, i) => (
+                        <div key={i} className="flex gap-2 items-center">
+                          <div className={`w-8 h-8 rounded-full ${m.c} text-white flex items-center justify-center text-xs font-bold`}>{m.l}</div>
+                          <div className="flex flex-col">
+                            <div className="text-xs font-bold text-gray-900">{m.name}</div>
+                            <div className="w-16 h-1.5 bg-gray-200 rounded mt-1"></div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              {/* Smart Contact Capture and Management */}
-              <div className="flex flex-col md:flex-row-reverse items-center">
-                <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 md:p-8">
-                  <img src="/feature2.png" alt="Smart Contact Capture and Management" className="w-full h-auto object-contain rounded-3xl shadow-inner" style={{boxShadow: 'inset 0 4px 24px 0 rgba(0,0,0,0.10)'}} />
-                </div>
-                <div className="w-full md:w-1/2 md:pr-12 md:p-8">
-                  <div className="text-[16px] uppercase tracking-widest text-brand-primary mb-1 font-semibold">smart directory</div>
-                  <h3 className="font-bold mb-3 text-[30px] text-black">Smart Contact Capture and Management</h3>
-                  <p className="mb-2 text-[16px] text-black">Beyond a simple address book, this platform gives you complete control over your network. You can instantly share your digital business card via a unique QR code or easily digitize existing physical business cards using our built-in OCR scanner. The new contact is seamlessly added to your network. From there, you can use customizable tags (e.g., "Client," "Event Attendee," "Marketing Lead") to categorize and organize your new connections. This intelligence allows you to effortlessly search and filter your network, making it simple to find a specific group or individual when you need them most.</p>
-                  <div className="w-full flex justify-center md:justify-start">
-                    <a href="/products" className="mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-                      Get Started Now
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                    </a>
+
+                {/* Foreground Phone: Digital Namecard */}
+                <div className="absolute left-1/2 top-1/2 -translate-x-[25%] -translate-y-[45%] w-[260px] h-[540px] bg-[#f4f7fb] rounded-[32px] shadow-2xl border-[6px] border-white ring-1 ring-gray-200 z-10 flex flex-col overflow-hidden transform rotate-3 hover:rotate-0 transition duration-500">
+                  {/* Header */}
+                  <div className="bg-blue-600 pt-8 pb-10 px-5 relative z-0 shadow-sm border-b-[20px] border-blue-600 rounded-b-[24px]">
+                    <div className="flex items-center gap-3 text-white">
+                      <div className="w-10 h-10 rounded-full border-2 border-white object-cover bg-white flex items-center justify-center overflow-hidden">
+                        <div className="w-10 h-10 bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white font-bold tracking-widest text-[10px]">AM</div>
+                      </div>
+                      <span className="font-bold text-[15px] tracking-wide">Alex Mercer</span>
+                    </div>
+                  </div>
+
+                  {/* Cards Container */}
+                  <div className="flex-1 px-3 -mt-4 relative z-10 flex flex-col gap-3 overflow-hidden">
+
+                    {/* Primary Card */}
+                    <div className="bg-white rounded-[16px] shadow-sm border border-gray-100 relative overflow-hidden flex-shrink-0 flex flex-col">
+                      <div className="flex p-0 relative">
+                        {/* Left Graphic */}
+                        <div className="w-24 bg-blue-600 rounded-br-[60px] rounded-tr-[5px] flex items-center justify-center py-6">
+                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100">
+                            <div className="text-[10px] font-black text-blue-800 text-center leading-tight">GLOBAL<br />TRADE</div>
+                          </div>
+                        </div>
+
+                        {/* Right Details */}
+                        <div className="flex-1 p-3 pl-4 pr-2">
+                          <div className="font-bold text-gray-900 text-[14px] leading-tight mb-1">Alex Mercer</div>
+                          <div className="text-gray-500 text-[11px] font-medium mb-2">VP</div>
+
+                          <div className="w-full h-px bg-[#facc15] mb-2 opacity-50"></div>
+
+                          <div className="flex flex-col gap-1.5 text-[10px] text-gray-600 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
+                            <div className="flex items-center gap-2">
+                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                              <span className="w-full overflow-hidden text-ellipsis">Global Trade Network</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                              <span>+66 802139500</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                              <span className="w-[100px] overflow-hidden text-ellipsis">alex.m@gmail.com</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[12px] text-gray-700 px-1 mb-1">
+                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 bg-transparent flex items-center justify-center">
+                      </div>
+                      Set as primary card
+                    </div>
+
+                    {/* Secondary Card */}
+                    <div className="bg-white rounded-[16px] shadow-sm border border-gray-100 flex-shrink-0 relative overflow-hidden flex flex-col pt-3">
+                      {/* Decorative Shapes left & right */}
+                      <div className="absolute top-0 left-12 w-8 h-12 bg-blue-600 rounded-b-full"></div>
+                      <div className="absolute bottom-0 left-0 w-16 h-16 bg-blue-600 rounded-tr-full"></div>
+                      <div className="absolute bottom-4 left-0 w-8 h-12 bg-amber-400 rounded-r-full"></div>
+
+                      <div className="p-4 relative z-10 flex flex-col">
+                        <div className="flex gap-3 mb-4">
+                          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0 border border-gray-100 shadow-sm">
+                            <div className="flex -space-x-1">
+                              <div className="w-4 h-4 rounded-sm bg-[#facc15] rotate-45"></div>
+                              <div className="w-4 h-4 rounded-sm bg-[#1e3a8a] rotate-45"></div>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="font-bold text-gray-900 text-[14px] leading-tight mb-0.5">Alex Mercer</div>
+                            <div className="text-gray-500 text-[11px] font-medium leading-tight">Business Dev (TactLink)</div>
+                          </div>
+                        </div>
+
+                        <div className="pl-14 flex flex-col gap-2 text-[10px] text-gray-700 font-medium">
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                            </div>
+                            TactLink
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                            </div>
+                            +66 903304415
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </div>
+                            alex@tactlink.com
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
+                            </div>
+                            www.tactlink.com
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-[12px] text-gray-700 px-1 pb-2">
+                      <div className="w-4 h-4 rounded-full border-2 border-blue-600 bg-white flex items-center justify-center">
+                        <div className="w-2 h-2 rounded-full bg-blue-600"></div>
+                      </div>
+                      Set as primary card
+                    </div>
+                  </div>
+
+                  {/* Bottom Nav */}
+                  <div className="bg-white border-t border-gray-200 flex justify-between px-6 py-3 relative z-20 mt-auto">
+                    <div className="flex flex-col items-center gap-1">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                      <span className="text-[9px] text-gray-500 font-medium">Home</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-1.13a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
+                      <span className="text-[9px] text-gray-500 font-medium">Contacts</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1 relative">
+                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-blue-600 rounded-full"></div>
+                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
+                      <span className="text-[9px] text-blue-600 font-bold">My Cards</span>
+                    </div>
+                    <div className="flex flex-col items-center gap-1">
+                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                      <span className="text-[9px] text-gray-500 font-medium">More</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {/* For Associations & Events */}
-          <div>
-            <h2 className="font-extrabold text-brand-primary mb-12 text-center text-[30px] text-black">For Associations & Events</h2>
-            <div className="flex flex-col gap-16">
-              {/* Association Directory */}
-              <div className="flex flex-col md:flex-row-reverse items-center">
-                <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 md:p-8">
-                  <img src="/feature3.png" alt="Association Directory" className="w-full h-auto object-contain rounded-3xl shadow-inner" style={{boxShadow: 'inset 0 4px 24px 0 rgba(0,0,0,0.10)'}} />
+
+          {/* Feature 2: Event Networking (Image Left, Text Right) */}
+          <div className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20">
+            <div className="w-full md:w-1/2 flex flex-col items-start">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fff7ed] text-orange-600 text-sm font-bold mb-6 border border-orange-100">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+                Event Networking
+              </div>
+              <h3 className="font-extrabold mb-6 text-[32px] md:text-[40px] text-gray-900 leading-tight">
+                Turn your events into <span className="text-orange-600">interactive experiences.</span>
+              </h3>
+              <p className="mb-6 text-lg text-gray-600 leading-relaxed font-normal">
+                Orchestrate unforgettable events with our all-in-one digital toolkit. From discovery to post-event engagement, empower your members to seamlessly register, connect, and participate.
+              </p>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Centralized event discovery and listings
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Frictionless ticketing and registration management
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Interactive participant directory for instant networking
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Real-time analytics and attendance tracking
+                </li>
+              </ul>
+            </div>
+
+            <div className="w-full md:w-1/2 relative bg-gray-50 rounded-[40px] p-8 aspect-square flex items-center justify-center border border-gray-100 shadow-inner">
+              {/* Event QR Mockup */}
+              <div className="relative w-[280px] h-[580px] bg-white rounded-[32px] shadow-2xl border-[6px] border-white ring-1 ring-gray-200 z-10 flex flex-col overflow-hidden transform -rotate-2 hover:rotate-0 transition duration-500">
+                {/* Top Nav */}
+                <div className="flex items-center justify-between p-4 bg-white border-b border-gray-50">
+                  <svg className="w-5 h-5 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  <span className="text-sm font-medium text-gray-800 absolute left-1/2 -translate-x-1/2">Event QR code</span>
                 </div>
-                <div className="w-full md:w-1/2 md:pr-12 md:p-8">
-                  <div className="text-[16px] uppercase tracking-widest text-brand-primary mb-1 font-semibold">Association Directory</div>
-                  <h3 className="font-bold mb-3 text-[30px] text-black">The Living Heart of Your Community</h3>
-                  <p className="mb-2 text-[16px] text-black">Transform your static member list into a dynamic, interactive community hub. Our Association Directory feature is designed to empower both administrators and members, fostering a vibrant ecosystem for connection and collaboration.</p>
-                  
-                  <div className="mt-4 flex flex-col md:flex-row gap-4">
-                    <div className="flex-1 bg-brand-light rounded-xl p-4 shadow flex items-start gap-3">
-                      {/* Admin icon */}
-                      <svg className="w-7 h-7 text-brand-primary flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                      <div>
-                        <span className="font-semibold text-[16px] text-black">For Administrators</span><br />
-                        <span className="text-[16px] text-black">Easily manage member from a single database, saving you valuable time.</span>
-                      </div>
+
+                <div className="flex-1 flex flex-col items-center pt-8 px-6">
+                  {/* Fake Logo */}
+                  <div className="flex -space-x-3 mb-2">
+                    <div className="w-10 h-10 rounded-lg bg-[#eab308] rotate-45 flex items-center justify-center ring-2 ring-white z-10">
+                      <div className="w-3 h-3 bg-white rounded-sm"></div>
                     </div>
-                    <div className="flex-1 bg-brand-light rounded-xl p-4 shadow flex items-start gap-3">
-                      {/* Member icon */}
-                      <svg className="w-7 h-7 text-brand-primary flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m9-1.13a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"/></svg>
-                      <div>
-                        <span className="font-semibold text-[16px] text-black">For Members</span><br />
-                        <span className="text-[16px] text-black">Easily connect and collaborate within their community.</span>
+                    <div className="w-10 h-10 rounded-lg bg-[#1e3a8a] rotate-45 flex items-center justify-center ring-2 ring-white z-0">
+                      <div className="w-3 h-3 bg-white rounded-sm"></div>
+                    </div>
+                  </div>
+                  <div className="text-[10px] font-bold text-gray-600 tracking-[0.2em] mb-6">GLOBAL TRADE</div>
+
+                  <h4 className="text-sm font-bold text-center text-gray-900 mb-1 leading-tight">Annual Leaders Summit 2026</h4>
+                  <p className="text-xs text-gray-500 mb-8">15 Oct 2026 | 6:00 pm</p>
+
+                  {/* Fake QR pattern using grid */}
+                  <div className="w-52 h-52 bg-white p-2 relative flex flex-wrap content-start">
+                    {/* Generative blocks for a mock QR */}
+                    {[...Array(400)].map((_, i) => {
+                      // Some deterministic randomness
+                      const isDark = (Math.sin(i * 13.5) * Math.cos(i * 7.1)) > 0.1;
+                      // Corner squares
+                      const isTL = (i % 20 < 4) && (Math.floor(i / 20) < 4);
+                      const isTR = (i % 20 > 15) && (Math.floor(i / 20) < 4);
+                      const isBL = (i % 20 < 4) && (Math.floor(i / 20) > 15);
+
+                      // force empty corners so we can overlay clear squares
+                      if (isTL || isTR || isBL) return <div key={i} className="w-[5%] h-[5%] bg-white"></div>;
+
+                      return <div key={i} className={`w-[5%] h-[5%] ${isDark ? 'bg-gray-900' : 'bg-white'}`}></div>;
+                    })}
+
+                    {/* Corner markers */}
+                    <div className="absolute top-2 left-2 w-10 h-10 border-4 border-gray-900">
+                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
+                    </div>
+                    <div className="absolute top-2 right-2 w-10 h-10 border-4 border-gray-900">
+                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
+                    </div>
+                    <div className="absolute bottom-2 left-2 w-10 h-10 border-4 border-gray-900">
+                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
+                    </div>
+
+                    {/* Center Avatar */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center border border-gray-100 shadow-sm">
+                      <div className="flex -space-x-1">
+                        <div className="w-3 h-3 rounded bg-[#eab308] rotate-45"></div>
+                        <div className="w-3 h-3 rounded bg-[#1e3a8a] rotate-45"></div>
                       </div>
                     </div>
                   </div>
-                  <div className="w-full flex justify-center md:justify-start">
-                    <a href="/contact" className="mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-                      Learn More
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                    </a>
+                </div>
+
+                <div className="mt-auto border-t border-gray-100 pt-6 pb-8 flex justify-center">
+                  <button className="flex items-center gap-2 text-brand-primary text-sm font-bold">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                    Download now
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature 3: Automated Administration (Text Left, Image Right) */}
+          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            <div className="w-full md:w-1/2 flex flex-col items-start">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fdf4ff] text-purple-600 text-sm font-bold mb-6 border border-purple-100">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                Admin Workflows
+              </div>
+              <h3 className="font-extrabold mb-6 text-[32px] md:text-[40px] text-gray-900 leading-tight">
+                Put your membership renewals <span className="text-purple-600">on autopilot.</span>
+              </h3>
+              <p className="mb-6 text-lg text-gray-600 leading-relaxed font-normal">
+                Eliminate manual admin work with automated dues collection, smart reminders, and instant status updates the moment a payment clears. Stop chasing bank receipts.
+              </p>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Comprehensive membership management with smart reminders
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Actionable insights via a real-time analytics dashboard
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Automated, zero-fee payment receipt approvals
+                </li>
+                <li className="flex items-center gap-3 text-gray-700">
+                  <div className="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 shrink-0"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg></div>
+                  Seamless one-click data exports to Excel or CSV
+                </li>
+              </ul>
+            </div>
+
+            <div className="w-full md:w-1/2 relative">
+              {/* CSS Art / Abstract representation of Admin Dashboard */}
+              <div className="w-full aspect-[4/3] bg-white rounded-[24px] border border-gray-200 shadow-xl relative overflow-hidden flex flex-col transform rotate-2 hover:rotate-0 transition duration-500">
+                {/* Header */}
+                <div className="h-12 border-b border-gray-100 flex items-center px-4 justify-between bg-gray-50">
+                  <div className="flex gap-1.5">
+                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="h-4 w-24 bg-gray-200 rounded"></div>
+                    <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-[10px] text-white font-bold">JD</div>
+                  </div>
+                </div>
+                {/* Content */}
+                <div className="flex-1 p-6 flex gap-6">
+                  {/* Sidebar */}
+                  <div className="w-32 flex flex-col gap-3">
+                    <div className="h-3 w-16 bg-gray-200 rounded mb-2"></div>
+                    <div className="flex items-center gap-2 bg-purple-50 p-2 rounded border border-purple-100">
+                      <div className="w-4 h-4 rounded bg-purple-200"></div>
+                      <div className="h-2 flex-1 bg-purple-600 rounded"></div>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded">
+                      <div className="w-4 h-4 rounded bg-gray-200"></div>
+                      <div className="h-2 flex-1 bg-gray-300 rounded"></div>
+                    </div>
+                    <div className="flex items-center gap-2 p-2 rounded">
+                      <div className="w-4 h-4 rounded bg-gray-200"></div>
+                      <div className="h-2 flex-1 bg-gray-300 rounded"></div>
+                    </div>
+                  </div>
+                  {/* Main Data */}
+                  <div className="flex-1 flex flex-col gap-6">
+                    <div className="flex justify-between items-end">
+                      <div>
+                        <div className="text-xs font-bold text-gray-500 mb-1">MEMBERSHIP DUES COLLECTED</div>
+                        <div className="text-3xl font-black text-gray-900">$14,250.00</div>
+                      </div>
+                      <div className="px-3 py-1.5 bg-green-100 rounded-full text-green-700 text-xs font-bold flex items-center gap-1">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" /></svg>
+                        12.5% Keep up
+                      </div>
+                    </div>
+                    {/* Graph & Tables */}
+                    <div className="flex-1 flex gap-4">
+                      <div className="w-2/3 border-b border-l border-gray-200 flex items-end justify-between px-2 pt-4 pb-0 relative">
+                        <div className="absolute top-1/4 left-0 w-full border-t border-dashed border-gray-200"></div>
+                        <div className="absolute top-1/2 left-0 w-full border-t border-dashed border-gray-200"></div>
+                        <div className="absolute top-3/4 left-0 w-full border-t border-dashed border-gray-200"></div>
+                        {[40, 55, 45, 70, 65, 85, 100].map((h, i) => (
+                          <div key={i} className="w-6 bg-gradient-to-t from-purple-600 to-purple-400 rounded-t-sm relative z-10" style={{ height: `${h}%` }}></div>
+                        ))}
+                      </div>
+                      <div className="w-1/3 flex flex-col gap-3">
+                        <div className="text-xs font-bold text-gray-500">RECENT RENEWALS</div>
+                        {[1, 2, 3].map(i => (
+                          <div key={i} className="flex justify-between items-center bg-gray-50 p-2 rounded border border-gray-100">
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 rounded-full bg-gray-300"></div>
+                              <div className="w-12 h-1.5 bg-gray-400 rounded"></div>
+                            </div>
+                            <div className="w-8 h-1.5 bg-green-400 rounded"></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              {/* Digital Fishbowl for Events */}
-              <div className="flex flex-col md:flex-row items-center">
-                <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 md:p-8">
-                  <img src="/feature4.png" alt="Digital Fishbowl for Events" className="w-full h-auto object-contain rounded-3xl shadow-inner" style={{boxShadow: 'inset 0 4px 24px 0 rgba(0,0,0,0.10)'}} />
-                </div>
-                <div className="w-full md:w-1/2 md:pl-12 md:p-8">
-                  <div className="text-[16px] uppercase tracking-widest text-brand-primary mb-1 font-semibold">Digital Fishbowl</div>
-                  <h3 className="font-bold mb-3 text-[30px] text-black">Revolutionize Event Networking</h3>
-                  <p className="mb-2 text-[16px] text-black">Transform every gathering from a simple attendance list into a powerful networking opportunity.</p>
-                  
-                  <div className="mt-4 flex flex-col md:flex-row gap-4">
-                    <div className="flex-1 bg-brand-light rounded-xl p-4 shadow flex items-start gap-3">
-                      {/* Organizer icon: clipboard-check */}
-                      <svg className="w-7 h-7 text-brand-primary flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2l4-4"/>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 17H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2"/>
-                      </svg>
-                      <div>
-                        <span className="font-semibold text-[16px] text-black">For Event Organizers</span><br />
-                        <span className="text-[16px] text-black">Automate check-in with QR code registration. Provide a living, digital directory that extends the value of your event long after it's over.</span>
-                      </div>
-                    </div>
-                    <div className="flex-1 bg-brand-light rounded-xl p-4 shadow flex items-start gap-3">
-                      {/* Participant icon: user-group */}
-                      <svg className="w-7 h-7 text-brand-primary flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m9-1.13a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"/>
-                      </svg>
-                      <div>
-                        <span className="font-semibold text-[16px] text-black">For Participants</span><br />
-                        <span className="text-[16px] text-black">Easily share your digital business card and instantly see attendee profiles, building a lasting contact in your network.</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="w-full flex justify-center md:justify-start">
-                    <a href="/contact" className="mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-                      Learn More
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                    </a>
-                  </div>
-                </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="w-full py-24 px-6 md:px-0 bg-[#f8fafc] border-y border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="font-extrabold text-[36px] md:text-[48px] text-brand-primary mb-6">
+              How It Works
+            </h2>
+            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+              Digitize your entire community in three simple steps. We handle the heavy lifting so you can focus on building relationships.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-blue-200 via-brand-accent to-blue-200 z-0 opacity-50"></div>
+
+            {/* Step 1 */}
+            <div className="relative z-10 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
+                <span className="text-3xl font-black text-brand-accent">1</span>
               </div>
-              {/* Dedicated Support */}
-              <div className="flex flex-col md:flex-row-reverse items-center">
-                <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0 md:p-8">
-                  <img src="/feature5.png" alt="Dedicated Local Support" className="w-full h-auto object-contain rounded-3xl shadow-inner" style={{boxShadow: 'inset 0 4px 24px 0 rgba(0,0,0,0.10)'}} />
-                </div>
-                <div className="w-full md:w-1/2 md:pr-12 md:p-8">
-                  <div className="text-[16px] uppercase tracking-widest text-brand-primary mb-1 font-semibold">localized bd team</div>
-                  <h3 className="font-bold mb-3 text-[30px] text-black">Dedicated Local Support: Your Partner in Success</h3>
-                  <p className="mb-2 text-[16px] text-black">We believe that our partnership begins, not ends, at the point of sale. That's why we provide comprehensive support delivered by a dedicated local team right here in your country.</p>
-                  <p className="mb-2 text-[16px] text-black">From hands-on onboarding for a seamless launch to continuous technical support with quick response times, our local experts are your partners, committed to your long-term success.</p>
-                  <div className="w-full flex justify-center md:justify-start">
-                    <a href="/contact" className="mt-4 px-6 py-3 bg-brand-accent text-brand-primary rounded-full font-bold text-base flex items-center gap-2 shadow hover:bg-brand-primary hover:text-brand-white transition">
-                      Contact Us Now
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-                    </a>
-                  </div>
-                </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Onboard</h3>
+              <p className="text-gray-600 leading-relaxed px-4">
+                Import your existing member list. We automatically generate secure accounts and digital namecards for everyone.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="relative z-10 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
+                <span className="text-3xl font-black text-brand-accent">2</span>
               </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Engage</h3>
+              <p className="text-gray-600 leading-relaxed px-4">
+                Members log in, update their profiles, and start connecting. Launch your first event and watch engagement soar.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="relative z-10 flex flex-col items-center text-center group">
+              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
+                <span className="text-3xl font-black text-brand-accent">3</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Grow</h3>
+              <p className="text-gray-600 leading-relaxed px-4">
+                Collect dues automatically, gain insights into community activity, and let the network effect attract new members naturally.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* LEAD CAPTURE / DEMO FORM */}
+      {/* FINAL CTA */}
+      <section className="w-full py-24 px-6 relative overflow-hidden bg-[#1e255a]">
+        {/* Decorative background elements */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-accent opacity-20 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500 opacity-20 rounded-full blur-[80px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <h2 className="text-[40px] md:text-[56px] font-black text-white mb-6 leading-tight">
+            Ready to modernize your association?
+          </h2>
+          <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+            Join the forward-thinking organizations already using TactLink to save hours of admin work and supercharge member engagement.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <a href="/products" className="px-8 py-4 bg-brand-accent text-[#1e255a] rounded-full font-bold text-base hover:bg-white transition shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center justify-center gap-2">
+              Start Your Free Trial
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            </a>
+            <a href="/contact" className="px-8 py-4 bg-transparent text-white border-2 border-white/20 rounded-full font-bold text-base hover:border-white transition flex items-center justify-center">
+              Talk to Sales
+            </a>
+          </div>
+          <p className="mt-6 text-sm text-blue-200">
+            No credit card required. 14-day full-feature trial.
+          </p>
+        </div>
+      </section>
       {/*
       <section className="w-full bg-brand-primary py-20 px-4 md:px-0 flex justify-center items-center">
         <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-lg w-full flex flex-col items-center">
@@ -282,6 +1030,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-      </main>
+    </main >
   );
 }

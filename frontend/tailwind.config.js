@@ -14,6 +14,15 @@ module.exports = {
           white: "#ffffff", // Pure white
           light: "#f5f6fa", // Subtle light grey/off-white
         }
+      },
+      animation: {
+        marquee: 'marquee 90s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        }
       }
     }
   },
