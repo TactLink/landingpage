@@ -99,17 +99,17 @@ export default function HomePage() {
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
       {/* HERO SECTION */}
-      <section className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-20 py-8 md:py-16 relative overflow-hidden min-h-[85vh]">
-        <div className="flex-1 z-10 md:pr-12">
+      <section className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 pt-24 pb-16 relative overflow-hidden min-h-screen">
+        <div className="w-full md:w-[45%] lg:w-[48%] z-10 md:pr-8 lg:pr-10">
           {/* Eyebrow / Trust Signal */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
             <span className="flex items-center text-yellow-400 text-sm">★★★★★</span>
             <span className="text-sm font-medium text-white/90 tracking-wide">Trusted by 20+ leading organizations</span>
           </div>
 
-          <h1 className="font-extrabold mb-4 leading-[1.1] text-[40px] md:text-[56px] lg:text-[64px] text-white min-h-[100px] md:min-h-[140px]">
+          <h1 className="font-extrabold mb-3 leading-[1.1] text-[32px] md:text-[42px] lg:text-[48px] xl:text-[64px] text-white min-h-[80px] md:min-h-[100px] xl:min-h-[140px]">
             The Ultimate Platform for{' '}
-            <div className="overflow-hidden inline-block align-bottom relative h-[48px] md:h-[64px] lg:h-[72px]">
+            <div className="overflow-hidden inline-block align-bottom relative h-[38px] md:h-[48px] lg:h-[56px] xl:h-[72px] md:pt-1">
               <span
                 className={`text-brand-accent block transition-all duration-300 ease-in-out ${fade ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}
               >
@@ -117,7 +117,7 @@ export default function HomePage() {
               </span>
             </div>
           </h1>
-          <p className="mb-8 max-w-xl text-[16px] md:text-[18px] text-white/90 leading-relaxed font-light">
+          <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light">
             Turn your static member list into a thriving, interactive digital community. Automate networking, streamline contact management, and unlock new value for your members instantly.
           </p>
 
@@ -134,12 +134,12 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="flex-1 flex justify-center items-center mt-12 md:mt-0 w-full relative h-[550px] md:h-[600px] group [perspective:1000px] scale-90 lg:scale-100 origin-center md:origin-right">
+        <div className="w-full md:w-[55%] lg:w-[52%] flex justify-center items-center mt-8 md:mt-0 relative h-[400px] md:h-[400px] lg:h-[480px] xl:h-[580px] group [perspective:1000px] scale-75 md:scale-75 lg:scale-75 xl:scale-[0.9] origin-center md:origin-right">
           {/* Background glowing orb */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-brand-accent opacity-20 rounded-full blur-[120px] animate-pulse"></div>
 
           {/* Web Dashboard Replica (Background) */}
-          <div className="hidden md:flex absolute right-[-60px] lg:right-[-100px] top-1/2 -translate-y-1/2 w-[600px] lg:w-[700px] h-[400px] lg:h-[450px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-10 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
+          <div className="hidden md:flex absolute right-[-20px] lg:right-[-60px] top-1/2 -translate-y-1/2 w-[500px] lg:w-[650px] h-[350px] lg:h-[420px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-4 lg:group-hover:hover:-translate-x-10 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
             {/* Top Nav */}
             <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
               <div className="flex items-center gap-6">
@@ -244,7 +244,7 @@ export default function HomePage() {
           </div>
 
           {/* Floating Mobile UI Mockup (Mini Program Replica) */}
-          <div className="relative md:absolute md:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] h-[600px] md:w-[320px] md:h-[650px] bg-[#ffffff] rounded-[48px] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[12px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col flex-shrink-0 overflow-hidden group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100">
+          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[280px] h-[580px] md:w-[260px] lg:w-[300px] md:h-[540px] lg:h-[600px] bg-[#ffffff] rounded-[48px] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[12px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col flex-shrink-0 overflow-hidden group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100">
 
             {/* Dynamic Island / Camera Notch */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100] flex items-center justify-end px-2">
