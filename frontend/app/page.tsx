@@ -16,6 +16,7 @@ export default function HomePage() {
     { q: "How does the Digital Fishbowl work?", a: "It uses QR codes for registration and digital draws at events." },
   ];
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [compareTab, setCompareTab] = useState<'old' | 'new'>('new');
   const partnerBarRef = useRef<HTMLDivElement>(null);
 
   // Crossfade keywords
@@ -118,18 +119,18 @@ export default function HomePage() {
             </div>
           </h1>
           <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light">
-            Turn your static member list into a thriving, interactive digital community. Automate networking, streamline contact management, and unlock new value for your members instantly.
+            Turn your static member list into a thriving, interactive digital community. Partner with us and get full access — <span className="text-brand-accent font-semibold">completely free, forever.</span>
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-            <a href="/products" className="w-full sm:w-auto flex justify-center">
+            <a href="/contact" className="w-full sm:w-auto flex justify-center">
               <span className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
-                Start Free Trial
+                Become a Partner
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
               </span>
             </a>
             <a href="/contact" className="w-full sm:w-auto flex justify-center text-white/80 hover:text-white font-medium px-4 py-3 transition-colors">
-              Request a Guided Demo
+              Talk to Sales
             </a>
           </div>
         </div>
@@ -335,66 +336,212 @@ export default function HomePage() {
       </section>
 
       {/* THE WHY SECTION */}
-      <section className="w-full py-24 px-6 bg-white border-b border-gray-100">
-        <div className="max-w-5xl mx-auto text-center mb-16">
-          <h2 className="font-extrabold text-[36px] md:text-[48px] text-brand-primary mb-6 leading-tight">
-            Stop managing your members on spreadsheets.
+      <section className="w-full py-24 px-6 bg-gradient-to-b from-[#1A1F4C] to-[#252b6b] relative overflow-hidden">
+        {/* Decorative background glows */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-accent/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+        <div className="max-w-4xl xl:max-w-5xl mx-auto text-center mb-16 relative z-10">
+          <h2 className="font-extrabold text-[36px] md:text-[48px] text-white mb-6 leading-tight">
+            Stop managing your members on <span className="text-brand-accent">spreadsheets.</span>
           </h2>
-          <p className="text-lg text-gray-500 max-w-3xl mx-auto">
-            Traditional associations rely on scattered tools—Excel sheets for directories, WhatsApp for announcements, and manual bank transfers for renewals. TactLink unifies your entire community infrastructure into one seamless digital ecosystem.
+          <p className="text-lg text-white/60 max-w-3xl mx-auto">
+            Traditional associations rely on scattered tools — Excel sheets, WhatsApp groups, manual bank transfers. TactLink unifies your entire community into one seamless digital ecosystem.
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* The Old Way */}
-          <div className="bg-red-50 rounded-3xl p-8 md:p-10 border border-red-100 relative overflow-hidden group">
-            <div className="absolute top-0 left-0 w-2 h-full bg-red-400"></div>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 shrink-0">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900">The Old Way</h3>
+        <div className="max-w-4xl xl:max-w-5xl mx-auto relative z-10">
+
+          {/* === MOBILE: Tab switcher === */}
+          <div className="md:hidden">
+            {/* Tab pills */}
+            <div className="flex rounded-2xl overflow-hidden border border-white/10 mb-1 shadow-lg">
+              <button
+                onClick={() => {
+                  setCompareTab('old');
+                  if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(40);
+                }}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 font-extrabold text-xs uppercase tracking-widest transition-all active:scale-95 ${compareTab === 'old'
+                  ? 'bg-red-900/80 text-red-300'
+                  : 'bg-white/5 text-white/25'
+                  }`}
+              >
+                {/* Flame icon */}
+                <svg className="w-3.5 h-3.5 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9.879 16.121A3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" /></svg>
+                The Chaos
+                {compareTab === 'new' && <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-ping ml-0.5 shrink-0" />}
+              </button>
+              <div className="w-px bg-white/10 shrink-0" />
+              <button
+                onClick={() => {
+                  setCompareTab('new');
+                  if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([20, 30, 60]);
+                }}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 px-3 font-extrabold text-xs uppercase tracking-widest transition-all active:scale-95 ${compareTab === 'new'
+                  ? 'bg-brand-accent/20 text-brand-accent'
+                  : 'bg-white/5 text-white/25'
+                  }`}
+              >
+                {/* Sparkle icon */}
+                <svg className="w-3.5 h-3.5 text-brand-accent shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                The Solution
+                {compareTab === 'old' && <span className="w-1.5 h-1.5 rounded-full bg-brand-accent animate-ping ml-0.5 shrink-0" />}
+              </button>
             </div>
-            <ul className="space-y-6">
-              <li className="flex items-start gap-4 text-gray-600">
-                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                <span className="text-base leading-relaxed"><b>Disconnected Profiles</b>: Members can't easily find or interact with each other in a centralized way.</span>
-              </li>
-              <li className="flex items-start gap-4 text-gray-600">
-                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                <span className="text-base leading-relaxed"><b>Manual Renewals</b>: Exhausting back-and-forth chasing bank receipts and updating database rows by hand.</span>
-              </li>
-              <li className="flex items-start gap-4 text-gray-600">
-                <svg className="w-6 h-6 text-red-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                <span className="text-base leading-relaxed"><b>Static Events</b>: Clunky paper tickets, printed lists, and disorganized generic networking sessions.</span>
-              </li>
-            </ul>
+            <p className="text-center text-xs text-white/20 mb-4 tracking-wide">Tap to compare</p>
+
+            {/* Mobile panel: The Chaos */}
+            {compareTab === 'old' && (
+              <div className="rounded-2xl overflow-hidden border border-red-900/40 bg-red-950/50 backdrop-blur-xl">
+                {/* Stressed header */}
+                <div className="px-6 py-4 bg-red-900/30 border-b border-red-900/30 flex items-center gap-2">
+                  <svg className="w-4 h-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  <span className="text-xs font-bold text-red-400 uppercase tracking-widest">How most associations operate today</span>
+                </div>
+                {[
+                  { label: "Silent Directories", sub: "Fragmented, unsearchable member lists hidden in static spreadsheets.", link: "See the fix →" },
+                  { label: "Static Events", sub: "Clunky paper tickets, boring mixers, and zero post-event engagement.", link: "See the fix →" },
+                  { label: "Paper Chasing", sub: "Exhausting manual work chasing bank receipts and updating rows by hand.", link: "See the fix →" },
+                ].map((item, i) => (
+                  <div key={i} className={`px-6 py-5 ${i > 0 ? 'border-t border-red-900/20' : ''}`}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5">
+                        <svg className="w-3 h-3 text-red-400/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-white/40 text-sm line-through decoration-red-500/40">{item.label}</p>
+                        <p className="text-sm text-white/25 mt-0.5">{item.sub}</p>
+                        <button
+                          onClick={() => { setCompareTab('new'); if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate([20, 30, 60]); }}
+                          className="text-brand-accent/60 text-xs mt-2 hover:text-brand-accent transition-colors"
+                        >{item.link}</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Mobile panel: The Solution */}
+            {compareTab === 'new' && (
+              <div className="rounded-2xl overflow-hidden border border-brand-accent/20 bg-[#1a2040] backdrop-blur-xl relative">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-brand-accent/15 rounded-full blur-[60px] pointer-events-none" />
+                {/* Positive header */}
+                <div className="px-6 py-4 bg-brand-accent/10 border-b border-brand-accent/10 flex items-center gap-2 relative z-10">
+                  <svg className="w-4 h-4 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
+                  <span className="text-xs font-bold text-brand-accent uppercase tracking-widest">How TactLink associations work</span>
+                </div>
+                {[
+                  { label: "A Living Directory", sub: "A centralized hub with rich, real-time digital namecards for every member.", link: "See the old way →" },
+                  { label: "Interactive Experiences", sub: "All-in-one toolkit with frictionless ticketing and instant networking.", link: "See the old way →" },
+                  { label: "Admin on Autopilot", sub: "Automated dues collection, smart reminders, and zero-fee receipt approvals.", link: "See the old way →" },
+                ].map((item, i) => (
+                  <div key={i} className={`px-6 py-5 relative z-10 ${i > 0 ? 'border-t border-brand-accent/5' : ''}`}>
+                    <div className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-brand-accent/20 border border-brand-accent/30 flex items-center justify-center shrink-0 mt-0.5">
+                        <svg className="w-3 h-3 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="font-extrabold text-white text-sm">{item.label}</p>
+                        <p className="text-sm text-brand-accent/60 mt-0.5">{item.sub}</p>
+                        <button
+                          onClick={() => { setCompareTab('old'); if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(40); }}
+                          className="text-white/25 text-xs mt-2 hover:text-white/50 transition-colors"
+                        >{item.link}</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {/* "Why the switch" footer teaser */}
+                <div className="px-6 py-4 border-t border-brand-accent/10 bg-brand-accent/5 relative z-10 flex items-center justify-between">
+                  <span className="text-xs text-white/40">Still doing things the old way?</span>
+                  <button
+                    onClick={() => { setCompareTab('old'); if (typeof navigator !== 'undefined' && navigator.vibrate) navigator.vibrate(40); }}
+                    className="text-xs text-red-400 font-semibold flex items-center gap-1 hover:text-red-300 transition-colors"
+                  >
+                    See the chaos
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* The TactLink Way */}
-          <div className="bg-[#f0f9ff] rounded-3xl p-8 md:p-10 border border-blue-100 relative overflow-hidden group shadow-lg shadow-brand-accent/20">
-            <div className="absolute top-0 left-0 w-2 h-full bg-brand-accent"></div>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 rounded-full bg-[#e0f2fe] flex items-center justify-center text-brand-accent shrink-0">
-                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+          {/* === DESKTOP: Direct contrast row grid === */}
+          <div className="hidden md:block">
+            {/* Header bar — 3 col to match rows */}
+            <div className="grid grid-cols-[1fr_72px_1fr] rounded-t-[32px] overflow-hidden border border-white/10 border-b-0">
+              {/* Old Way header */}
+              <div className="bg-red-950/60 backdrop-blur-xl flex items-center gap-3 py-5 px-8">
+                <div className="w-7 h-7 rounded-full bg-red-500/20 border border-red-500/30 flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </div>
+                <div>
+                  <p className="font-extrabold text-white/50 tracking-widest uppercase text-lg">Old Way</p>
+                  <p className="text-xs text-red-400/60 mt-0.5">How most associations operate today</p>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">The TactLink Way</h3>
+              {/* VS center — empty spacer */}
+              <div className="bg-[#161a3a]" />
+              {/* TactLink header */}
+              <div className="bg-brand-accent/10 backdrop-blur-xl flex items-center gap-3 py-5 px-8 relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-brand-accent/10 pointer-events-none" />
+                <img src="/TactLink-Logo-core.png" alt="TactLink" className="h-6 w-auto object-contain relative z-10 shrink-0" />
+                <div className="relative z-10">
+                  <p className="font-[family-name:var(--font-montserrat)] font-extrabold text-brand-accent tracking-widest uppercase text-lg">TACTLINK WAY</p>
+                  <p className="text-xs text-brand-accent/50 mt-0.5">How TactLink associations work</p>
+                </div>
+              </div>
             </div>
-            <ul className="space-y-6">
-              <li className="flex items-start gap-4 text-gray-700">
-                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span className="text-base leading-relaxed"><b>Live Member Directory</b>: Searchable, categorized, dynamic digital profiles that encourage instant networking.</span>
-              </li>
-              <li className="flex items-start gap-4 text-gray-700">
-                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span className="text-base leading-relaxed"><b>Automated Administration</b>: Collect membership fees via app, auto-approve roles, and export pristine data.</span>
-              </li>
-              <li className="flex items-start gap-4 text-gray-700">
-                <svg className="w-6 h-6 text-brand-accent mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span className="text-base leading-relaxed"><b>Interactive Experiences</b>: Gamified networking with the Digital Fishbowl and dedicated in-app event portals.</span>
-              </li>
-            </ul>
+
+            {/* Rows */}
+            {[
+              {
+                old: { label: "Silent Directories", sub: "Fragmented, unsearchable member lists hidden in static spreadsheets." },
+                new: { label: "A Living Directory", sub: "A centralized hub with rich, real-time digital namecards for every member." },
+              },
+              {
+                old: { label: "Static Events", sub: "Clunky paper tickets, boring mixers, and zero post-event engagement." },
+                new: { label: "Interactive Experiences", sub: "All-in-one toolkit with frictionless ticketing and instant networking." },
+              },
+              {
+                old: { label: "Paper Chasing", sub: "Exhausting manual work chasing bank receipts and updating rows by hand." },
+                new: { label: "Admin on Autopilot", sub: "Automated dues collection, smart reminders, and zero-fee receipt approvals." },
+              },
+            ].map((row, i) => (
+              <div key={i} className={`grid grid-cols-[1fr_72px_1fr] border border-white/5 ${i === 0 ? 'border-t-0' : ''} ${i === 2 ? 'rounded-b-[32px] overflow-hidden' : ''} shadow-[0_30px_100px_rgba(0,0,0,0.5)] border-l border-r`}>
+
+                {/* OLD WAY cell — desaturated by default, clears on hover */}
+                <div className="group bg-red-950/40 backdrop-blur-xl px-8 py-7 flex items-start gap-4 hover:bg-red-900/50 transition-all duration-300 cursor-default border-r border-white/5">
+                  <div className="w-5 h-5 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-red-500/20 transition-colors">
+                    <svg className="w-3 h-3 text-red-400/50 group-hover:text-red-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white/30 group-hover:text-white/50 text-lg line-through decoration-red-500/30 group-hover:decoration-red-500/60 transition-all">{row.old.label}</p>
+                    <p className="text-base text-white/15 group-hover:text-white/30 mt-0.5 transition-colors">{row.old.sub}</p>
+                  </div>
+                </div>
+
+                {/* VS center badge */}
+                <div className="bg-[#161a3a] flex items-center justify-center">
+                  <span className="text-[10px] font-black text-white/20 tracking-widest uppercase">vs</span>
+                </div>
+
+                {/* TACTLINK cell — glows and lifts on hover */}
+                <div className="group bg-brand-accent/5 backdrop-blur-xl px-8 py-7 flex items-start gap-4 relative overflow-hidden hover:bg-brand-accent/10 hover:shadow-[inset_0_0_30px_rgba(239,201,74,0.06)] transition-all duration-300 cursor-default">
+                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-accent/10 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+                  <div className="w-5 h-5 rounded-full bg-brand-accent/20 border border-brand-accent/30 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-brand-accent/40 group-hover:border-brand-accent/60 group-hover:shadow-[0_0_8px_rgba(239,201,74,0.4)] transition-all z-10">
+                    <svg className="w-3 h-3 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                  </div>
+                  <div className="relative z-10">
+                    <p className="font-extrabold text-white text-lg group-hover:text-brand-accent transition-colors">{row.new.label}</p>
+                    <p className="text-base text-brand-accent/60 group-hover:text-brand-accent/80 mt-0.5 transition-colors">{row.new.sub}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
+
         </div>
       </section>
 
@@ -461,29 +608,36 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto mb-6 px-4">
           <div className="text-center text-gray-500 font-bold text-[14px] uppercase tracking-widest">Also Part of a Growing Global Network</div>
         </div>
-        <div className="relative flex overflow-x-hidden">
-          {/* This is a simple scrolling marquee placeholder. In a production app, you might want to use keyframes in CSS for smooth infinite scroll */}
-          <div className="flex animate-marquee whitespace-nowrap w-max">
-            {loading ? null : [...Array(10)].map((_, copy) => (
-              <div key={copy} className="flex gap-8 px-4 items-center">
-                {globalPartners.map((partner, idx) => {
-                  const logoUrl = partner.logo?.url
-                    ? partner.logo.url.startsWith("http")
-                      ? partner.logo.url
-                      : `${STRAPI_URL}${partner.logo.url}`
-                    : undefined;
-                  return (
-                    <div key={`global-${copy}-${partner.id || idx}`} className="inline-flex flex-col items-center justify-center">
-                      <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-sm p-2 flex items-center justify-center w-20 h-20 opacity-80 hover:opacity-100 transition grayscale hover:grayscale-0">
-                        {logoUrl ? (
-                          <img src={logoUrl} alt={partner.name || 'Global Partner'} className="h-12 w-12 object-contain" />
-                        ) : (
-                          <span className="text-[10px] text-gray-400">Logo</span>
-                        )}
-                      </a>
-                    </div>
-                  );
-                })}
+        <div className="relative flex overflow-hidden group w-full bg-white">
+          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+
+          {/* Continuous scrolling marquee - Requires exactly 2 identical halves for the -50% translateX loop to work perfectly */}
+          <div className="flex animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
+            {[0, 1].map((half) => (
+              <div key={half} className="flex shrink-0">
+                {loading ? null : [...Array(10)].map((_, copy) => (
+                  <div key={copy} className="flex items-center gap-12 pr-12 shrink-0">
+                    {globalPartners.map((partner, idx) => {
+                      const logoUrl = partner.logo?.url
+                        ? partner.logo.url.startsWith("http")
+                          ? partner.logo.url
+                          : `${STRAPI_URL}${partner.logo.url}`
+                        : undefined;
+                      return (
+                        <div key={`global-${half}-${copy}-${partner.id || idx}`} className="inline-flex flex-col items-center justify-center shrink-0">
+                          <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-sm p-2 flex items-center justify-center w-20 h-20 opacity-80 hover:opacity-100 transition grayscale hover:grayscale-0 hover:scale-110 duration-1200">
+                            {logoUrl ? (
+                              <img src={logoUrl} alt={partner.name || 'Global Partner'} className="h-12 w-12 object-contain" />
+                            ) : (
+                              <span className="text-[12px] text-gray-400 font-medium">Logo</span>
+                            )}
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -924,40 +1078,46 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative">
             {/* Connecting line for desktop */}
-            <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-blue-200 via-brand-accent to-blue-200 z-0 opacity-50"></div>
+            <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-brand-primary/10 via-brand-accent/50 to-brand-primary/10 z-0"></div>
 
             {/* Step 1 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
-              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
-                <span className="text-3xl font-black text-brand-accent">1</span>
+              <div className="w-24 h-24 rounded-[32px] rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:-rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
+                <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Onboard</h3>
-              <p className="text-gray-600 leading-relaxed px-4">
-                Import your existing member list. We automatically generate secure accounts and digital namecards for everyone.
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Create</h3>
+              <p className="text-gray-600 leading-relaxed px-4 text-base">
+                Set up your association on TactLink and customize your digital hub.
               </p>
             </div>
 
             {/* Step 2 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
-              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
-                <span className="text-3xl font-black text-brand-accent">2</span>
+              <div className="w-24 h-24 rounded-[32px] -rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
+                <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Engage</h3>
-              <p className="text-gray-600 leading-relaxed px-4">
-                Members log in, update their profiles, and start connecting. Launch your first event and watch engagement soar.
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Invite</h3>
+              <p className="text-gray-600 leading-relaxed px-4 text-base">
+                Onboard your community by inviting members directly into the platform.
               </p>
             </div>
 
             {/* Step 3 */}
             <div className="relative z-10 flex flex-col items-center text-center group">
-              <div className="w-24 h-24 rounded-full bg-white border-4 border-[#e0f2fe] flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 transition duration-300 group-hover:border-brand-accent">
-                <span className="text-3xl font-black text-brand-accent">3</span>
+              <div className="w-24 h-24 rounded-[32px] rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:-rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
+                <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Grow</h3>
-              <p className="text-gray-600 leading-relaxed px-4">
-                Collect dues automatically, gain insights into community activity, and let the network effect attract new members naturally.
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Connect</h3>
+              <p className="text-gray-600 leading-relaxed px-4 text-base">
+                Launch interactive events and watch your member engagement soar.
               </p>
             </div>
           </div>
@@ -975,19 +1135,16 @@ export default function HomePage() {
             Ready to modernize your association?
           </h2>
           <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-            Join the forward-thinking organizations already using TactLink to save hours of admin work and supercharge member engagement.
+            Partner with TactLink and get access to the full platform — completely free. Join the forward-thinking organizations already transforming their communities.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="/products" className="px-8 py-4 bg-brand-accent text-[#1e255a] rounded-full font-bold text-base hover:bg-white transition shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center justify-center gap-2">
-              Start Your Free Trial
+            <a href="/contact" className="px-8 py-4 bg-brand-accent text-[#1e255a] rounded-full font-bold text-base hover:bg-white transition shadow-[0_0_20px_rgba(56,189,248,0.4)] flex items-center justify-center gap-2">
+              Become a Partner
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-            </a>
-            <a href="/contact" className="px-8 py-4 bg-transparent text-white border-2 border-white/20 rounded-full font-bold text-base hover:border-white transition flex items-center justify-center">
-              Talk to Sales
             </a>
           </div>
           <p className="mt-6 text-sm text-blue-200">
-            No credit card required. 14-day full-feature trial.
+            Free for partners. No credit card required.
           </p>
         </div>
       </section>
