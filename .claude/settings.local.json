@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c \"ffprobe C:\\\\Users\\\\kloms\\\\Documents\\\\tactlink_dev\\\\landingpage\\\\assets\\\\card.mp4 2>&1\")",
+      "Bash(cmd /c \"ffprobe C:\\\\Users\\\\kloms\\\\Documents\\\\tactlink_dev\\\\landingpage\\\\assets\\\\hero.mp4 2>&1\")",
+      "Bash(/c/Users/kloms/AppData/Local/Microsoft/WinGet/Packages/Gyan.FFmpeg_Microsoft.Winget.Source_8wekyb3d8bbwe/ffmpeg-8.1-full_build/bin/ffmpeg.exe -i C:/Users/kloms/Documents/tactlink_dev/landingpage/assets/hero.mp4 -vcodec libx264 -crf 26 -preset slow -movflags +faststart -an C:/Users/kloms/Documents/tactlink_dev/landingpage/frontend/public/hero.mp4 -y)"
+    ]
+  }
+}
