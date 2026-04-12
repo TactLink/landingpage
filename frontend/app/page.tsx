@@ -130,8 +130,6 @@ export default function HomePage() {
 
   // Remove the entire useEffect for auto-scroll and related debug code.
 
-  if (!mounted) return null;
-
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
       {/* HERO SECTION */}
