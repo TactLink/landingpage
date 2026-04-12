@@ -44,8 +44,8 @@ export default function DigitalNamecardPage() {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#374085]/40 blur-[150px] mix-blend-screen pointer-events-none" />
 
                 {/* ── DESKTOP layout (md+): side by side, vertically centered ── */}
-                <div className="hidden md:flex max-w-7xl mx-auto px-6 min-h-screen items-center gap-16 relative z-10 pt-20">
-                    <div className="flex-1 text-left flex flex-col items-start">
+                <div className="hidden md:flex max-w-7xl mx-auto px-6 min-h-screen items-center justify-center gap-12 lg:gap-24 relative z-10 pt-10 pb-16">
+                    <div className="w-1/2 max-w-xl text-left flex flex-col items-start">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
                             <span className="flex h-2 w-2 rounded-full bg-brand-accent animate-pulse" />
                             <span className="text-sm font-medium text-white tracking-widest uppercase">The Last Namecard You'll Need</span>
