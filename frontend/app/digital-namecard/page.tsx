@@ -44,7 +44,7 @@ export default function DigitalNamecardPage() {
                 <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#374085]/40 blur-[150px] mix-blend-screen pointer-events-none" />
 
                 {/* ── DESKTOP layout (md+): side by side, vertically centered ── */}
-                <div className="hidden md:flex max-w-7xl mx-auto px-6 min-h-screen items-center justify-center gap-12 lg:gap-24 relative z-10 pt-10 pb-16">
+                <div className="hidden md:flex max-w-7xl mx-auto px-6 md:px-12 lg:px-16 min-h-screen items-center justify-center gap-12 lg:gap-24 relative z-10 pt-10 pb-16">
                     <div className="w-1/2 max-w-xl text-left flex flex-col items-start">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
                             <span className="flex h-2 w-2 rounded-full bg-brand-accent animate-pulse" />
@@ -156,33 +156,33 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* FEATURE 1: DIGITAL NAMECARD */}
-            <section data-navbar-theme="light" className="py-24 bg-gray-50 overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row items-center gap-16">
+            <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-12 lg:px-16 bg-gray-50 overflow-hidden">
+                <div className="max-w-7xl mx-auto flex flex-col gap-32">
+                    <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
                         {/* Text */}
-                        <div className="w-full md:w-1/2">
+                        <div className="w-full md:w-1/2 flex flex-col items-start">
                             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary/5 border border-brand-primary/10 text-brand-primary text-sm font-bold uppercase tracking-widest mb-6">
                                 <span className="w-2 h-2 rounded-full bg-brand-accent inline-block" />
                                 Feature 01 — Digital Namecard
                             </div>
-                            <h2 className="text-[32px] md:text-[40px] font-extrabold text-brand-primary mb-6 leading-tight tracking-tight">
+                            <h2 className="text-[32px] md:text-[40px] font-extrabold text-gray-900 mb-6 leading-tight">
                                 Make &amp; share your <span className="text-brand-accent">digital identity.</span>
                             </h2>
-                            <p className="text-[18px] text-gray-600 mb-8 leading-relaxed">
+                            <p className="mb-6 text-[16px] md:text-[18px] text-gray-600 leading-relaxed font-light">
                                 Build a beautiful, dynamic namecard that reflects who you are — then share it instantly with anyone, anywhere.
                             </p>
-                            <ul className="space-y-4">
+                            <ul className="space-y-4 mb-8">
                                 {[
                                     { icon: "M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2", label: "Create multiple identities — work, personal, freelance, and more." },
                                     { icon: "M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z", label: "Share via QR code — no app needed on the receiver's end." },
                                     { icon: "M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1", label: "Share a link via message, email, or social — one tap, instant profile." },
                                     { icon: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z", label: "Customise your card with your photo, bio, links, and social handles." },
                                 ].map((item, idx) => (
-                                    <li key={idx} className="flex items-start gap-3">
-                                        <div className="mt-0.5 w-8 h-8 rounded-xl bg-brand-primary/5 flex items-center justify-center flex-shrink-0">
-                                            <svg className="w-4 h-4 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d={item.icon} /></svg>
+                                    <li key={idx} className="flex items-center gap-3 text-gray-700">
+                                        <div className="w-6 h-6 rounded-full bg-brand-primary/10 flex items-center justify-center text-brand-primary shrink-0">
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d={item.icon} /></svg>
                                         </div>
-                                        <span className="text-gray-700 leading-relaxed">{item.label}</span>
+                                        <span className="text-[15px] leading-relaxed font-light text-gray-700">{item.label}</span>
                                     </li>
                                 ))}
                             </ul>
@@ -203,22 +203,22 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* FEATURE 2: SMART DIRECTORY */}
-            <section data-navbar-theme="light" className="py-24 bg-white overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex flex-col md:flex-row-reverse items-center gap-16">
+            <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-12 lg:px-16 bg-white overflow-hidden">
+                <div className="max-w-7xl mx-auto flex flex-col gap-32">
+                    <div className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20">
                         {/* Text */}
-                        <div className="w-full md:w-1/2">
+                        <div className="w-full md:w-1/2 flex flex-col items-start">
                             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent/5 border border-brand-accent/20 text-brand-accent text-sm font-bold uppercase tracking-widest mb-6">
                                 <span className="w-2 h-2 rounded-full bg-brand-accent inline-block" />
                                 Feature 02 — Smart Directory
                             </div>
-                            <h2 className="text-[32px] md:text-[40px] font-extrabold text-brand-primary mb-6 leading-tight tracking-tight">
+                            <h2 className="text-[32px] md:text-[40px] font-extrabold text-gray-900 mb-6 leading-tight">
                                 Collect, manage &amp; <span className="text-brand-accent">stay connected.</span>
                             </h2>
-                            <p className="text-[18px] text-gray-600 mb-8 leading-relaxed">
+                            <p className="mb-6 text-[16px] md:text-[18px] text-gray-600 leading-relaxed font-light">
                                 Every connection you make lives in one smart, searchable directory — and the relationship doesn't stop at the exchange.
                             </p>
-                            <ul className="space-y-4">
+                            <ul className="space-y-4 mb-8">
                                 {[
                                     { icon: "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z", label: "Scan physical business cards instantly with AI-powered OCR." },
                                     { icon: "M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z", label: "Collect namecards via QR scan — saved automatically to your directory." },
@@ -226,11 +226,11 @@ export default function DigitalNamecardPage() {
                                     { icon: "M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z", label: "Chat directly with your connections from within the app." },
                                     { icon: "M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z", label: "Follow updates and posts from people in your network." },
                                 ].map((item, idx) => (
-                                    <li key={idx} className="flex items-start gap-3">
-                                        <div className="mt-0.5 w-8 h-8 rounded-xl bg-brand-accent/10 flex items-center justify-center flex-shrink-0">
-                                            <svg className="w-4 h-4 text-brand-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d={item.icon} /></svg>
+                                    <li key={idx} className="flex items-center gap-3 text-gray-700">
+                                        <div className="w-6 h-6 rounded-full bg-brand-accent/10 flex items-center justify-center text-brand-accent shrink-0">
+                                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d={item.icon} /></svg>
                                         </div>
-                                        <span className="text-gray-700 leading-relaxed">{item.label}</span>
+                                        <span className="text-[15px] leading-relaxed font-light text-gray-700">{item.label}</span>
                                     </li>
                                 ))}
                             </ul>

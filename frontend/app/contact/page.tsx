@@ -44,7 +44,7 @@ export default function ContactPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pb-24 flex flex-col lg:flex-row gap-12 lg:gap-16 relative z-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pb-24 flex flex-col lg:flex-row gap-12 lg:gap-16 relative z-20">
 
         {/* Left Column: Partnership Email CTA */}
         <div className="flex-1 lg:max-w-2xl flex flex-col gap-8">

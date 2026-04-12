@@ -132,7 +132,7 @@ export default function Navbar() {
           ? 'bg-white/90 backdrop-blur-md shadow-[0_1px_12px_rgba(0,0,0,0.08)]'
           : 'bg-gradient-to-b from-black/25 to-transparent backdrop-blur-sm'
       }`}>
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 py-3 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">

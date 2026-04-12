@@ -278,7 +278,7 @@ export default function HomePage() {
           </div>
 
           {/* Floating Mobile UI Mockup (Feed Replica) */}
-          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] h-[710px] shrink-0 bg-[#f4f6f9] rounded-[2.25rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[10px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col overflow-hidden group-hover:hover:z-30 scale-[0.8] lg:scale-[0.85] origin-top md:origin-left group-hover:hover:scale-[0.85] lg:group-hover:hover:scale-[0.9] group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100 font-sans">
+          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] h-[710px] shrink-0 bg-[#f4f6f9] rounded-[2.25rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[10px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col overflow-hidden group-hover:hover:z-30 scale-[0.7] lg:scale-[0.75] origin-top md:origin-left group-hover:hover:scale-[0.75] lg:group-hover:hover:scale-[0.8] group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100 font-sans">
 
             {/* Dynamic Island / Camera Notch */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100] flex items-center justify-end px-2">
