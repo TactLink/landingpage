@@ -18,6 +18,7 @@ export default function HomePage() {
   const [localPartners, setLocalPartners] = useState<any[]>([]);
   const [globalPartners, setGlobalPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [activeCountry, setActiveCountry] = useState("Global");
   const [localShouldScroll, setLocalShouldScroll] = useState(false);
   const localMarqueeRef = useRef<HTMLDivElement>(null);
@@ -45,6 +46,7 @@ export default function HomePage() {
   const [fade, setFade] = useState(true);
 
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setFade(false); // slide away
       setTimeout(() => {
@@ -112,19 +114,23 @@ export default function HomePage() {
 
   // Check if local partners overflow the container → enable marquee only if needed
   useEffect(() => {
-    if (!localMarqueeRef.current || !localContentRef.current) return;
     const check = () => {
-      const containerW = localMarqueeRef.current!.offsetWidth;
-      const contentW = localContentRef.current!.scrollWidth;
+      if (!localMarqueeRef.current || !localContentRef.current) return;
+      const containerW = localMarqueeRef.current.offsetWidth;
+      const contentW = localContentRef.current.scrollWidth;
       setLocalShouldScroll(contentW > containerW);
     };
     check();
-    const ro = new ResizeObserver(check);
-    ro.observe(localMarqueeRef.current);
-    return () => ro.disconnect();
+    if (localMarqueeRef.current) {
+      const ro = new ResizeObserver(check);
+      ro.observe(localMarqueeRef.current);
+      return () => ro.disconnect();
+    }
   }, [localPartners]);
 
   // Remove the entire useEffect for auto-scroll and related debug code.
+
+  if (!mounted) return null;
 
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">

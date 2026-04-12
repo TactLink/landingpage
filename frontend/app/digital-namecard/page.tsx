@@ -189,9 +189,9 @@ export default function DigitalNamecardPage() {
                         </div>
 
                         {/* Namecard Video */}
-                        <div className="w-full md:w-1/2 relative flex justify-center">
+                        <div className="w-full md:w-1/2 relative flex justify-center py-4">
                             <div className="absolute inset-0 bg-gradient-to-br from-brand-accent/10 to-[#374085]/10 rounded-[3rem] transform rotate-2 scale-105 z-0" />
-                            <div className="relative z-10 w-full max-w-sm aspect-[305/678] overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100 bg-black">
+                            <div className="relative z-10 w-full max-w-[280px] lg:max-w-[320px] aspect-[305/678] overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100 bg-black">
                                 <video autoPlay loop muted playsInline className="w-full h-full object-cover object-top">
                                     <source src="/mockups/namecard-global.webm" type="video/webm" />
                                     <source src="/mockups/namecard-global.mp4" type="video/mp4" />
@@ -237,13 +237,12 @@ export default function DigitalNamecardPage() {
                         </div>
 
                         {/* Directory Screenshot */}
-                        <div className="w-full md:w-1/2 relative flex justify-center">
+                        <div className="w-full md:w-1/2 relative flex justify-center py-4">
                             <div className="absolute inset-0 bg-gradient-to-br from-green-100/50 to-brand-accent/10 rounded-[3rem] transform -rotate-2 scale-105 z-0" />
-                            <div className="relative z-10 w-full max-w-sm aspect-[305/678] overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100 bg-gray-100 group">
+                            <div className="relative z-10 w-full max-w-[280px] lg:max-w-[320px] aspect-[305/678] overflow-hidden rounded-[2.5rem] shadow-2xl border border-gray-100 bg-gray-100 group">
                                 <Image
-                                    key={activeCountry}
-                                    src={`/mockups/directory-${activeCountry.toLowerCase()}.png`}
-                                    alt={`Smart Directory - ${activeCountry}`}
+                                    src="/mockups/directory-global.png"
+                                    alt="Smart Directory"
                                     fill
                                     className="object-cover object-top transition-all duration-500 group-hover:scale-105"
                                 />

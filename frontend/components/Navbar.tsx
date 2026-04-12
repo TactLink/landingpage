@@ -11,7 +11,6 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("Global");
-  const [isScrolled, setIsScrolled] = useState(false);
   const [navTheme, setNavTheme] = useState<'dark' | 'light'>('dark');
   const pathname = usePathname();
   const touchStartX = useRef<number | null>(null);
@@ -43,36 +42,63 @@ export default function Navbar() {
         })
         .catch(() => {}); // silently fall back to Global
     }
+  }, []);
 
-    // Navbar theme: read data-navbar-theme from the section currently behind the nav
-    const updateTheme = () => {
-      const sections = document.querySelectorAll('[data-navbar-theme]');
-      let currentTheme: 'dark' | 'light' = 'dark';
-      // Look at the pixel ~40px from the top (middle of the navbar)
-      sections.forEach((section) => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 40 && rect.bottom > 40) {
-          currentTheme = (section.getAttribute('data-navbar-theme') as 'dark' | 'light') || 'dark';
+  // Navbar theme observer — re-runs on every page navigation
+  useEffect(() => {
+    const visibleSections = new Map<Element, string>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const theme = entry.target.getAttribute('data-navbar-theme') || 'dark';
+          if (entry.isIntersecting) {
+            visibleSections.set(entry.target, theme);
+          } else {
+            visibleSections.delete(entry.target);
+          }
+        });
+
+        // Of all sections intersecting the navbar zone, pick the one closest to the top
+        let bestTheme: 'dark' | 'light' = 'dark';
+        let bestTop = Infinity;
+        visibleSections.forEach((theme, section) => {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 64 && Math.abs(rect.top) < Math.abs(bestTop)) {
+            bestTop = rect.top;
+            bestTheme = theme as 'dark' | 'light';
+          }
+        });
+
+        // Fallback: if no section has top <= 64 yet, use the first visible one
+        if (bestTop === Infinity && visibleSections.size > 0) {
+          bestTheme = visibleSections.values().next().value as 'dark' | 'light';
         }
-      });
-      setNavTheme(currentTheme);
+
+        setNavTheme(bestTheme);
+      },
+      {
+        rootMargin: '0px 0px -95% 0px',
+        threshold: 0,
+      }
+    );
+
+    // Observe all themed sections (with delay for DOM hydration)
+    const startObserving = () => {
+      observer.disconnect();
+      visibleSections.clear();
+      const sections = document.querySelectorAll('[data-navbar-theme]');
+      sections.forEach((section) => observer.observe(section));
     };
 
-    // Run immediately, after hydration, and on every scroll
-    updateTheme();
-    const t = setTimeout(updateTheme, 300); // catch hydration delay
-    window.addEventListener('scroll', updateTheme, { passive: true });
-
-    // Also re-check when sections are added to the DOM (Next.js SPA navigation)
-    const mo = new MutationObserver(updateTheme);
-    mo.observe(document.body, { childList: true, subtree: true });
+    startObserving();
+    const timer = setTimeout(startObserving, 300);
 
     return () => {
-      clearTimeout(t);
-      window.removeEventListener('scroll', updateTheme);
-      mo.disconnect();
+      clearTimeout(timer);
+      observer.disconnect();
     };
-  }, []);
+  }, [pathname]);
 
   // Handle click outside for desktop dropdown
   useEffect(() => {
@@ -145,13 +171,13 @@ export default function Navbar() {
                       onClick={() => handleCountrySelectDesktop(country)}
                       className={`w-full text-left px-4 py-2.5 text-[13px] font-medium transition-colors flex items-center justify-between ${
                         country === selectedCountry 
-                          ? (isScrolled ? 'bg-brand-primary/5 text-brand-primary' : 'bg-brand-accent/10 text-brand-accent') 
-                          : (isScrolled ? 'text-gray-600 hover:bg-gray-50' : 'text-white/70 hover:bg-white/5 hover:text-white')
+                          ? (navTheme === 'light' ? 'bg-brand-primary/5 text-brand-primary' : 'bg-brand-accent/10 text-brand-accent') 
+                          : (navTheme === 'light' ? 'text-gray-600 hover:bg-gray-50' : 'text-white/70 hover:bg-white/5 hover:text-white')
                       }`}
                     >
                       {country}
                       {country === selectedCountry && (
-                        <span className={`w-1.5 h-1.5 rounded-full ${isScrolled ? 'bg-brand-primary' : 'bg-brand-accent'}`} />
+                        <span className={`w-1.5 h-1.5 rounded-full ${navTheme === 'light' ? 'bg-brand-primary' : 'bg-brand-accent'}`} />
                       )}
                     </button>
                   ))}
@@ -175,11 +201,11 @@ export default function Navbar() {
               {pathname === '/' ? 'Partner' : 'Download'}
             </Link>
           )}
-          <button onClick={openMenu} aria-label="Open menu" className={`focus:outline-none p-1 transition-colors ${isScrolled ? 'text-brand-primary' : 'text-white'}`}>
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
+          <div className="md:hidden flex items-center justify-end">
+            <button onClick={openMenu} aria-label="Open menu" className={`focus:outline-none p-1 transition-colors duration-500 ${navTheme === 'light' ? 'text-brand-primary' : 'text-white'}`}>
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            </button>
+          </div>
         </div>
       </div>
       </nav>
