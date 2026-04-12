@@ -777,7 +777,7 @@ export default function HomePage() {
 
       {/* FEATURES SECTION */}
       {/* FEATURES SECTION (ZIG-ZAG) */}
-      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-0 bg-white">
+      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-12 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto flex flex-col gap-32">
 
           {/* Feature 1: Live Directory (Text Left, Image Right) */}
@@ -1196,7 +1196,7 @@ export default function HomePage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-0 bg-[#f8fafc] border-y border-gray-100">
+      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-12 lg:px-16 bg-[#f8fafc] border-y border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-extrabold text-[36px] md:text-[48px] text-brand-primary mb-6">
@@ -1278,7 +1278,7 @@ export default function HomePage() {
         </div>
       </section>
       {/*
-      <section data-navbar-theme="dark" className="w-full bg-brand-primary py-20 px-4 md:px-0 flex justify-center items-center">
+      <section data-navbar-theme="dark" className="w-full bg-brand-primary py-20 px-6 md:px-12 lg:px-16 flex justify-center items-center">
         <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-lg w-full flex flex-col items-center">
           <h2 className="font-extrabold mb-6 text-[30px] text-black">Request a Demo</h2>
           <form className="w-full flex flex-col gap-5">
@@ -1294,7 +1294,7 @@ export default function HomePage() {
       */}
 
       {/* FAQ SECTION */}
-      <section data-navbar-theme="light" className="w-full py-20 px-4 md:px-0 bg-brand-light">
+      <section data-navbar-theme="light" className="w-full py-20 px-6 md:px-12 lg:px-16 bg-brand-light">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-extrabold text-brand-primary mb-8 text-center text-[30px] text-black">Frequently Asked Questions</h2>
           <div className="space-y-4">
