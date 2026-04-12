@@ -11,7 +11,7 @@ export default function AboutPage() {
     <main className="w-full min-h-screen bg-[#0A0D1E] text-white selection:bg-brand-accent selection:text-brand-primary">
       
       {/* HERO SECTION */}
-      <section className="relative w-full py-32 px-6 flex flex-col items-center justify-center text-center overflow-hidden min-h-[85vh]">
+      <section className="relative w-full py-32 px-6 md:px-12 lg:px-16 flex flex-col items-center justify-center text-center overflow-hidden min-h-[85vh]">
         {/* Background Gradients */}
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-accent/20 blur-[120px] mix-blend-screen pointer-events-none" />
         <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#374085]/40 blur-[150px] mix-blend-screen pointer-events-none" />
@@ -36,7 +36,7 @@ export default function AboutPage() {
       </section>
 
       {/* STATS BAR (Glassmorphic) */}
-      <section className="w-full px-6 -mt-16 relative z-20 mb-20">
+      <section className="w-full px-6 md:px-12 lg:px-16 -mt-16 relative z-20 mb-20">
         <div className="max-w-6xl mx-auto bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl grid grid-cols-2 lg:grid-cols-4 gap-8 text-center lg:divide-x divide-white/10">
           {[
             { value: "20+", label: "Partner Organizations" },
@@ -53,7 +53,7 @@ export default function AboutPage() {
       </section>
 
       {/* OUR STORY SECTION */}
-      <section className="w-full py-24 px-6 relative">
+      <section className="w-full py-24 px-6 md:px-12 lg:px-16 relative">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           {/* Text Column */}
           <div className="flex-1 flex flex-col items-start pr-0 lg:pr-8">
@@ -98,7 +98,7 @@ export default function AboutPage() {
       </section>
 
       {/* OUR SOLUTION SECTION */}
-      <section className="w-full py-24 px-6 relative overflow-hidden bg-white/5 border-y border-white/5 mt-16">
+      <section className="w-full py-24 px-6 md:px-12 lg:px-16 relative overflow-hidden bg-white/5 border-y border-white/5 mt-16">
         <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#374085]/20 to-transparent blur-3xl pointer-events-none" />
         <div className="max-w-6xl mx-auto relative z-10">
           <div className="text-center mb-16">
@@ -142,7 +142,7 @@ export default function AboutPage() {
       </section>
 
       {/* OUR VISION / SDGs SECTION */}
-      <section className="w-full py-24 px-6 relative mt-16">
+      <section className="w-full py-24 px-6 md:px-12 lg:px-16 relative mt-16">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           {/* Left: text + SDG list */}
           <div className="flex-1 flex flex-col items-start lg:pr-10">
@@ -187,7 +187,7 @@ export default function AboutPage() {
       </section>
 
       {/* LEADERSHIP TEAM SECTION */}
-      <section className="w-full py-32 px-6 bg-[#060813] border-t border-white/5 mt-16 relative">
+      <section className="w-full py-32 px-6 md:px-12 lg:px-16 bg-[#060813] border-t border-white/5 mt-16 relative">
         <div className="absolute top-0 right-1/4 w-[30%] h-[30%] bg-brand-accent/5 blur-[120px] rounded-full mix-blend-screen pointer-events-none" />
         <div className="max-w-6xl mx-auto relative z-10">
           {/* Section Header */}
