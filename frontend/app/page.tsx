@@ -4,10 +4,24 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { fetchStrapiCollection, STRAPI_URL } from "../lib/strapi";
 
+const COUNTRY_FLAGS: Record<string, string> = {
+  "Thailand": "🇹🇭",
+  "Singapore": "🇸🇬",
+  "Malaysia": "🇲🇾",
+  "Indonesia": "🇮🇩",
+  "Vietnam": "🇻🇳",
+  "Philippines": "🇵🇭",
+  "Global": "🌐",
+};
+
 export default function HomePage() {
   const [localPartners, setLocalPartners] = useState<any[]>([]);
   const [globalPartners, setGlobalPartners] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeCountry, setActiveCountry] = useState("Global");
+  const [localShouldScroll, setLocalShouldScroll] = useState(false);
+  const localMarqueeRef = useRef<HTMLDivElement>(null);
+  const localContentRef = useRef<HTMLDivElement>(null);
   // FAQ
   const faqs = [
     { q: "What is TactLink?", a: "TactLink is a smart directory and networking platform for associations and events." },
@@ -58,7 +72,8 @@ export default function HomePage() {
       try {
         setLoading(true);
         // Get the current country from localStorage (default to Global)
-        const activeCountry = localStorage.getItem('tactlink_country') || "Global";
+        const country = localStorage.getItem('tactlink_country') || "Global";
+        setActiveCountry(country);
 
         // 1. Fetch all partners without filtering
         const data = await fetchStrapiCollection("partners", {
@@ -71,7 +86,7 @@ export default function HomePage() {
 
         if (data && data.length > 0) {
           data.forEach((p: any) => {
-            if (p.country === activeCountry) {
+            if (p.country === country) {
               locals.push(p);
             } else {
               globals.push(p);
@@ -95,12 +110,26 @@ export default function HomePage() {
     return () => window.removeEventListener('countryChange', loadPartners);
   }, []);
 
+  // Check if local partners overflow the container → enable marquee only if needed
+  useEffect(() => {
+    if (!localMarqueeRef.current || !localContentRef.current) return;
+    const check = () => {
+      const containerW = localMarqueeRef.current!.offsetWidth;
+      const contentW = localContentRef.current!.scrollWidth;
+      setLocalShouldScroll(contentW > containerW);
+    };
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(localMarqueeRef.current);
+    return () => ro.disconnect();
+  }, [localPartners]);
+
   // Remove the entire useEffect for auto-scroll and related debug code.
 
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
       {/* HERO SECTION */}
-      <section className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 pt-24 pb-16 relative overflow-hidden min-h-screen">
+      <section data-navbar-theme="dark" className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 pt-24 pb-16 relative overflow-hidden min-h-screen">
         <div className="w-full md:w-[45%] lg:w-[48%] z-10 md:pr-8 lg:pr-10">
           {/* Eyebrow / Trust Signal */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
@@ -110,16 +139,16 @@ export default function HomePage() {
 
           <h1 className="font-extrabold mb-3 leading-[1.1] text-[32px] md:text-[42px] lg:text-[48px] xl:text-[64px] text-white min-h-[80px] md:min-h-[100px] xl:min-h-[140px]">
             The Ultimate Platform for{' '}
-            <div className="overflow-hidden inline-block align-bottom relative h-[38px] md:h-[48px] lg:h-[56px] xl:h-[72px] md:pt-1">
+            <span className="overflow-hidden inline-flex items-end align-bottom relative h-[1.1em]">
               <span
-                className={`text-brand-accent block transition-all duration-300 ease-in-out ${fade ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}
+                className={`text-brand-accent block transition-all duration-300 ease-in-out  ${fade ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}
               >
                 {keywords[currentKeywordIndex]}
               </span>
-            </div>
+            </span>
           </h1>
           <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light">
-            Turn your static member list into a thriving, interactive digital community. Partner with us and get full access — <span className="text-brand-accent font-semibold">completely free, forever.</span>
+            Turn your static member list into a thriving, interactive digital community. Partner with us and get premium access — <span className="text-brand-accent font-semibold">completely free, forever.</span>
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -129,18 +158,18 @@ export default function HomePage() {
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
               </span>
             </a>
-            <a href="/contact" className="w-full sm:w-auto flex justify-center text-white/80 hover:text-white font-medium px-4 py-3 transition-colors">
-              Talk to Sales
+            <a href="/digital-namecard" className="w-full sm:w-auto flex justify-center text-white/80 hover:text-white font-medium px-4 py-3 transition-colors">
+              Try the App
             </a>
           </div>
         </div>
 
-        <div className="w-full md:w-[55%] lg:w-[52%] flex justify-center items-center mt-8 md:mt-0 relative h-[400px] md:h-[400px] lg:h-[480px] xl:h-[580px] group [perspective:1000px] scale-75 md:scale-75 lg:scale-75 xl:scale-[0.9] origin-center md:origin-right">
+        <div className="w-full md:w-[55%] lg:w-[52%] flex justify-center items-center mt-8 md:mt-0 relative min-h-[65vh] lg:min-h-[72vh] group [perspective:1000px] origin-center md:origin-right">
           {/* Background glowing orb */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-brand-accent opacity-20 rounded-full blur-[120px] animate-pulse"></div>
 
           {/* Web Dashboard Replica (Background) */}
-          <div className="hidden md:flex absolute right-[-20px] lg:right-[-60px] top-1/2 -translate-y-1/2 w-[500px] lg:w-[650px] h-[350px] lg:h-[420px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-4 lg:group-hover:hover:-translate-x-10 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
+          <div className="hidden md:flex absolute right-0 lg:right-[-20px] top-1/2 -translate-y-1/2 w-[520px] lg:w-[680px] max-w-[50vw] h-[360px] lg:h-[480px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-4 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
             {/* Top Nav */}
             <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
               <div className="flex items-center gap-6">
@@ -244,89 +273,148 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Floating Mobile UI Mockup (Mini Program Replica) */}
-          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[280px] h-[580px] md:w-[260px] lg:w-[300px] md:h-[540px] lg:h-[600px] bg-[#ffffff] rounded-[48px] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[12px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col flex-shrink-0 overflow-hidden group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100">
+          {/* Floating Mobile UI Mockup (Feed Replica) */}
+          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 h-[65vh] lg:h-[72vh] aspect-[305/678] shrink-0 bg-[#f4f6f9] rounded-[3rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[12px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col overflow-hidden group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100 font-sans">
 
             {/* Dynamic Island / Camera Notch */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100] flex items-center justify-end px-2">
               <div className="w-2.5 h-2.5 bg-[#0a0a0a] rounded-full border border-white/5"></div>
             </div>
 
-            {/* Dark Blue Header */}
-            <div className="w-full bg-[#1e255a] pt-12 pb-16 px-6 relative rounded-b-[36px] shadow-sm overflow-hidden z-20">
-              {/* Subtle background pattern to match screenshot */}
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '16px 16px' }}></div>
-              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M6 12L12 6L18 12L12 18L6 12Z\' fill=\'white\'/%3E%3Cpath d=\'M0 0H24V24H0V0Z\' fill=\'transparent\'/%3E%3C/svg%3E")', backgroundSize: '40px 40px', backgroundPosition: 'center' }}></div>
+            {/* Dark Blue Curved Header */}
+            <div className="w-full bg-gradient-to-br from-[#2b51aa] to-[#1e346f] pt-12 pb-12 px-5 relative shrink-0 z-20 shadow-sm" style={{ borderBottomLeftRadius: '36px', borderBottomRightRadius: '36px' }}>
+              {/* Fake Wavy lines pattern */}
+              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at center, transparent 40%, rgba(255,255,255,0.4) 41%, rgba(255,255,255,0.4) 43%, transparent 44%)', backgroundSize: '150% 150%', backgroundPosition: 'left 50% top 100%' }}></div>
+              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at center, transparent 30%, rgba(255,255,255,0.4) 31%, rgba(255,255,255,0.4) 33%, transparent 34%)', backgroundSize: '150% 150%', backgroundPosition: 'left 50% top 100%' }}></div>
 
               <div className="flex justify-between items-center mb-6 relative z-10">
-                <svg className="w-5 h-5 text-brand-accent cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                <svg className="w-6 h-6 text-brand-accent cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                <div className="space-y-1 w-5 cursor-pointer">
+                  <div className="w-full h-[2px] bg-white rounded-full"></div>
+                  <div className="w-full h-[2px] bg-white rounded-full"></div>
+                  <div className="w-full h-[2px] bg-white rounded-full"></div>
+                </div>
               </div>
-              <h2 className="text-white text-[28px] font-bold mb-3 tracking-wide relative z-10">Hello, John!</h2>
-              <p className="text-white/90 text-[12px] leading-relaxed pr-4 relative z-10">
-                Welcome to the mini program page where you can interact with different associations, giving you instant access to any services, content, and tools in one place.
-              </p>
-            </div>
 
-            {/* Content Area */}
-            <div className="flex-1 px-5 pt-8 pb-32 overflow-hidden bg-white">
-              <h3 className="text-gray-900 font-bold mb-4 text-[15px] tracking-tight">Here are your associations:</h3>
-
-              <div className="grid grid-cols-2 gap-3">
-                {/* Card 1: Global Trade Council (Yellowish) */}
-                <div className="bg-[#fef9c3] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-square shadow-sm hover:shadow-md transition cursor-pointer relative overflow-hidden group">
-                  <div className="absolute inset-0 bg-yellow-400/5 group-hover:bg-yellow-400/20 transition"></div>
-                  {/* Subtle globe/shield watermark */}
-                  <svg className="absolute w-28 h-28 text-yellow-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" /></svg>
-                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto z-10 text-center">Global Trade Council</span>
+              <div className="flex items-center gap-3 relative z-10 mb-2">
+                <div className="w-14 h-14 bg-white border-[1.5px] border-white rounded-full flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden">
+                  <div className="text-[20px] font-black text-[#2cbdf4] tracking-tighter">FN<span className="text-[#f15e61]">.</span></div>
                 </div>
-
-                {/* Card 2: Founders Network (Bluish) */}
-                <div className="bg-[#b4c6ff] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-square shadow-sm hover:shadow-md transition cursor-pointer group">
-                  <div className="font-black text-[28px] text-[#2cbdf4] tracking-tighter mb-1 mt-auto group-hover:scale-110 transition">FN<span className="text-[#f15e61]">.</span></div>
-                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto text-center">Founders Network</span>
-                </div>
-
-                {/* Card 3: Film Club (Greenish) */}
-                <div className="bg-[#b9e5aa] rounded-[28px] p-4 flex flex-col items-center justify-center aspect-[9/10] shadow-sm hover:shadow-md transition cursor-pointer group relative overflow-hidden">
-                  <div className="absolute uppercase text-white/30 font-black text-4xl rotate-12 -translate-y-4 font-mono group-hover:scale-110 transition">FILM<br />CLUB</div>
-                  <span className="font-bold text-[#1a1f4c] text-[13px] mt-auto z-10 text-center">Film Club</span>
-                </div>
-
-                {/* Vertical Wrapper for Card 4 & 5 */}
-                <div className="flex flex-col gap-3">
-                  {/* Card 4: Health Society (Peach) */}
-                  <div className="bg-[#ffdac1] rounded-[24px] p-3 flex flex-col items-center justify-center h-[90px] shadow-sm hover:shadow-md transition cursor-pointer group">
-                    <svg className="w-10 h-10 text-[#f15e61] mb-1 group-hover:scale-110 transition shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /><path d="M11 7h2v3h3v2h-3v3h-2v-3H8v-2h3z" fill="white" /></svg>
-                    <span className="font-bold text-[#1a1f4c] text-[12px] text-center leading-tight">Health Society</span>
-                  </div>
-
-                  {/* Card 5: Add New (Grey) */}
-                  <div className="bg-[#e2e8f0] rounded-[20px] p-2 flex flex-col items-center justify-center flex-1 shadow-inner hover:bg-gray-300 transition cursor-pointer border border-transparent border-t-white/50">
-                    <svg className="w-6 h-6 text-gray-400 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                    <span className="text-gray-500 text-[12px] font-medium">Add new</span>
-                  </div>
-                </div>
+                <h2 className="text-white text-[22px] font-bold tracking-tight">Founders Network</h2>
               </div>
             </div>
 
-            {/* Bottom Floating Nav Bar */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[92%] h-[68px] bg-[#4a558a] rounded-[34px] flex justify-between items-center px-[6px] shadow-[0_20px_40px_rgba(0,0,0,0.3)] z-30">
-              <div className="flex flex-col items-center justify-center w-[25%] h-[56px] bg-white rounded-[28px] text-[#4a558a] shadow-sm cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
-                <span className="text-[10px] font-bold tracking-tight">Portal</span>
+            {/* Scrollable Feed */}
+            <div className="flex-1 overflow-hidden bg-[#f4f6f9] pb-24 -mt-6 pt-6 relative z-10">
+
+              <div className="text-center text-gray-500 font-bold text-[13px] mb-4">Feed</div>
+
+              {/* Stories Row */}
+              <div className="flex gap-3 px-4 overflow-hidden mb-4 shrink-0">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="relative shrink-0 flex flex-col items-center">
+                    <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-gray-300 to-gray-400">
+                      <img src={`https://i.pravatar.cc/100?img=${i + 10}`} className="w-full h-full rounded-full object-cover border-[1.5px] border-white" alt={`Story ${i}`} />
+                    </div>
+                    {i === 3 && (
+                      <div className="absolute top-0 right-0 w-4 h-4 bg-[#f15e61] rounded-full border border-white flex items-center justify-center text-[8px] text-white font-bold z-10 box-content">2</div>
+                    )}
+                  </div>
+                ))}
               </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                <span className="text-[10px] font-medium tracking-tight">Chat</span>
+
+              {/* Post 1 */}
+              <div className="bg-white rounded-2xl mx-3 shadow-[0_2px_10px_rgba(0,0,0,0.03)] mb-4 overflow-hidden border border-gray-100">
+                {/* Post Header */}
+                <div className="p-3 pb-2">
+                  <div className="flex gap-2">
+                    <img src="https://i.pravatar.cc/100?img=11" className="w-10 h-10 rounded-full object-cover shrink-0" alt="Author" />
+                    <div className="flex-1 overflow-hidden">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-bold text-gray-900 text-[13px] leading-tight">Marcus Wong</h4>
+                        <span className="text-gray-400 font-bold shrink-0 text-sm leading-none ml-2">⋮</span>
+                      </div>
+                      <p className="text-[10px] text-gray-600 leading-tight truncate mt-[2px]">Product Manager • ABC International Sdn Bhd</p>
+                      <p className="text-[9px] text-gray-400 mt-1">6h ago • Edited</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Images */}
+                <div className="grid grid-cols-2 gap-[1px] bg-white h-[120px]">
+                  <img src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Presentation" />
+                  <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Audience" />
+                </div>
+
+                {/* Engagement */}
+                <div className="px-3 py-2">
+                  <div className="flex justify-between items-center text-[10px] text-gray-500 border-b border-gray-50 pb-2 mb-2">
+                    <div className="flex items-center gap-1">
+                      <div className="flex -space-x-1">
+                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[3] leading-none">❤️</div>
+                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[2] leading-none">👍</div>
+                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[1] leading-none">🫂</div>
+                      </div>
+                      <span className="ml-1 tracking-tight">Riley Fernandez and others</span>
+                    </div>
+                    <div className="tracking-tight">78 comments • 10 reposts</div>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex justify-between items-center px-2 py-1">
+                    {/* Like */}
+                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+                    {/* Comment */}
+                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+                    {/* Send / Paper Plane */}
+                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer -rotate-12 transform origin-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
+                    {/* Repost */}
+                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+
+              {/* Post 2 (Partial cutoff like mockup) */}
+              <div className="bg-white rounded-2xl mx-3 shadow-[0_2px_10px_rgba(0,0,0,0.03)] overflow-hidden border border-gray-100 mb-6">
+                <div className="p-3 pb-2">
+                  <div className="flex gap-2">
+                    <img src="https://i.pravatar.cc/100?img=33" className="w-10 h-10 rounded-full object-cover shrink-0" alt="Author" />
+                    <div className="flex-1 overflow-hidden">
+                      <div className="flex justify-between items-start">
+                        <h4 className="font-bold text-gray-900 text-[13px] leading-tight">Jeremiah Eden</h4>
+                        <span className="text-gray-400 font-bold shrink-0 text-sm leading-none ml-2">⋮</span>
+                      </div>
+                      <p className="text-[10px] text-gray-600 leading-tight truncate mt-[2px]">General Admin • Charity Organization</p>
+                      <p className="text-[9px] text-gray-400 mt-1">3 weeks ago</p>
+                    </div>
+                  </div>
+                </div>
+                {/* Image */}
+                <div className="w-full bg-gray-100 h-[80px]">
+                  <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Charity" />
+                </div>
+              </div>
+
+            </div>
+
+            {/* Floating Bottom Nav */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-[68px] bg-gradient-to-br from-[#3c5ba9] to-[#253f86] rounded-[34px] flex justify-between items-center px-[6px] shadow-[0_20px_40px_rgba(30,50,110,0.4)] z-30">
+              <div className="flex flex-col items-center justify-center w-[25%] h-[56px] bg-white rounded-[28px] text-[#2b51aa] shadow-sm cursor-pointer border border-[#2b51aa]/10">
+                {/* RSS / Feed Icon */}
+                <svg className="w-[20px] h-[20px] mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 19A2 2 0 114 23 2 2 0 014 19zM4 11A10 10 0 0114 21m-10-5A5 5 0 019 21" /></svg>
+                <span className="text-[10px] font-bold tracking-tight">Feed</span>
+              </div>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
                 <span className="text-[10px] font-medium tracking-tight">Events</span>
               </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/80 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
                 <span className="text-[10px] font-medium tracking-tight">Tickets</span>
+              </div>
+              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
+                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <span className="text-[10px] font-medium tracking-tight">Members</span>
               </div>
             </div>
           </div>
@@ -336,7 +424,7 @@ export default function HomePage() {
       </section>
 
       {/* THE WHY SECTION */}
-      <section className="w-full py-24 px-6 bg-gradient-to-b from-[#1A1F4C] to-[#252b6b] relative overflow-hidden">
+      <section data-navbar-theme="dark" className="w-full py-24 px-6 bg-gradient-to-b from-[#1A1F4C] to-[#252b6b] relative overflow-hidden">
         {/* Decorative background glows */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-accent/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
@@ -545,101 +633,138 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* PARTNERS BAR: LOCAL */}
-      <section className="w-full py-16 px-4 bg-[#f8f9fc]">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="font-extrabold text-[30px] md:text-[40px] text-brand-primary">
-              Trusted By Global Change-Makers
-            </h2>
-            <div className="w-24 h-1 bg-brand-accent mx-auto mt-4 rounded-full"></div>
+      {/* PARTNERS BAR: COUNTRY-AWARE */}
+      <section data-navbar-theme="light" className="w-full bg-[#f8f9fc] pt-16 pb-0 overflow-hidden">
+
+        {/* ── LOCAL / COUNTRY ROW ── */}
+        <div className="max-w-7xl mx-auto px-4 mb-10">
+          <div className="text-center mb-8">
+            {/* Dynamic heading */}
+            {!loading && activeCountry !== "Global" ? (
+              <>
+                <h2 className="font-extrabold text-[28px] md:text-[38px] text-brand-primary">
+                  {localPartners.length > 0
+                    ? <>Associations Using TactLink <span className="text-brand-accent">in {activeCountry}</span></>
+                    : <>Be the first association <span className="text-brand-accent">in {activeCountry}</span> on TactLink</>}
+                </h2>
+              </>
+            ) : (
+              <>
+                <h2 className="font-extrabold text-[28px] md:text-[38px] text-brand-primary">
+                  Trusted By <span className="text-brand-accent">Global Change-Makers</span>
+                </h2>
+              </>
+            )}
+            <div className="w-24 h-1 bg-brand-accent mx-auto mt-4 rounded-full" />
           </div>
 
-          <div className="relative group max-w-full">
-            <button
-              onClick={() => scrollLocalPartners('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 md:-ml-6 z-10 bg-white shadow-lg rounded-full p-2 text-gray-500 hover:text-brand-primary hidden md:block opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-            </button>
-            <div
-              ref={partnerBarRef}
-              className="flex items-center gap-6 md:gap-8 overflow-x-auto snap-x snap-mandatory py-4 px-2 w-full mx-auto md:justify-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-            >
-              {loading ? (
-                <div className="text-gray-400 text-center w-full min-w-full">Loading partners...</div>
-              ) : localPartners.length > 0 ? (
-                localPartners.map((partner, idx) => {
-                  const logoUrl = partner.logo?.url
-                    ? partner.logo.url.startsWith("http")
-                      ? partner.logo.url
-                      : `${STRAPI_URL}${partner.logo.url}`
-                    : undefined;
-                  return (
-                    <div key={partner.id || idx} className="flex flex-col items-center flex-shrink-0 snap-center">
-                      <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-2xl shadow border border-gray-100 p-4 flex items-center justify-center w-36 h-36 hover:shadow-lg transition">
-                        {logoUrl ? (
-                          <img src={logoUrl} alt={partner.name || 'Partner'} className="h-24 w-24 object-contain" />
-                        ) : (
-                          <span className="text-xs text-gray-400">No Logo</span>
-                        )}
-                      </a>
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="text-center text-gray-500 w-full py-8 text-lg min-w-full">
-                  We are expanding our local network! Check out our international partners below.
-                </div>
-              )}
+          {/* Local partners row */}
+          {loading ? (
+            <div className="flex justify-center py-8">
+              <div className="flex gap-4">
+                {[1, 2, 3, 4].map(i => <div key={i} className="w-28 h-28 rounded-2xl bg-gray-200 animate-pulse" />)}
+              </div>
             </div>
-            <button
-              onClick={() => scrollLocalPartners('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 md:-mr-6 z-10 bg-white shadow-lg rounded-full p-2 text-gray-500 hover:text-brand-primary hidden md:block opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* PARTNERS BAR: GLOBAL */}
-      <section className="w-full bg-gradient-to-b from-[#f8f9fc] to-white py-12 px-0 overflow-hidden border-b border-gray-100">
-        <div className="max-w-7xl mx-auto mb-6 px-4">
-          <div className="text-center text-gray-500 font-bold text-[14px] uppercase tracking-widest">Also Part of a Growing Global Network</div>
-        </div>
-        <div className="relative flex overflow-hidden group w-full bg-white">
-          <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
-
-          {/* Continuous scrolling marquee - Requires exactly 2 identical halves for the -50% translateX loop to work perfectly */}
-          <div className="flex animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
-            {[0, 1].map((half) => (
-              <div key={half} className="flex shrink-0">
-                {loading ? null : [...Array(10)].map((_, copy) => (
-                  <div key={copy} className="flex items-center gap-12 pr-12 shrink-0">
-                    {globalPartners.map((partner, idx) => {
+          ) : localPartners.length > 0 ? (
+            /* Scrolling marquee for local partners */
+            <div ref={localMarqueeRef} className="relative overflow-hidden group">
+              {localShouldScroll && (
+                <>
+                  <div className="absolute left-0 top-0 w-16 h-full bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
+                  <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
+                </>
+              )}
+              <div className={localShouldScroll
+                ? "flex animate-[marquee_50s_linear_infinite] group-hover:[animation-play-state:paused] w-max"
+                : "flex justify-center flex-wrap gap-6 py-2 px-4"}>
+                {/* One visible set (for measurement + static display) */}
+                <div ref={localContentRef} className="flex shrink-0 gap-6 px-3">
+                  {localPartners.map((partner, idx) => {
+                    const logoUrl = partner.logo?.url
+                      ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
+                      : undefined;
+                    return (
+                      <a key={`local-0-${idx}`} href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
+                        className="flex-shrink-0 bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center justify-center w-32 h-32 hover:shadow-xl hover:scale-105 transition-all duration-300">
+                        {logoUrl
+                          ? <img src={logoUrl} alt={partner.name || 'Partner'} className="h-20 w-20 object-contain" />
+                          : <span className="text-xs text-gray-400 font-medium text-center px-2">{partner.name || 'Partner'}</span>}
+                      </a>
+                    );
+                  })}
+                </div>
+                {/* Duplicate set — only rendered when scrolling */}
+                {localShouldScroll && (
+                  <div className="flex shrink-0 gap-6 px-3">
+                    {localPartners.map((partner, idx) => {
                       const logoUrl = partner.logo?.url
-                        ? partner.logo.url.startsWith("http")
-                          ? partner.logo.url
-                          : `${STRAPI_URL}${partner.logo.url}`
+                        ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
                         : undefined;
                       return (
-                        <div key={`global-${half}-${copy}-${partner.id || idx}`} className="inline-flex flex-col items-center justify-center shrink-0">
-                          <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-sm p-2 flex items-center justify-center w-20 h-20 opacity-80 hover:opacity-100 transition grayscale hover:grayscale-0 hover:scale-110 duration-1200">
-                            {logoUrl ? (
-                              <img src={logoUrl} alt={partner.name || 'Global Partner'} className="h-12 w-12 object-contain" />
-                            ) : (
-                              <span className="text-[12px] text-gray-400 font-medium">Logo</span>
-                            )}
-                          </a>
-                        </div>
+                        <a key={`local-1-${idx}`} href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
+                          className="flex-shrink-0 bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center justify-center w-32 h-32 hover:shadow-xl hover:scale-105 transition-all duration-300">
+                          {logoUrl
+                            ? <img src={logoUrl} alt={partner.name || 'Partner'} className="h-20 w-20 object-contain" />
+                            : <span className="text-xs text-gray-400 font-medium text-center px-2">{partner.name || 'Partner'}</span>}
+                        </a>
                       );
                     })}
                   </div>
-                ))}
+                )}
               </div>
-            ))}
+            </div>
+          ) : (
+            /* Fallback CTA when no local partners */
+            !loading && activeCountry !== "Global" && (
+              <div className="flex flex-col items-center gap-4 py-6">
+                <p className="text-gray-500 text-base max-w-md text-center">
+                  We&apos;re growing in {activeCountry}. Partner with us and put your association on this page.
+                </p>
+                <a href="/contact"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-brand-primary text-white rounded-full font-semibold text-sm hover:bg-brand-accent hover:text-brand-primary transition-all duration-300 shadow-md">
+                  Become a Partner
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                </a>
+              </div>
+            )
+          )}
+        </div>
+
+        {/* ── GLOBAL MARQUEE ROW ── */}
+        <div className="border-t border-gray-200 bg-white py-10 overflow-hidden">
+          <div className="max-w-7xl mx-auto mb-5 px-4">
+            <div className="text-center text-gray-400 font-semibold text-[12px] uppercase tracking-[0.2em]">
+              {activeCountry !== "Global" ? `Also trusted by associations worldwide` : `Powering associations across the globe`}
+            </div>
+          </div>
+          <div className="relative flex overflow-hidden group w-full">
+            <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+            <div className="flex animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
+              {[0, 1].map((half) => (
+                <div key={half} className="flex shrink-0">
+                  {loading ? null : [...Array(10)].map((_, copy) => (
+                    <div key={copy} className="flex items-center gap-10 pr-10 shrink-0">
+                      {globalPartners.map((partner, idx) => {
+                        const logoUrl = partner.logo?.url
+                          ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
+                          : undefined;
+                        return (
+                          <div key={`global-${half}-${copy}-${partner.id || idx}`} className="inline-flex shrink-0">
+                            <a href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
+                              className="flex items-center justify-center w-20 h-20 opacity-60 hover:opacity-100 transition grayscale hover:grayscale-0 hover:scale-110 duration-300">
+                              {logoUrl
+                                ? <img src={logoUrl} alt={partner.name || 'Partner'} className="h-12 w-12 object-contain" />
+                                : <span className="text-[11px] text-gray-400 font-medium">{partner.name}</span>}
+                            </a>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -648,7 +773,7 @@ export default function HomePage() {
 
       {/* FEATURES SECTION */}
       {/* FEATURES SECTION (ZIG-ZAG) */}
-      <section className="w-full py-24 px-6 md:px-0 bg-white">
+      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-0 bg-white">
         <div className="max-w-7xl mx-auto flex flex-col gap-32">
 
           {/* Feature 1: Live Directory (Text Left, Image Right) */}
@@ -1067,7 +1192,7 @@ export default function HomePage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="w-full py-24 px-6 md:px-0 bg-[#f8fafc] border-y border-gray-100">
+      <section data-navbar-theme="light" className="w-full py-24 px-6 md:px-0 bg-[#f8fafc] border-y border-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="font-extrabold text-[36px] md:text-[48px] text-brand-primary mb-6">
@@ -1125,7 +1250,7 @@ export default function HomePage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="w-full py-24 px-6 relative overflow-hidden bg-[#1e255a]">
+      <section data-navbar-theme="dark" className="w-full py-24 px-6 relative overflow-hidden bg-[#1e255a]">
         {/* Decorative background elements */}
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-accent opacity-20 rounded-full blur-[100px] translate-x-1/2 -translate-y-1/2 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500 opacity-20 rounded-full blur-[80px] -translate-x-1/3 translate-y-1/3 pointer-events-none" />
@@ -1149,7 +1274,7 @@ export default function HomePage() {
         </div>
       </section>
       {/*
-      <section className="w-full bg-brand-primary py-20 px-4 md:px-0 flex justify-center items-center">
+      <section data-navbar-theme="dark" className="w-full bg-brand-primary py-20 px-4 md:px-0 flex justify-center items-center">
         <div className="bg-white rounded-3xl shadow-2xl p-10 max-w-lg w-full flex flex-col items-center">
           <h2 className="font-extrabold mb-6 text-[30px] text-black">Request a Demo</h2>
           <form className="w-full flex flex-col gap-5">
@@ -1165,7 +1290,7 @@ export default function HomePage() {
       */}
 
       {/* FAQ SECTION */}
-      <section className="w-full py-20 px-4 md:px-0 bg-brand-light">
+      <section data-navbar-theme="light" className="w-full py-20 px-4 md:px-0 bg-brand-light">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-extrabold text-brand-primary mb-8 text-center text-[30px] text-black">Frequently Asked Questions</h2>
           <div className="space-y-4">
@@ -1176,7 +1301,7 @@ export default function HomePage() {
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   type="button"
                 >
-                  <span className="text-black">{faq.q}</span>
+                  <span className="text-black text-left">{faq.q}</span>
                   <span className="ml-4 text-brand-accent text-2xl">{openFaq === idx ? '-' : '+'}</span>
                 </button>
                 {openFaq === idx && (

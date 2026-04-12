@@ -18,9 +18,9 @@ export default function DigitalNamecardPage() {
     ];
 
     const testimonials = [
-        { name: "Sarah J.", role: "Freelance Designer", text: "TactLink completely changed how I network. I have different profiles for my design clients and my photography gigs. So professional!" },
-        { name: "Michael R.", role: "Sales Executive", text: "The OCR scanner is a lifesaver after conferences. What used to take me hours of manual data entry now takes 5 minutes." },
-        { name: "Elena T.", role: "Startup Founder", text: "Sleek, fast, and always works. I get compliments every time someone scans my QR code. Ditching paper was the best choice." }
+        { name: "Arifin K.", role: "Serial Entrepreneur", text: "TactLink completely changed how I network across SE Asia. I effortlessly manage different profiles for my e-commerce ventures and tech startups. So professional!" },
+        { name: "Nadia P.", role: "Startup Founder", text: "The OCR scanner is a lifesaver after regional pitch events. What used to take me hours of manual data entry now takes 5 minutes. My investor pipeline is always up to date." },
+        { name: "Wei Jie T.", role: "SME Owner", text: "Sleek, fast, and always works. I get compliments from enterprise clients every time they scan my QR code. Ditching paper was the best choice for my business." }
     ];
 
     const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -38,7 +38,7 @@ export default function DigitalNamecardPage() {
         <main className="w-full min-h-screen bg-white selection:bg-brand-accent selection:text-brand-primary">
             
             {/* HERO SECTION */}
-            <section className="relative w-full min-h-screen overflow-hidden bg-[#0A0D1E]">
+            <section data-navbar-theme="dark" className="relative w-full min-h-screen overflow-hidden bg-[#0A0D1E]">
                 {/* Background Gradients */}
                 <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-accent/20 blur-[120px] mix-blend-screen pointer-events-none" />
                 <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-[#374085]/40 blur-[150px] mix-blend-screen pointer-events-none" />
@@ -156,7 +156,7 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* FEATURE 1: DIGITAL NAMECARD */}
-            <section className="py-24 bg-gray-50 overflow-hidden">
+            <section data-navbar-theme="light" className="py-24 bg-gray-50 overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row items-center gap-16">
                         {/* Text */}
@@ -203,7 +203,7 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* FEATURE 2: SMART DIRECTORY */}
-            <section className="py-24 bg-white overflow-hidden">
+            <section data-navbar-theme="light" className="py-24 bg-white overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="flex flex-col md:flex-row-reverse items-center gap-16">
                         {/* Text */}
@@ -254,7 +254,7 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* PREMIUM FEATURES SECTION */}
-            <section className="py-24 bg-gray-50 relative overflow-hidden">
+            <section data-navbar-theme="light" className="py-24 bg-gray-50 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-primary/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3" />
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <div className="text-center mb-16">
@@ -327,15 +327,15 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* BRIDGE / REFERRAL SECTION */}
-            <section className="py-28 relative overflow-hidden bg-brand-primary">
+            <section data-navbar-theme="dark" className="py-28 relative overflow-hidden bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086]">
                 {/* Abstract Design Elements */}
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-accent/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
+                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#cfa086]/20 rounded-full blur-[120px] translate-x-1/3 -translate-y-1/3 pointer-events-none" />
                 <div className="absolute inset-0 opacity-5 pointer-events-none">
                     <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M0 40L40 0H20L0 20M40 40V20L20 40" fill="none" stroke="currentColor" strokeWidth="1"/></pattern></defs><rect width="100%" height="100%" fill="url(#grid)"/></svg>
                 </div>
                 
                 <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-brand-accent text-sm font-bold uppercase tracking-widest mb-8 border border-white/20 shadow-lg shadow-black/20">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#374085]/40 text-brand-accent text-sm font-bold uppercase tracking-widest mb-8 border border-white/10 shadow-lg shadow-black/20 backdrop-blur-md">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                         Unlock Premium For Free
                     </div>
@@ -343,18 +343,18 @@ export default function DigitalNamecardPage() {
                         Refer your Association, <br className="hidden md:block" />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-[#f8cdab]">Get Premium for Life.</span>
                     </h2>
-                    <p className="text-[18px] md:text-[20px] text-white/80 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
+                    <p className="text-[18px] md:text-[20px] text-white/90 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
                         Love TactLink? Help your community go paperless. Introduce TactLink to your association or chamber of commerce, and if they partner with us, we’ll upgrade your personal account to TactLink Premium completely free.
                     </p>
-                    <a href="/contact?subject=Association+Referral" className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-brand-accent to-yellow-400 text-brand-primary hover:to-white hover:from-white px-8 py-4 rounded-2xl font-extrabold text-[17px] shadow-[0_0_40px_rgba(239,201,74,0.3)] transition-all transform hover:-translate-y-1 hover:scale-[1.02]">
+                    <a href="/contact?subject=Association+Referral" className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
                         Refer an Association Now
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                        <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
                     </a>
                 </div>
             </section>
 
             {/* SOCIAL PROOF SECTION */}
-            <section className="py-24 bg-brand-primary text-white">
+            <section data-navbar-theme="dark" className="py-24 bg-brand-primary text-white">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-16">
                         <h2 className="text-[32px] md:text-[48px] font-extrabold mb-4 tracking-tight">Loved by Professionals everywhere.</h2>
@@ -386,7 +386,7 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* BOTTOM CTA */}
-            <section className="py-24 bg-gray-50 text-center">
+            <section data-navbar-theme="light" className="py-24 bg-gray-50 text-center">
                 <div className="max-w-4xl mx-auto px-6">
                     <h2 className="text-[32px] md:text-[48px] font-extrabold text-brand-primary mb-6 tracking-tight">Ready to ditch the paper cards?</h2>
                     <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">Download the TactLink app today and create your first dynamic digital identity in less than 2 minutes.</p>
@@ -402,7 +402,7 @@ export default function DigitalNamecardPage() {
             </section>
 
             {/* FAQ SECTION */}
-            <section className="w-full py-24 px-4 bg-white border-t border-gray-100">
+            <section data-navbar-theme="light" className="w-full py-24 px-4 bg-white border-t border-gray-100">
                 <div className="max-w-3xl mx-auto">
                     <h2 className="font-extrabold text-brand-primary mb-12 text-center text-[32px] md:text-[40px] tracking-tight">Got Questions?</h2>
                     <div className="space-y-4">

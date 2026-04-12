@@ -12,8 +12,13 @@ export default function Navbar() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState("Global");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [navTheme, setNavTheme] = useState<'dark' | 'light'>('dark');
   const pathname = usePathname();
   const touchStartX = useRef<number | null>(null);
+  
+  // Custom dropdown state for Desktop
+  const [isCountryDropdownOpen, setIsCountryDropdownOpen] = useState(false);
+  const desktopDropdownRef = useRef<HTMLDivElement>(null);
 
   const openMenu = () => { setMobileOpen(true); requestAnimationFrame(() => setMenuVisible(true)); };
   const closeMenu = () => { setMenuVisible(false); setTimeout(() => setMobileOpen(false), 300); };
@@ -39,73 +44,137 @@ export default function Navbar() {
         .catch(() => {}); // silently fall back to Global
     }
 
-    // Add scroll listener
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    // Navbar theme: read data-navbar-theme from the section currently behind the nav
+    const updateTheme = () => {
+      const sections = document.querySelectorAll('[data-navbar-theme]');
+      let currentTheme: 'dark' | 'light' = 'dark';
+      // Look at the pixel ~40px from the top (middle of the navbar)
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 40 && rect.bottom > 40) {
+          currentTheme = (section.getAttribute('data-navbar-theme') as 'dark' | 'light') || 'dark';
+        }
+      });
+      setNavTheme(currentTheme);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
+    // Run immediately, after hydration, and on every scroll
+    updateTheme();
+    const t = setTimeout(updateTheme, 300); // catch hydration delay
+    window.addEventListener('scroll', updateTheme, { passive: true });
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Also re-check when sections are added to the DOM (Next.js SPA navigation)
+    const mo = new MutationObserver(updateTheme);
+    mo.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      clearTimeout(t);
+      window.removeEventListener('scroll', updateTheme);
+      mo.disconnect();
+    };
   }, []);
 
-  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  // Handle click outside for desktop dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target as Node)) {
+        setIsCountryDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleCountryChangeMobile = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newCountry = e.target.value;
     setSelectedCountry(newCountry);
     localStorage.setItem('tactlink_country', newCountry);
-    // Dispatch event so other components (like page.tsx) can re-fetch partners
     window.dispatchEvent(new Event('countryChange'));
+  };
+
+  const handleCountrySelectDesktop = (newCountry: string) => {
+    setSelectedCountry(newCountry);
+    localStorage.setItem('tactlink_country', newCountry);
+    window.dispatchEvent(new Event('countryChange'));
+    setIsCountryDropdownOpen(false);
   };
 
   return (
     <>
-      <nav className={`w-full fixed top-0 left-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm' : 'bg-white/5 backdrop-blur-md border-b border-white/10'}`}>
+      <nav className={`w-full fixed top-0 left-0 z-50 transition-all duration-500 ${
+        navTheme === 'light'
+          ? 'bg-white/90 backdrop-blur-md shadow-[0_1px_12px_rgba(0,0,0,0.08)]'
+          : 'bg-gradient-to-b from-black/25 to-transparent backdrop-blur-sm'
+      }`}>
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
             <Image src="/TactLink-Logo-core.png" alt="TactLink Logo" width={120} height={40} className="h-8 w-auto object-contain" priority />
-            <span className={`font-[family-name:var(--font-montserrat)] font-extrabold text-xl tracking-tight transition-colors ${isScrolled ? 'text-brand-primary' : 'text-white'}`}>TACTLINK</span>
+            <span className={`font-[family-name:var(--font-montserrat)] font-extrabold text-xl tracking-tight transition-colors duration-500 ${navTheme === 'light' ? 'text-brand-primary' : 'text-white'}`}>TACTLINK</span>
           </Link>
         </div>
         {/* Right Section: Links + Country + CTA */}
         <div className="hidden md:flex items-center gap-8 ml-auto">
           {/* Main nav links */}
           <div className="flex gap-6 items-center">
-            <Link href="/" className={`transition-colors text-[14px] font-medium py-1 ${pathname === '/' ? 'text-brand-accent' : isScrolled ? 'text-gray-600 hover:text-brand-primary' : 'text-white/70 hover:text-white'}`}>Platform / Associations</Link>
-            <Link href="/digital-namecard" className={`transition-colors text-[14px] font-medium py-1 ${pathname === '/digital-namecard' ? 'text-brand-accent' : isScrolled ? 'text-gray-600 hover:text-brand-primary' : 'text-white/70 hover:text-white'}`}>Digital Namecard</Link>
-            <Link href="/about" className={`transition-colors text-[14px] font-medium py-1 ${pathname === '/about' ? 'text-brand-accent' : isScrolled ? 'text-gray-600 hover:text-brand-primary' : 'text-white/70 hover:text-white'}`}>About</Link>
-            <Link href="/contact" className={`transition-colors text-[14px] font-medium py-1 ${pathname === '/contact' ? 'text-brand-accent' : isScrolled ? 'text-gray-600 hover:text-brand-primary' : 'text-white/70 hover:text-white'}`}>Contact</Link>
+            <Link href="/" className={`transition-colors duration-500 text-[14px] font-medium py-1 ${pathname === '/' ? 'text-brand-accent' : navTheme === 'light' ? 'text-gray-600 hover:text-brand-primary' : 'text-white/80 hover:text-white'}`}>Platform / Associations</Link>
+            <Link href="/digital-namecard" className={`transition-colors duration-500 text-[14px] font-medium py-1 ${pathname === '/digital-namecard' ? 'text-brand-accent' : navTheme === 'light' ? 'text-gray-600 hover:text-brand-primary' : 'text-white/80 hover:text-white'}`}>Digital Namecard</Link>
+            <Link href="/about" className={`transition-colors duration-500 text-[14px] font-medium py-1 ${pathname === '/about' ? 'text-brand-accent' : navTheme === 'light' ? 'text-gray-600 hover:text-brand-primary' : 'text-white/80 hover:text-white'}`}>About</Link>
+            <Link href="/contact" className={`transition-colors duration-500 text-[14px] font-medium py-1 ${pathname === '/contact' ? 'text-brand-accent' : navTheme === 'light' ? 'text-gray-600 hover:text-brand-primary' : 'text-white/80 hover:text-white'}`}>Contact</Link>
           </div>
 
-          <div className={`flex items-center gap-5 border-l pl-5 transition-colors ${isScrolled ? 'border-gray-300' : 'border-white/20'}`}>
-            {/* Minimal Country Dropdown */}
-            <div className={`relative flex items-center transition-colors cursor-pointer group ${isScrolled ? 'text-gray-600 hover:text-brand-primary' : 'text-white/70 hover:text-white'}`}>
-              <select
-                value={selectedCountry}
-                onChange={handleCountryChange}
-                className="bg-transparent text-[13px] font-medium text-inherit focus:outline-none appearance-none cursor-pointer pr-4"
+          <div className={`flex items-center gap-5 border-l pl-5 transition-colors duration-500 ${navTheme === 'light' ? 'border-gray-300' : 'border-white/20'}`}>
+            
+            {/* Custom Desktop Country Dropdown */}
+            <div className="relative" ref={desktopDropdownRef}>
+              <button 
+                onClick={() => setIsCountryDropdownOpen(!isCountryDropdownOpen)}
+                className={`flex items-center gap-1.5 focus:outline-none transition-colors duration-500 ${navTheme === 'light' ? 'text-gray-600 hover:text-brand-primary' : 'text-white/80 hover:text-white'}`}
               >
-                {COUNTRIES.map(country => (
-                  <option key={country} value={country} className="text-gray-900">{country}</option>
-                ))}
-              </select>
-              <svg className="w-3 h-3 opacity-50 absolute right-0 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                <span className="text-[13px] font-semibold tracking-wide">{selectedCountry}</span>
+                <svg className={`w-3.5 h-3.5 transition-transform duration-200 ${isCountryDropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" /></svg>
+              </button>
+
+              {/* Dropdown Menu */}
+              {isCountryDropdownOpen && (
+                <div className={`absolute right-0 top-full mt-3 w-40 rounded-xl shadow-2xl py-1.5 overflow-hidden transition-all duration-200 transform origin-top-right border ${navTheme === 'light' ? 'bg-white border-gray-100' : 'bg-[#0A0D1E]/95 backdrop-blur-3xl border-white/10'}`}>
+                  {COUNTRIES.map(country => (
+                    <button
+                      key={country}
+                      onClick={() => handleCountrySelectDesktop(country)}
+                      className={`w-full text-left px-4 py-2.5 text-[13px] font-medium transition-colors flex items-center justify-between ${
+                        country === selectedCountry 
+                          ? (isScrolled ? 'bg-brand-primary/5 text-brand-primary' : 'bg-brand-accent/10 text-brand-accent') 
+                          : (isScrolled ? 'text-gray-600 hover:bg-gray-50' : 'text-white/70 hover:bg-white/5 hover:text-white')
+                      }`}
+                    >
+                      {country}
+                      {country === selectedCountry && (
+                        <span className={`w-1.5 h-1.5 rounded-full ${isScrolled ? 'bg-brand-primary' : 'bg-brand-accent'}`} />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* CTA Bookend */}
-            <Link href={pathname === '/' ? '/contact' : '#download'} className="bg-brand-accent text-brand-primary hover:bg-white px-6 py-2.5 rounded-full font-bold text-[14px] shadow-lg shadow-brand-accent/20 transition-all transform hover:scale-[1.03]">
-              {pathname === '/' ? 'Become a Partner' : 'Download App'}
-            </Link>
+            {pathname !== '/contact' && (
+              <Link href={pathname === '/' ? '/contact' : '#download'} className="bg-brand-accent text-brand-primary hover:bg-white px-6 py-2.5 rounded-full font-bold text-[14px] shadow-lg shadow-brand-accent/20 transition-all transform hover:scale-[1.03]">
+                {pathname === '/' ? 'Become a Partner' : 'Download App'}
+              </Link>
+            )}
           </div>
         </div>
 
         {/* Hamburger menu for mobile */}
         <div className="md:hidden flex items-center gap-3">
-          <Link href={pathname === '/' ? '/contact' : '#download'} className="bg-brand-accent text-brand-primary px-4 py-1.5 rounded-full font-bold text-[13px]">
-            {pathname === '/' ? 'Partner' : 'Download'}
-          </Link>
+          {pathname !== '/contact' && (
+            <Link href={pathname === '/' ? '/contact' : '#download'} className="bg-brand-accent text-brand-primary px-4 py-1.5 rounded-full font-bold text-[13px]">
+              {pathname === '/' ? 'Partner' : 'Download'}
+            </Link>
+          )}
           <button onClick={openMenu} aria-label="Open menu" className={`focus:outline-none p-1 transition-colors ${isScrolled ? 'text-brand-primary' : 'text-white'}`}>
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -165,15 +234,17 @@ export default function Navbar() {
             </nav>
 
             {/* CTA */}
-            <div className="px-4 mt-4">
-              <Link
-                href={pathname === '/' ? '/contact' : '#download'}
-                onClick={closeMenu}
-                className="block w-full text-center bg-brand-accent text-brand-primary font-bold text-[15px] py-3 rounded-xl shadow-md shadow-brand-accent/20 hover:bg-yellow-300 transition-colors"
-              >
-                {pathname === '/' ? 'Become a Partner' : 'Download App'}
-              </Link>
-            </div>
+            {pathname !== '/contact' && (
+              <div className="px-4 mt-4">
+                <Link
+                  href={pathname === '/' ? '/contact' : '#download'}
+                  onClick={closeMenu}
+                  className="block w-full text-center bg-brand-accent text-brand-primary font-bold text-[15px] py-3 rounded-xl shadow-md shadow-brand-accent/20 hover:bg-yellow-300 transition-colors"
+                >
+                  {pathname === '/' ? 'Become a Partner' : 'Download App'}
+                </Link>
+              </div>
+            )}
 
             {/* Country Selector */}
             <div className="px-4 mt-auto mb-8 pt-6 border-t border-gray-100 mt-6">
@@ -181,7 +252,7 @@ export default function Navbar() {
               <div className="relative">
                 <select
                   value={selectedCountry}
-                  onChange={handleCountryChange}
+                  onChange={handleCountryChangeMobile}
                   className="w-full bg-gray-50 border border-gray-200 text-[15px] font-medium text-gray-700 p-3 pr-8 rounded-lg focus:outline-none appearance-none cursor-pointer"
                 >
                   {COUNTRIES.map(country => (
@@ -196,4 +267,4 @@ export default function Navbar() {
       )}
     </>
   );
-} 
+}

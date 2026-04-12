@@ -15,6 +15,10 @@ module.exports = {
           light: "#f5f6fa", // Subtle light grey/off-white
         }
       },
+      fontFamily: {
+        sans: ['var(--font-roboto)', 'Arial', 'Helvetica', 'sans-serif'],
+        heading: ['var(--font-montserrat)', 'Arial', 'Helvetica', 'sans-serif'],
+      },
       animation: {
         marquee: 'marquee 90s linear infinite',
       },
