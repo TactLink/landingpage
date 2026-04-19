@@ -31,7 +31,7 @@ export default function DigitalNamecardPage() {
     }, []);
 
     useEffect(() => {
-        fetchStrapiCollection("faqs", { sort: "order:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
+        fetchStrapiCollection("faqs", { "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
             .then((data) => {
                 if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
             })

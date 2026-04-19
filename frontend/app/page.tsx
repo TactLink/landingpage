@@ -15,6 +15,21 @@ const COUNTRY_FLAGS: Record<string, string> = {
   "Global": "🌐",
 };
 
+function useInView(ref: { current: Element | null }): boolean {
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setInView(true); observer.disconnect(); } },
+      { threshold: 0, rootMargin: '0px 0px -80px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  return inView;
+}
+
 export default function HomePage() {
   const [localPartners, setLocalPartners] = useState<any[]>([]);
   const [globalPartners, setGlobalPartners] = useState<any[]>([]);
@@ -28,6 +43,14 @@ export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [compareTab, setCompareTab] = useState<'old' | 'new'>('new');
   const partnerBarRef = useRef<HTMLDivElement>(null);
+  const feat1Ref = useRef<HTMLDivElement>(null);
+  const feat2Ref = useRef<HTMLDivElement>(null);
+  const feat3Ref = useRef<HTMLDivElement>(null);
+  const howItWorksGridRef = useRef<HTMLDivElement>(null);
+  const feat1InView = useInView(feat1Ref);
+  const feat2InView = useInView(feat2Ref);
+  const feat3InView = useInView(feat3Ref);
+  const howItWorksInView = useInView(howItWorksGridRef);
 
   // Crossfade keywords
   const keywords = [
@@ -108,7 +131,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { sort: "order:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
+    fetchStrapiCollection("faqs", { "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
@@ -139,12 +162,12 @@ export default function HomePage() {
       <section data-navbar-theme="dark" className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 pt-24 pb-16 relative overflow-hidden min-h-screen">
         <div className="w-full md:w-[45%] lg:w-[48%] z-10 md:pr-8 lg:pr-10">
           {/* Eyebrow / Trust Signal */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6 animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: '0.05s' }}>
             <span className="flex items-center text-yellow-400 text-sm">★★★★★</span>
             <span className="text-sm font-medium text-white/90 tracking-wide">Trusted by 20+ leading organizations</span>
           </div>
 
-          <h1 className="font-extrabold mb-3 leading-[1.1] text-[32px] md:text-[42px] lg:text-[48px] xl:text-[64px] text-white min-h-[80px] md:min-h-[100px] xl:min-h-[140px]">
+          <h1 className="font-extrabold mb-3 leading-[1.1] text-[32px] md:text-[42px] lg:text-[48px] xl:text-[64px] text-white min-h-[80px] md:min-h-[100px] xl:min-h-[140px] animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: '0.2s' }}>
             The Ultimate Platform for{' '}
             <span className="overflow-hidden inline-flex items-end align-bottom relative h-[1.1em]">
               <span
@@ -154,11 +177,11 @@ export default function HomePage() {
               </span>
             </span>
           </h1>
-          <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light">
+          <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: '0.35s' }}>
             Turn your static member list into a thriving, interactive digital community. Partner with us and get premium access — <span className="text-brand-accent font-semibold">completely free, forever.</span>
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: '0.5s' }}>
             <a href="/contact" className="w-full sm:w-auto flex justify-center">
               <span className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
                 Become a Partner
@@ -682,7 +705,7 @@ export default function HomePage() {
                 </>
               )}
               <div className={localShouldScroll
-                ? "flex animate-[marquee_50s_linear_infinite] group-hover:[animation-play-state:paused] w-max"
+                ? "flex animate-[marquee_120s_linear_infinite] group-hover:[animation-play-state:paused] w-max"
                 : "flex justify-center flex-wrap gap-6 py-2 px-4"}>
                 {/* One visible set (for measurement + static display) */}
                 <div ref={localContentRef} className="flex shrink-0 gap-6 px-3">
@@ -747,7 +770,7 @@ export default function HomePage() {
           <div className="relative flex overflow-hidden group w-full">
             <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-            <div className="flex animate-[marquee_60s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
+            <div className="flex animate-[marquee_150s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
               {[0, 1].map((half) => (
                 <div key={half} className="flex shrink-0">
                   {loading ? null : [...Array(10)].map((_, copy) => (
@@ -784,7 +807,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto flex flex-col gap-32">
 
           {/* Feature 1: Live Directory (Text Left, Image Right) */}
-          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+          <div ref={feat1Ref} className="flex flex-col md:flex-row items-center gap-12 lg:gap-20" style={{ opacity: (!mounted || feat1InView) ? 1 : 0, transform: (!mounted || feat1InView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease, transform 0.7s ease' : 'none' }}>
             <div className="w-full md:w-1/2 flex flex-col items-start">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#f0f9ff] text-brand-accent text-sm font-bold mb-6 border border-blue-100">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-1.13a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
@@ -984,7 +1007,7 @@ export default function HomePage() {
           </div>
 
           {/* Feature 2: Event Networking (Image Left, Text Right) */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20">
+          <div ref={feat2Ref} className="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20" style={{ opacity: (!mounted || feat2InView) ? 1 : 0, transform: (!mounted || feat2InView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease, transform 0.7s ease' : 'none' }}>
             <div className="w-full md:w-1/2 flex flex-col items-start">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fff7ed] text-orange-600 text-sm font-bold mb-6 border border-orange-100">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
@@ -1089,7 +1112,7 @@ export default function HomePage() {
           </div>
 
           {/* Feature 3: Automated Administration (Text Left, Image Right) */}
-          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+          <div ref={feat3Ref} className="flex flex-col md:flex-row items-center gap-12 lg:gap-20" style={{ opacity: (!mounted || feat3InView) ? 1 : 0, transform: (!mounted || feat3InView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease, transform 0.7s ease' : 'none' }}>
             <div className="w-full md:w-1/2 flex flex-col items-start">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fdf4ff] text-purple-600 text-sm font-bold mb-6 border border-purple-100">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
@@ -1210,12 +1233,12 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative">
+          <div ref={howItWorksGridRef} className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8 relative">
             {/* Connecting line for desktop */}
             <div className="hidden md:block absolute top-[45px] left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-brand-primary/10 via-brand-accent/50 to-brand-primary/10 z-0"></div>
 
             {/* Step 1 */}
-            <div className="relative z-10 flex flex-col items-center text-center group">
+            <div className="relative z-10 flex flex-col items-center text-center group" style={{ opacity: (!mounted || howItWorksInView) ? 1 : 0, transform: (!mounted || howItWorksInView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease 0ms, transform 0.7s ease 0ms' : 'none' }}>
               <div className="w-24 h-24 rounded-[32px] rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:-rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
                 <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -1228,7 +1251,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 2 */}
-            <div className="relative z-10 flex flex-col items-center text-center group">
+            <div className="relative z-10 flex flex-col items-center text-center group" style={{ opacity: (!mounted || howItWorksInView) ? 1 : 0, transform: (!mounted || howItWorksInView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease 150ms, transform 0.7s ease 150ms' : 'none' }}>
               <div className="w-24 h-24 rounded-[32px] -rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
                 <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -1241,7 +1264,7 @@ export default function HomePage() {
             </div>
 
             {/* Step 3 */}
-            <div className="relative z-10 flex flex-col items-center text-center group">
+            <div className="relative z-10 flex flex-col items-center text-center group" style={{ opacity: (!mounted || howItWorksInView) ? 1 : 0, transform: (!mounted || howItWorksInView) ? 'translateY(0)' : 'translateY(2.5rem)', transition: mounted ? 'opacity 0.7s ease 300ms, transform 0.7s ease 300ms' : 'none' }}>
               <div className="w-24 h-24 rounded-[32px] rotate-3 bg-white border border-gray-100 flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:-rotate-3 transition duration-500 group-hover:border-brand-accent/50 group-hover:shadow-brand-accent/20">
                 <svg className="w-10 h-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -1309,11 +1332,13 @@ export default function HomePage() {
                   type="button"
                 >
                   <span className="text-black text-left">{faq.q}</span>
-                  <span className="ml-4 text-brand-accent text-2xl">{openFaq === idx ? '-' : '+'}</span>
+                  <svg className={`ml-4 w-5 h-5 text-brand-accent shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
                 </button>
-                {openFaq === idx && (
-                  <div className="mt-4 text-black text-base prose prose-sm max-w-none"><ReactMarkdown>{faq.a}</ReactMarkdown></div>
-                )}
+                <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openFaq === idx ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                  <div className="overflow-hidden">
+                    <div className={`text-black text-base prose prose-sm max-w-none transition-opacity duration-300 ${openFaq === idx ? 'opacity-100 pt-4' : 'opacity-0'}`}><ReactMarkdown>{faq.a}</ReactMarkdown></div>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

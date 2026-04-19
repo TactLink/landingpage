@@ -16,7 +16,7 @@ export default function RequestDemoPage() {
   const [countries, setCountries] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch(`${STRAPI_URL}/api/countries?sort=order:asc,name:asc&filters[publishedAt][$notNull]=true`)
+    fetch(`${STRAPI_URL}/api/countries?sort=name:asc&filters[publishedAt][$notNull]=true`)
       .then((r) => r.json())
       .then((json) => {
         const names = (json.data ?? []).map((c: { attributes: { name: string } }) => c.attributes.name);
