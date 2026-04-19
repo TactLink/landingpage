@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { fetchStrapiCollection, STRAPI_URL } from "../lib/strapi";
+import ReactMarkdown from "react-markdown";
 
 const COUNTRY_FLAGS: Record<string, string> = {
   "Thailand": "🇹🇭",
@@ -107,7 +108,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { sort: "order:asc", "filters[publishedAt][$notNull]": true })
+    fetchStrapiCollection("faqs", { sort: "order:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
@@ -1311,7 +1312,7 @@ export default function HomePage() {
                   <span className="ml-4 text-brand-accent text-2xl">{openFaq === idx ? '-' : '+'}</span>
                 </button>
                 {openFaq === idx && (
-                  <div className="mt-4 text-black text-base">{faq.a}</div>
+                  <div className="mt-4 text-black text-base prose prose-sm max-w-none"><ReactMarkdown>{faq.a}</ReactMarkdown></div>
                 )}
               </div>
             ))}

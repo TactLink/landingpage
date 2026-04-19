@@ -10,7 +10,12 @@
   },
   "attributes": {
     "question": { "type": "string", "required": true },
-    "answer": { "type": "text", "required": true },
-    "order": { "type": "integer" }
+    "answer": { "type": "richtext", "required": true },
+    "order": { "type": "integer" },
+    "page": {
+      "type": "enumeration",
+      "enum": ["homepage", "namecard", "both"],
+      "default": "homepage"
+    }
   }
 } 

@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { fetchStrapiCollection } from "../../lib/strapi";
+import ReactMarkdown from "react-markdown";
 
 export default function DigitalNamecardPage() {
     const [mounted, setMounted] = useState(false);
@@ -10,12 +12,7 @@ export default function DigitalNamecardPage() {
         setMounted(true);
     }, []);
 
-    const faqs = [
-        { q: "Do the receivers need the app to scan my card?", a: "No! Anyone can scan your QR code using their standard smartphone camera. It will open your profile in their default web browser." },
-        { q: "Can I use it for business and personal profiles?", a: "Yes, you can create multiple digital identities (e.g., one for work, one for freelance, one for personal) and share the right one depending on the context." },
-        { q: "How do I scan physical business cards?", a: "Our mobile app includes a built-in OCR (Optical Character Recognition) scanner. Just point your camera at a paper card and TactLink will instantly extract and save the contact details." },
-        { q: "Is the app free to use?", a: "We offer a robust free tier that is perfect for individuals looking to digitize their networking. Premium features and unlimited scans are available on affordable paid plans." },
-    ];
+    const [faqs, setFaqs] = useState<{ q: string; a: string }[]>([]);
 
     const testimonials = [
         { name: "Arifin K.", role: "Serial Entrepreneur", text: "TactLink completely changed how I network across SE Asia. I effortlessly manage different profiles for my e-commerce ventures and tech startups. So professional!" },
@@ -31,6 +28,14 @@ export default function DigitalNamecardPage() {
         load();
         window.addEventListener('countryChange', load);
         return () => window.removeEventListener('countryChange', load);
+    }, []);
+
+    useEffect(() => {
+        fetchStrapiCollection("faqs", { sort: "order:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
+            .then((data) => {
+                if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
+            })
+            .catch(() => {});
     }, []);
 
 
@@ -415,7 +420,7 @@ export default function DigitalNamecardPage() {
                                     <span className={`ml-4 text-brand-accent text-3xl font-light transition-transform duration-300 ${openFaq === idx ? 'rotate-45 text-gray-400' : ''}`}>+</span>
                                 </button>
                                 <div className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${openFaq === idx ? 'max-h-48 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
-                                    <p className="text-gray-600 leading-relaxed text-[16px]">{faq.a}</p>
+                                    <div className="text-gray-600 leading-relaxed text-[16px] prose prose-sm max-w-none"><ReactMarkdown>{faq.a}</ReactMarkdown></div>
                                 </div>
                             </div>
                         ))}
