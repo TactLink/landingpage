@@ -23,25 +23,17 @@ export default function Navbar() {
   const closeMenu = () => { setMenuVisible(false); setTimeout(() => setMobileOpen(false), 300); };
 
   useEffect(() => {
-    // Load saved country or auto-detect via IP
     const savedCountry = localStorage.getItem('tactlink_country');
     if (savedCountry && COUNTRIES.includes(savedCountry)) {
       setSelectedCountry(savedCountry);
-    } else {
-      const COUNTRY_MAP: Record<string, string> = {
-        TH: 'Thailand', SG: 'Singapore', ID: 'Indonesia',
-        MY: 'Malaysia', KH: 'Cambodia', VN: 'Vietnam', PH: 'Philippines', BD: 'Bangladesh',
-      };
-      fetch('https://ipapi.co/json/')
-        .then(r => r.json())
-        .then(data => {
-          const detected = COUNTRY_MAP[data.country_code] || 'Global';
-          setSelectedCountry(detected);
-          localStorage.setItem('tactlink_country', detected);
-          window.dispatchEvent(new Event('countryChange'));
-        })
-        .catch(() => {}); // silently fall back to Global
     }
+    // Sync navbar when CountryDetectBanner switches country
+    const onCountryChange = () => {
+      const updated = localStorage.getItem('tactlink_country');
+      if (updated && COUNTRIES.includes(updated)) setSelectedCountry(updated);
+    };
+    window.addEventListener('countryChange', onCountryChange);
+    return () => window.removeEventListener('countryChange', onCountryChange);
   }, []);
 
   // Navbar theme observer — re-runs on every page navigation

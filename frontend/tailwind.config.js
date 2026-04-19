@@ -21,12 +21,22 @@ module.exports = {
       },
       animation: {
         marquee: 'marquee 90s linear infinite',
+        'fade-up': 'fade-up 0.6s ease both',
+        'fade-in': 'fade-in 0.2s ease both',
       },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '100%': { transform: 'translateX(-50%)' },
-        }
+        },
+        'fade-up': {
+          from: { opacity: '0', transform: 'translateY(2rem)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'fade-in': {
+          from: { opacity: '0', transform: 'translateY(-4px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
       }
     }
   },

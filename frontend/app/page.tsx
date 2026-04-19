@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { fetchStrapiCollection, STRAPI_URL } from "../lib/strapi";
 import ReactMarkdown from "react-markdown";
 
@@ -30,6 +30,25 @@ function useInView(ref: { current: Element | null }): boolean {
   return inView;
 }
 
+const FAQItem = memo(function FAQItem({ idx, faq, isOpen, onToggle }: {
+  idx: number;
+  faq: { q: string; a: string };
+  isOpen: boolean;
+  onToggle: (idx: number) => void;
+}) {
+  return (
+    <div className="bg-white rounded-xl shadow p-6 cursor-pointer select-none" onClick={() => onToggle(idx)}>
+      <div className="w-full flex justify-between items-center text-lg font-semibold text-black">
+        <span className="text-black text-left">{faq.q}</span>
+        <svg className={`ml-4 w-5 h-5 text-brand-accent shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+      </div>
+      {isOpen && (
+        <div className="mt-4 text-black text-base prose prose-sm max-w-none animate-fade-in"><ReactMarkdown>{faq.a}</ReactMarkdown></div>
+      )}
+    </div>
+  );
+});
+
 export default function HomePage() {
   const [localPartners, setLocalPartners] = useState<any[]>([]);
   const [globalPartners, setGlobalPartners] = useState<any[]>([]);
@@ -51,6 +70,10 @@ export default function HomePage() {
   const feat2InView = useInView(feat2Ref);
   const feat3InView = useInView(feat3Ref);
   const howItWorksInView = useInView(howItWorksGridRef);
+
+  const handleToggleFaq = useCallback((idx: number) => {
+    setOpenFaq(prev => prev === idx ? null : idx);
+  }, []);
 
   // Crossfade keywords
   const keywords = [
@@ -106,7 +129,7 @@ export default function HomePage() {
 
         if (data && data.length > 0) {
           data.forEach((p: any) => {
-            if (p.country === country) {
+            if (country === "Global" || p.country === country) {
               locals.push(p);
             } else {
               globals.push(p);
@@ -196,7 +219,7 @@ export default function HomePage() {
 
         <div className="w-full md:w-[55%] lg:w-[52%] flex justify-center items-center mt-8 md:mt-0 relative min-h-[65vh] lg:min-h-[72vh] group [perspective:1000px] origin-center md:origin-right">
           {/* Background glowing orb */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-brand-accent opacity-20 rounded-full blur-[120px] animate-pulse"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] h-[100%] bg-brand-accent opacity-20 rounded-full blur-[120px] animate-pulse" style={{ willChange: 'opacity' }}></div>
 
           {/* Web Dashboard Replica (Background) */}
           <div className="hidden md:flex absolute right-0 lg:right-[-20px] top-1/2 -translate-y-1/2 w-[520px] lg:w-[680px] max-w-[50vw] h-[360px] lg:h-[480px] bg-[#f8fafc] rounded-2xl shadow-[0_30px_60px_rgba(0,0,0,0.4)] border border-gray-200 overflow-hidden transition-all duration-700 z-0 flex-col opacity-95 group-hover:hover:z-30 group-hover:hover:scale-105 group-hover:hover:-translate-x-4 group-hover:hover:-translate-y-[55%] pointer-events-none group-hover:pointer-events-auto">
@@ -706,7 +729,8 @@ export default function HomePage() {
               )}
               <div className={localShouldScroll
                 ? "flex animate-[marquee_120s_linear_infinite] group-hover:[animation-play-state:paused] w-max"
-                : "flex justify-center flex-wrap gap-6 py-2 px-4"}>
+                : "flex justify-center flex-wrap gap-6 py-2 px-4"}
+                style={localShouldScroll ? { willChange: 'transform' } : undefined}>
                 {/* One visible set (for measurement + static display) */}
                 <div ref={localContentRef} className="flex shrink-0 gap-6 px-3">
                   {localPartners.map((partner, idx) => {
@@ -761,7 +785,7 @@ export default function HomePage() {
         </div>
 
         {/* ── GLOBAL MARQUEE ROW ── */}
-        <div className="border-t border-gray-200 bg-white py-10 overflow-hidden">
+        {globalPartners.length > 0 && <div className="border-t border-gray-200 bg-white py-10 overflow-hidden">
           <div className="max-w-7xl mx-auto mb-5 px-4">
             <div className="text-center text-gray-400 font-semibold text-[12px] uppercase tracking-[0.2em]">
               {activeCountry !== "Global" ? `Also trusted by associations worldwide` : `Powering associations across the globe`}
@@ -770,7 +794,7 @@ export default function HomePage() {
           <div className="relative flex overflow-hidden group w-full">
             <div className="absolute left-0 top-0 w-32 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
             <div className="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
-            <div className="flex animate-[marquee_150s_linear_infinite] group-hover:[animation-play-state:paused] w-max">
+            <div className="flex animate-[marquee_150s_linear_infinite] group-hover:[animation-play-state:paused] w-max" style={{ willChange: 'transform' }}>
               {[0, 1].map((half) => (
                 <div key={half} className="flex shrink-0">
                   {loading ? null : [...Array(10)].map((_, copy) => (
@@ -796,7 +820,7 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </div>
+        </div>}
       </section>
 
 
@@ -1325,21 +1349,7 @@ export default function HomePage() {
           <h2 className="font-extrabold text-brand-primary mb-8 text-center text-[30px] text-black">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="bg-white rounded-xl shadow p-6">
-                <button
-                  className="w-full flex justify-between items-center text-lg font-semibold text-black focus:outline-none"
-                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
-                  type="button"
-                >
-                  <span className="text-black text-left">{faq.q}</span>
-                  <svg className={`ml-4 w-5 h-5 text-brand-accent shrink-0 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openFaq === idx ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
-                  <div className="overflow-hidden">
-                    <div className={`text-black text-base prose prose-sm max-w-none transition-opacity duration-300 ${openFaq === idx ? 'opacity-100 pt-4' : 'opacity-0'}`}><ReactMarkdown>{faq.a}</ReactMarkdown></div>
-                  </div>
-                </div>
-              </div>
+              <FAQItem key={idx} idx={idx} faq={faq} isOpen={openFaq === idx} onToggle={handleToggleFaq} />
             ))}
           </div>
         </div>
