@@ -82,15 +82,14 @@ export default function AboutPage() {
           
           {/* Visual Column */}
           <div className="flex-[0.8] flex items-center justify-center relative w-full mt-12 lg:mt-0 lg:order-last order-first">
-            {/* Glowing Accent */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-accent/20 blur-[100px] rounded-full z-0" />
-            <div className="relative z-10 p-2 rounded-[2rem] bg-gradient-to-tr from-brand-accent/20 to-[#374085]/40 backdrop-blur-md shadow-2xl border border-white/10 transform rotate-2 hover:rotate-0 transition-transform duration-500 max-w-sm w-full mx-auto">
+            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full max-w-lg mx-auto">
               <Image
-                src="/hero_app_mockup.png"
-                alt="TactLink app interface"
-                width={400}
-                height={500}
-                className="w-full h-auto object-contain drop-shadow-2xl rounded-[1.5rem] bg-[#0A0D1E]"
+                src="/people.png"
+                alt="TactLink team at events and partnerships"
+                width={600}
+                height={480}
+                className="w-full h-auto object-cover"
               />
             </div>
           </div>
