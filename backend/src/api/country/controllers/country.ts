@@ -1,2 +1,2 @@
 import { factories } from '@strapi/strapi';
-export default factories.createCoreController('api::country.country');
+export default factories.createCoreController('api::country.country' as any);
