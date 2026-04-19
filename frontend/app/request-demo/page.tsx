@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { STRAPI_URL } from "../../lib/strapi";
 
 export default function RequestDemoPage() {
   const [form, setForm] = useState({
@@ -12,6 +13,17 @@ export default function RequestDemoPage() {
     country: "",
   });
   const [status, setStatus] = useState("");
+  const [countries, setCountries] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(`${STRAPI_URL}/api/countries?sort=order:asc,name:asc&filters[publishedAt][$notNull]=true`)
+      .then((r) => r.json())
+      .then((json) => {
+        const names = (json.data ?? []).map((c: { attributes: { name: string } }) => c.attributes.name);
+        setCountries(names);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -20,10 +32,10 @@ export default function RequestDemoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("Sending...");
-    const res = await fetch('http://localhost:1337/api/demo-requests', {
+    const res = await fetch(`${STRAPI_URL}/api/demo-requests`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ data: form }), // wrap form in data
+      body: JSON.stringify({ data: form }),
     });
     if (res.ok) setStatus("Request sent!");
     else setStatus("Error sending request.");
@@ -41,14 +53,11 @@ export default function RequestDemoPage() {
             <input className="border rounded px-4 py-3 text-lg" name="organization" placeholder="Organization Name" required onChange={handleChange} />
             <input className="border rounded px-4 py-3 text-lg" name="role" placeholder="Role" required onChange={handleChange} />
             <input className="border rounded px-4 py-3 text-lg" name="memberSize" placeholder="Member Size" required onChange={handleChange} />
-            <select className="border rounded px-4 py-3 text-lg" name="country" required onChange={handleChange}>
+            <select className="border rounded px-4 py-3 text-lg" name="country" required onChange={handleChange} value={form.country}>
               <option value="">Select Country</option>
-              <option value="Thailand">Thailand</option>
-              <option value="Indonesia">Indonesia</option>
-              <option value="Cambodia">Cambodia</option>
-              <option value="Malaysia">Malaysia</option>
-              <option value="Vietnam">Vietnam</option>
-              <option value="Singapore">Singapore</option>
+              {countries.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
             </select>
             <button type="submit" className="bg-tactlink-primary text-tactlink-white px-6 py-3 rounded hover:bg-tactlink-accent hover:text-tactlink-dark transition font-bold text-lg mt-2">Submit</button>
             <div>{status}</div>
@@ -57,4 +66,4 @@ export default function RequestDemoPage() {
       </section>
     </main>
   );
-} 
+}

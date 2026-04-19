@@ -23,13 +23,7 @@ export default function HomePage() {
   const [localShouldScroll, setLocalShouldScroll] = useState(false);
   const localMarqueeRef = useRef<HTMLDivElement>(null);
   const localContentRef = useRef<HTMLDivElement>(null);
-  // FAQ
-  const faqs = [
-    { q: "What is TactLink?", a: "TactLink is a smart directory and networking platform for associations and events." },
-    { q: "How do I request a demo?", a: "Fill out the form above and our team will contact you based on your country." },
-    { q: "Is TactLink available on mobile?", a: "Yes, TactLink is available as a web and mobile application." },
-    { q: "How does the Digital Fishbowl work?", a: "It uses QR codes for registration and digital draws at events." },
-  ];
+  const [faqs, setFaqs] = useState<{ q: string; a: string }[]>([]);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [compareTab, setCompareTab] = useState<'old' | 'new'>('new');
   const partnerBarRef = useRef<HTMLDivElement>(null);
@@ -110,6 +104,14 @@ export default function HomePage() {
     // Listen for country changes from Navbar
     window.addEventListener('countryChange', loadPartners);
     return () => window.removeEventListener('countryChange', loadPartners);
+  }, []);
+
+  useEffect(() => {
+    fetchStrapiCollection("faqs", { sort: "order:asc", "filters[publishedAt][$notNull]": true })
+      .then((data) => {
+        if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
+      })
+      .catch(() => {});
   }, []);
 
   // Check if local partners overflow the container → enable marquee only if needed

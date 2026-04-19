@@ -10,6 +10,7 @@
   },
   "attributes": {
     "question": { "type": "string", "required": true },
-    "answer": { "type": "text", "required": true }
+    "answer": { "type": "text", "required": true },
+    "order": { "type": "integer" }
   }
 } 
