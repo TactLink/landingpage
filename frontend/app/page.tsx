@@ -71,6 +71,12 @@ export default function HomePage() {
   const feat3InView = useInView(feat3Ref);
   const howItWorksInView = useInView(howItWorksGridRef);
 
+  const localDragRef = useRef({ isDragging: false, startX: 0, startScrollLeft: 0 });
+  const localVelocityRef = useRef(0);
+  const localLastXRef = useRef(0);
+  const localLastTimeRef = useRef(0);
+  const localInertiaRef = useRef(0);
+
   const handleToggleFaq = useCallback((idx: number) => {
     setOpenFaq(prev => prev === idx ? null : idx);
   }, []);
@@ -129,7 +135,8 @@ export default function HomePage() {
 
         if (data && data.length > 0) {
           data.forEach((p: any) => {
-            if (country === "Global" || p.country === country) {
+            const partnerCountry = p.country?.name ?? p.country ?? null;
+            if (country === "Global" || partnerCountry === country || partnerCountry === "Global") {
               locals.push(p);
             } else {
               globals.push(p);
@@ -177,7 +184,6 @@ export default function HomePage() {
     }
   }, [localPartners]);
 
-  // Remove the entire useEffect for auto-scroll and related debug code.
 
   return (
     <main className="w-full min-h-screen bg-white text-brand-primary overflow-x-hidden">
@@ -719,26 +725,106 @@ export default function HomePage() {
               </div>
             </div>
           ) : localPartners.length > 0 ? (
-            /* Scrolling marquee for local partners */
-            <div ref={localMarqueeRef} className="relative overflow-hidden group">
-              {localShouldScroll && (
-                <>
-                  <div className="absolute left-0 top-0 w-16 h-full bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
-                  <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
-                </>
-              )}
-              <div className={localShouldScroll
-                ? "flex animate-[marquee_120s_linear_infinite] group-hover:[animation-play-state:paused] w-max"
-                : "flex justify-center flex-wrap gap-6 py-2 px-4"}
-                style={localShouldScroll ? { willChange: 'transform' } : undefined}>
-                {/* One visible set (for measurement + static display) */}
-                <div ref={localContentRef} className="flex shrink-0 gap-6 px-3">
+            /* Draggable row with momentum + desktop arrows */
+            <div className="relative group/carousel">
+              {/* Desktop arrow buttons */}
+              <button
+                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 z-20 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200 opacity-0 group-hover/carousel:opacity-100"
+                onClick={() => {
+                  cancelAnimationFrame(localInertiaRef.current);
+                  localMarqueeRef.current?.scrollBy({ left: -280, behavior: 'smooth' });
+                }}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <button
+                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 z-20 w-10 h-10 bg-white rounded-full shadow-lg border border-gray-100 items-center justify-center text-brand-primary hover:bg-brand-primary hover:text-white transition-all duration-200 opacity-0 group-hover/carousel:opacity-100"
+                onClick={() => {
+                  cancelAnimationFrame(localInertiaRef.current);
+                  localMarqueeRef.current?.scrollBy({ left: 280, behavior: 'smooth' });
+                }}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+
+              <div
+                ref={localMarqueeRef}
+                className="overflow-x-hidden cursor-grab active:cursor-grabbing select-none"
+                onMouseDown={(e) => {
+                  cancelAnimationFrame(localInertiaRef.current);
+                  localDragRef.current = { isDragging: true, startX: e.clientX, startScrollLeft: localMarqueeRef.current?.scrollLeft ?? 0 };
+                  localLastXRef.current = e.clientX;
+                  localLastTimeRef.current = Date.now();
+                  localVelocityRef.current = 0;
+                }}
+                onMouseMove={(e) => {
+                  if (!localDragRef.current.isDragging || !localMarqueeRef.current) return;
+                  const now = Date.now();
+                  const dt = now - localLastTimeRef.current;
+                  if (dt > 0) localVelocityRef.current = (localLastXRef.current - e.clientX) / dt * 16;
+                  localLastXRef.current = e.clientX;
+                  localLastTimeRef.current = now;
+                  localMarqueeRef.current.scrollLeft = localDragRef.current.startScrollLeft - (e.clientX - localDragRef.current.startX);
+                }}
+                onMouseUp={() => {
+                  if (!localDragRef.current.isDragging) return;
+                  localDragRef.current.isDragging = false;
+                  const applyInertia = () => {
+                    if (!localMarqueeRef.current || Math.abs(localVelocityRef.current) < 0.5) return;
+                    localMarqueeRef.current.scrollLeft += localVelocityRef.current;
+                    localVelocityRef.current *= 0.92;
+                    localInertiaRef.current = requestAnimationFrame(applyInertia);
+                  };
+                  localInertiaRef.current = requestAnimationFrame(applyInertia);
+                }}
+                onMouseLeave={() => {
+                  if (!localDragRef.current.isDragging) return;
+                  localDragRef.current.isDragging = false;
+                  localVelocityRef.current *= 0.5;
+                  const applyInertia = () => {
+                    if (!localMarqueeRef.current || Math.abs(localVelocityRef.current) < 0.5) return;
+                    localMarqueeRef.current.scrollLeft += localVelocityRef.current;
+                    localVelocityRef.current *= 0.92;
+                    localInertiaRef.current = requestAnimationFrame(applyInertia);
+                  };
+                  localInertiaRef.current = requestAnimationFrame(applyInertia);
+                }}
+                onTouchStart={(e) => {
+                  cancelAnimationFrame(localInertiaRef.current);
+                  localDragRef.current = { isDragging: true, startX: e.touches[0].clientX, startScrollLeft: localMarqueeRef.current?.scrollLeft ?? 0 };
+                  localLastXRef.current = e.touches[0].clientX;
+                  localLastTimeRef.current = Date.now();
+                  localVelocityRef.current = 0;
+                }}
+                onTouchMove={(e) => {
+                  if (!localDragRef.current.isDragging || !localMarqueeRef.current) return;
+                  const now = Date.now();
+                  const dt = now - localLastTimeRef.current;
+                  if (dt > 0) localVelocityRef.current = (localLastXRef.current - e.touches[0].clientX) / dt * 16;
+                  localLastXRef.current = e.touches[0].clientX;
+                  localLastTimeRef.current = now;
+                  localMarqueeRef.current.scrollLeft = localDragRef.current.startScrollLeft - (e.touches[0].clientX - localDragRef.current.startX);
+                }}
+                onTouchEnd={() => {
+                  localDragRef.current.isDragging = false;
+                  const applyInertia = () => {
+                    if (!localMarqueeRef.current || Math.abs(localVelocityRef.current) < 0.5) return;
+                    localMarqueeRef.current.scrollLeft += localVelocityRef.current;
+                    localVelocityRef.current *= 0.92;
+                    localInertiaRef.current = requestAnimationFrame(applyInertia);
+                  };
+                  localInertiaRef.current = requestAnimationFrame(applyInertia);
+                }}
+              >
+                <div className="absolute left-0 top-0 w-12 h-full bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
+                <div className="absolute right-0 top-0 w-12 h-full bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
+                <div ref={localContentRef} className="flex gap-6 px-3 py-2">
                   {localPartners.map((partner, idx) => {
                     const logoUrl = partner.logo?.url
                       ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
                       : undefined;
                     return (
-                      <a key={`local-0-${idx}`} href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
+                      <a key={idx} href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
                         className="flex-shrink-0 bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center justify-center w-32 h-32 hover:shadow-xl hover:scale-105 transition-all duration-300">
                         {logoUrl
                           ? <img src={logoUrl} alt={partner.name || 'Partner'} className="h-20 w-20 object-contain" />
@@ -747,24 +833,6 @@ export default function HomePage() {
                     );
                   })}
                 </div>
-                {/* Duplicate set — only rendered when scrolling */}
-                {localShouldScroll && (
-                  <div className="flex shrink-0 gap-6 px-3">
-                    {localPartners.map((partner, idx) => {
-                      const logoUrl = partner.logo?.url
-                        ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
-                        : undefined;
-                      return (
-                        <a key={`local-1-${idx}`} href={partner.url || '#'} target="_blank" rel="noopener noreferrer"
-                          className="flex-shrink-0 bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center justify-center w-32 h-32 hover:shadow-xl hover:scale-105 transition-all duration-300">
-                          {logoUrl
-                            ? <img src={logoUrl} alt={partner.name || 'Partner'} className="h-20 w-20 object-contain" />
-                            : <span className="text-xs text-gray-400 font-medium text-center px-2">{partner.name || 'Partner'}</span>}
-                        </a>
-                      );
-                    })}
-                  </div>
-                )}
               </div>
             </div>
           ) : (
