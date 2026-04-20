@@ -1,0 +1,12 @@
+export default {
+  routes: [
+    {
+      method: 'GET',
+      path: '/countries',
+      handler: 'country.find',
+      config: {
+        policies: [],
+      },
+    },
+  ],
+};

@@ -1,39 +1,75 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Footer() {
   return (
-    <footer className="w-full bg-brand-primary text-brand-white py-12 mt-0 text-[16px]">
-      <div className="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    <footer className="w-full relative overflow-hidden bg-[#0A0D1E] text-white/80 py-16 mt-0 text-[15px] border-t border-white/10">
+      {/* Decorative Orbs */}
+      <div className="absolute top-[-50%] left-[-10%] w-[40%] h-[100%] rounded-full bg-brand-accent/10 blur-[120px] mix-blend-screen pointer-events-none" />
+      <div className="absolute bottom-[-50%] right-[-10%] w-[40%] h-[100%] rounded-full bg-[#374085]/20 blur-[150px] mix-blend-screen pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center">
         
-        {/* 2nd column: menu */}
-        <nav className="flex md:flex-row flex-col items-start gap-4">
-          <a href="/" className="hover:underline ">Home</a>
-          <a href="/about" className="hover:underline ">About</a>
-          <a href="/products" className="hover:underline ">Products</a>
-          <a href="/terms" className="hover:underline ">Terms &amp; Conditions</a>
-          <a href="/privacy" className="hover:underline ">Privacy Policy</a>
-        </nav>
-        {/* 4th column: social media */}
-        <div className="flex flex-col items-end ml-auto gap-4">
-        <div className="">Follow us on social media:</div>
-        <div className="flex flex-row items-center gap-4 ml-auto">
-          <a href="https://web.facebook.com/TactLink" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35C.595 0 0 .592 0 1.326v21.348C0 23.408.595 24 1.325 24h11.495v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.797.143v3.24l-1.918.001c-1.504 0-1.797.715-1.797 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.406 24 24 23.408 24 22.674V1.326C24 .592 23.406 0 22.675 0"/></svg>
-          </a>
-          <a href="https://www.instagram.com/tactlinksmartdirectory/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.334 3.608 1.308.974.974 1.246 2.241 1.308 3.608.058 1.266.069 1.646.069 4.85s-.012 3.584-.07 4.85c-.062 1.366-.334 2.633-1.308 3.608-.974.974-2.241 1.246-3.608 1.308-1.266.058-1.646.069-4.85.069s-3.584-.012-4.85-.07c-1.366-.062-2.633-.334-3.608-1.308-.974-.974-1.246-2.241-1.308-3.608C2.175 15.647 2.163 15.267 2.163 12s.012-3.584.07-4.85c.062-1.366.334-2.633 1.308-3.608.974-.974 2.241-1.246 3.608-1.308C8.416 2.175 8.796 2.163 12 2.163zm0-2.163C8.741 0 8.332.013 7.052.072 5.775.131 4.602.425 3.635 1.392 2.668 2.359 2.374 3.532 2.315 4.808 2.256 6.088 2.243 6.497 2.243 12c0 5.503.013 5.912.072 7.192.059 1.276.353 2.449 1.32 3.416.967.967 2.14 1.261 3.416 1.32 1.28.059 1.689.072 7.192.072s5.912-.013 7.192-.072c1.276-.059 2.449-.353 3.416-1.32.967-.967 1.261-2.14 1.32-3.416.059-1.28.072-1.689.072-7.192s-.013-5.912-.072-7.192c-.059-1.276-.353-2.449-1.32-3.416C21.449.425 20.276.131 19 .072 17.72.013 17.311 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-          </a>
-          <a href="https://www.linkedin.com/company/tactlink/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.327-.027-3.037-1.849-3.037-1.851 0-2.132 1.445-2.132 2.939v5.667H9.358V9h3.414v1.561h.049c.476-.899 1.637-1.849 3.37-1.849 3.602 0 4.267 2.368 4.267 5.455v6.285zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zm1.777 13.019H3.56V9h3.554v11.452zM22.225 0H1.771C.792 0 0 .771 0 1.723v20.549C0 23.229.792 24 1.771 24h20.451C23.2 24 24 23.229 24 22.271V1.723C24 .771 23.2 0 22.225 0z"/></svg>
-          </a>
+        {/* Top/Middle: Logo & Description / Links & Social */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-12 items-start mb-16 px-4">
+          
+          {/* Logo & Info */}
+          <div className="flex flex-col items-start gap-6">
+            <a href="/" className="flex items-center gap-2">
+              <img src="/TactLink-Logo-core.webp" alt="TactLink" className="h-8 w-auto object-contain brightness-0 invert" />
+              <span className="font-[family-name:var(--font-montserrat)] font-extrabold text-xl tracking-tight text-white">TACTLINK</span>
+            </a>
+            <p className="text-white/60 leading-relaxed font-light text-[14px] max-w-xs">
+              Reimagine Networking with Smart Directory. Transform professional networking, go paperless, foster collaboration, and grow your community.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div className="flex flex-col items-start md:items-center gap-6">
+            <h3 className="text-white font-bold tracking-widest uppercase text-xs">Quick Links</h3>
+            <nav className="flex flex-col items-start md:items-center gap-3 text-[14px]">
+              <a href="/" className="hover:text-white hover:translate-x-1 transition-all duration-300">Home</a>
+              <a href="/about" className="hover:text-white hover:translate-x-1 transition-all duration-300">About</a>
+              <a href="/digital-namecard" className="hover:text-white hover:translate-x-1 transition-all duration-300">Digital Namecard</a>
+              <a href="/terms" className="hover:text-white hover:translate-x-1 transition-all duration-300">Terms &amp; Conditions</a>
+              <a href="/privacy" className="hover:text-white hover:translate-x-1 transition-all duration-300">Privacy Policy</a>
+            </nav>
+          </div>
+
+          {/* Social Media & Contact */}
+          <div className="flex flex-col items-start md:items-end gap-6 md:ml-auto w-full">
+            <h3 className="text-white font-bold tracking-widest uppercase text-xs">Connect</h3>
+            <div className="flex flex-row items-center gap-4">
+              <a href="https://web.facebook.com/TactLink" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all text-white/70 hover:text-white">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
+              </a>
+              <a href="https://www.instagram.com/tactlinksmartdirectory/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all text-white/70 hover:text-white">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+              </a>
+              <a href="https://www.linkedin.com/company/tactlink/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-white/30 transition-all text-white/70 hover:text-white">
+                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+              </a>
+            </div>
+            
+            <div className="flex flex-col md:items-end gap-1 mt-4 text-[13px] text-white/50 text-left md:text-right">
+              <span className="flex items-center gap-1.5"><svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>14 Arumugam Road, #03-06 LTC Building C</span>
+              <span>Singapore 409959</span>
+            </div>
+          </div>
+
         </div>
-        <div className="flex flex-col items-start gap-2 ml-auto">
-          <div className="">&copy; {new Date().getFullYear()} <span className="text-brand-accent font-bold">TactLink</span>. All rights reserved.</div>
-          <div className="">14 Arumugam Road, #03-06 LTC Building C, Singapore 409959</div>
+
+        {/* Bottom divider and Copyright */}
+        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        <div className="mt-8 flex flex-col md:flex-row items-center justify-between w-full px-4 text-[13px] text-white/40">
+          <div>&copy; {new Date().getFullYear()} <span className="text-white/80 font-bold">TactLink</span>. All rights reserved.</div>
+          <div className="mt-4 md:mt-0 flex items-center gap-6">
+            <a href="/terms" className="hover:text-white transition-colors">Terms</a>
+            <a href="/privacy" className="hover:text-white transition-colors">Privacy</a>
+          </div>
         </div>
-        </div>
-        {/* 1st column: copyright and address */}
-        
+
       </div>
     </footer>
   );
