@@ -77,7 +77,7 @@ export default function ContactPage() {
               </p>
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { country: 'Singapore', email: 'info.singapore@tactlink.com' },
+                  { country: 'Singapore', email: 'info@tactlink.com' },
                   { country: 'Thailand', email: 'info.thailand@tactlink.com' },
                   { country: 'Cambodia', email: 'info.cambodia@tactlink.com' },
                   { country: 'Malaysia', email: 'info.malaysia@tactlink.com' },
@@ -89,9 +89,9 @@ export default function ContactPage() {
                   <a
                     key={country}
                     href={`mailto:${email}?subject=Partnership Inquiry from ${country}`}
-                    className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-brand-accent/10 hover:border-brand-accent/30 transition-all duration-200"
+                    className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-brand-accent/10 hover:border-brand-accent/30 transition-all duration-200 overflow-hidden"
                   >
-                    <span className="text-[11px] font-bold text-brand-accent w-8 h-8 rounded-full bg-brand-accent/10 flex items-center justify-center flex-shrink-0">{country.slice(0,2).toUpperCase()}</span>
+                    <span className="text-[11px] font-bold text-brand-accent w-8 h-8 rounded-full bg-brand-accent/10 hidden sm:flex items-center justify-center flex-shrink-0">{country.slice(0,2).toUpperCase()}</span>
                     <span className="text-white text-[13px] font-semibold">{country}</span>
                   </a>
                 ))}
@@ -115,7 +115,7 @@ export default function ContactPage() {
           <div className="flex flex-col gap-6">
             <h2 className="text-2xl font-extrabold text-white">Other Inquiries</h2>
             <div className="flex flex-col gap-4">
-              <a href="mailto:support@tactlink.com" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
+              <a href="mailto:info@tactlink.com?subject=App Support Request" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
                 <div className="w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-brand-accent/20 transition-all">
                   <LifeBuoy size={22} />
                 </div>
@@ -125,7 +125,7 @@ export default function ContactPage() {
                 </div>
               </a>
 
-              <a href="mailto:press@tactlink.com" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
+              <a href="mailto:info@tactlink.com?subject=Press %26 Media Inquiry" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
                 <div className="w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-brand-accent/20 transition-all">
                   <Newspaper size={22} />
                 </div>
@@ -135,7 +135,7 @@ export default function ContactPage() {
                 </div>
               </a>
 
-              <a href="mailto:info@tactlink.com" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
+              <a href="mailto:info@tactlink.com?subject=General Inquiry" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
                 <div className="w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-brand-accent/20 transition-all">
                   <MessageCircle size={22} />
                 </div>

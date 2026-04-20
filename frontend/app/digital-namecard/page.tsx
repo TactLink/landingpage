@@ -72,9 +72,9 @@ export default function DigitalNamecardPage() {
                         </div>
                         <div className="mt-6 flex items-center gap-3 opacity-80">
                             <div className="flex -space-x-2">
-                                {[1,2,3,4,5].map(i => (
-                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-[#0A0D1E] bg-[#374085] flex items-center justify-center overflow-hidden">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-white/80 translate-y-0.5"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                                {['/user1.png','/user2.png','/user3.png','/user4.png','/cdanny.jpg'].map((src, i) => (
+                                    <div key={i} className="w-7 h-7 rounded-full border-2 border-[#0A0D1E] overflow-hidden">
+                                        <img src={src} alt="user" className="w-full h-full object-cover" />
                                     </div>
                                 ))}
                             </div>
@@ -127,9 +127,9 @@ export default function DigitalNamecardPage() {
                         </div>
                         <div className="flex items-center gap-3 opacity-80">
                             <div className="flex -space-x-2">
-                                {[1,2,3,4,5].map(i => (
-                                    <div key={i} className="w-6 h-6 rounded-full border-2 border-[#0A0D1E] bg-[#374085] flex items-center justify-center overflow-hidden">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white/80 translate-y-0.5"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                                {['/user1.png','/user2.png','/user3.png','/user4.png','/cdanny.jpg'].map((src, i) => (
+                                    <div key={i} className="w-6 h-6 rounded-full border-2 border-[#0A0D1E] overflow-hidden">
+                                        <img src={src} alt="user" className="w-full h-full object-cover" />
                                     </div>
                                 ))}
                             </div>

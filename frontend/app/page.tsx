@@ -233,7 +233,7 @@ export default function HomePage() {
             <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-[#2a3166] rounded flex items-center justify-center transform rotate-45"><div className="w-2 h-2 bg-yellow-400 rounded-sm"></div></div>
+                  <img src="/TactLink-Logo-core.png" alt="TactLink" className="h-6 w-auto object-contain" />
                   <span className="font-bold text-gray-800 text-sm">Platform Admin</span>
                 </div>
               </div>
@@ -332,150 +332,11 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Floating Mobile UI Mockup (Feed Replica) */}
-          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] h-[710px] shrink-0 bg-[#f4f6f9] rounded-[2.25rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[10px] border-[#18181b] ring-1 ring-inset ring-white/10 transition-all duration-700 z-10 flex flex-col overflow-hidden group-hover:hover:z-30 scale-[0.7] lg:scale-[0.75] origin-top md:origin-left group-hover:hover:scale-[0.75] lg:group-hover:hover:scale-[0.8] group-hover:hover:-translate-y-[55%] group-hover:md:opacity-100 md:group-hover:opacity-60 group-hover:hover:opacity-100 font-sans">
-
-            {/* Dynamic Island / Camera Notch */}
-            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100] flex items-center justify-end px-2">
-              <div className="w-2.5 h-2.5 bg-[#0a0a0a] rounded-full border border-white/5"></div>
-            </div>
-
-            {/* Dark Blue Curved Header */}
-            <div className="w-full bg-gradient-to-br from-[#2b51aa] to-[#1e346f] pt-12 pb-12 px-5 relative shrink-0 z-20 shadow-sm" style={{ borderBottomLeftRadius: '36px', borderBottomRightRadius: '36px' }}>
-              {/* Fake Wavy lines pattern */}
-              <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at center, transparent 40%, rgba(255,255,255,0.4) 41%, rgba(255,255,255,0.4) 43%, transparent 44%)', backgroundSize: '150% 150%', backgroundPosition: 'left 50% top 100%' }}></div>
-              <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at center, transparent 30%, rgba(255,255,255,0.4) 31%, rgba(255,255,255,0.4) 33%, transparent 34%)', backgroundSize: '150% 150%', backgroundPosition: 'left 50% top 100%' }}></div>
-
-              <div className="flex justify-between items-center mb-6 relative z-10">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                <div className="space-y-1 w-5 cursor-pointer">
-                  <div className="w-full h-[2px] bg-white rounded-full"></div>
-                  <div className="w-full h-[2px] bg-white rounded-full"></div>
-                  <div className="w-full h-[2px] bg-white rounded-full"></div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 relative z-10 mb-2">
-                <div className="w-14 h-14 bg-white border-[1.5px] border-white rounded-full flex items-center justify-center shrink-0 shadow-lg relative overflow-hidden">
-                  <div className="text-[20px] font-black text-[#2cbdf4] tracking-tighter">FN<span className="text-[#f15e61]">.</span></div>
-                </div>
-                <h2 className="text-white text-[22px] font-bold tracking-tight">Founders Network</h2>
-              </div>
-            </div>
-
-            {/* Scrollable Feed */}
-            <div className="flex-1 overflow-hidden bg-[#f4f6f9] pb-24 -mt-6 pt-6 relative z-10">
-
-              <div className="text-center text-gray-500 font-bold text-[13px] mb-4">Feed</div>
-
-              {/* Stories Row */}
-              <div className="flex gap-3 px-4 overflow-hidden mb-4 shrink-0">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="relative shrink-0 flex flex-col items-center">
-                    <div className="w-14 h-14 rounded-full p-[2px] bg-gradient-to-tr from-gray-300 to-gray-400">
-                      <img src={`https://i.pravatar.cc/100?img=${i + 10}`} className="w-full h-full rounded-full object-cover border-[1.5px] border-white" alt={`Story ${i}`} />
-                    </div>
-                    {i === 3 && (
-                      <div className="absolute top-0 right-0 w-4 h-4 bg-[#f15e61] rounded-full border border-white flex items-center justify-center text-[8px] text-white font-bold z-10 box-content">2</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Post 1 */}
-              <div className="bg-white rounded-2xl mx-3 shadow-[0_2px_10px_rgba(0,0,0,0.03)] mb-4 overflow-hidden border border-gray-100">
-                {/* Post Header */}
-                <div className="p-3 pb-2">
-                  <div className="flex gap-2">
-                    <img src="https://i.pravatar.cc/100?img=11" className="w-10 h-10 rounded-full object-cover shrink-0" alt="Author" />
-                    <div className="flex-1 overflow-hidden">
-                      <div className="flex justify-between items-start">
-                        <h4 className="font-bold text-gray-900 text-[13px] leading-tight">Marcus Wong</h4>
-                        <span className="text-gray-400 font-bold shrink-0 text-sm leading-none ml-2">⋮</span>
-                      </div>
-                      <p className="text-[10px] text-gray-600 leading-tight truncate mt-[2px]">Product Manager • ABC International Sdn Bhd</p>
-                      <p className="text-[9px] text-gray-400 mt-1">6h ago • Edited</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Images */}
-                <div className="grid grid-cols-2 gap-[1px] bg-white h-[120px]">
-                  <img src="https://images.unsplash.com/photo-1540569014015-19a7be504e3a?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Presentation" />
-                  <img src="https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Audience" />
-                </div>
-
-                {/* Engagement */}
-                <div className="px-3 py-2">
-                  <div className="flex justify-between items-center text-[10px] text-gray-500 border-b border-gray-50 pb-2 mb-2">
-                    <div className="flex items-center gap-1">
-                      <div className="flex -space-x-1">
-                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[3] leading-none">❤️</div>
-                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[2] leading-none">👍</div>
-                        <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center text-[10px] z-[1] leading-none">🫂</div>
-                      </div>
-                      <span className="ml-1 tracking-tight">Riley Fernandez and others</span>
-                    </div>
-                    <div className="tracking-tight">78 comments • 10 reposts</div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex justify-between items-center px-2 py-1">
-                    {/* Like */}
-                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
-                    {/* Comment */}
-                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
-                    {/* Send / Paper Plane */}
-                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer -rotate-12 transform origin-center" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                    {/* Repost */}
-                    <svg className="w-[20px] h-[20px] text-[#2b51aa] cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
-                  </div>
-                </div>
-              </div>
-
-              {/* Post 2 (Partial cutoff like mockup) */}
-              <div className="bg-white rounded-2xl mx-3 shadow-[0_2px_10px_rgba(0,0,0,0.03)] overflow-hidden border border-gray-100 mb-6">
-                <div className="p-3 pb-2">
-                  <div className="flex gap-2">
-                    <img src="https://i.pravatar.cc/100?img=33" className="w-10 h-10 rounded-full object-cover shrink-0" alt="Author" />
-                    <div className="flex-1 overflow-hidden">
-                      <div className="flex justify-between items-start">
-                        <h4 className="font-bold text-gray-900 text-[13px] leading-tight">Jeremiah Eden</h4>
-                        <span className="text-gray-400 font-bold shrink-0 text-sm leading-none ml-2">⋮</span>
-                      </div>
-                      <p className="text-[10px] text-gray-600 leading-tight truncate mt-[2px]">General Admin • Charity Organization</p>
-                      <p className="text-[9px] text-gray-400 mt-1">3 weeks ago</p>
-                    </div>
-                  </div>
-                </div>
-                {/* Image */}
-                <div className="w-full bg-gray-100 h-[80px]">
-                  <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=400&fit=crop" className="w-full h-full object-cover" alt="Charity" />
-                </div>
-              </div>
-
-            </div>
-
-            {/* Floating Bottom Nav */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 w-[90%] h-[68px] bg-gradient-to-br from-[#3c5ba9] to-[#253f86] rounded-[34px] flex justify-between items-center px-[6px] shadow-[0_20px_40px_rgba(30,50,110,0.4)] z-30">
-              <div className="flex flex-col items-center justify-center w-[25%] h-[56px] bg-white rounded-[28px] text-[#2b51aa] shadow-sm cursor-pointer border border-[#2b51aa]/10">
-                {/* RSS / Feed Icon */}
-                <svg className="w-[20px] h-[20px] mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 19A2 2 0 114 23 2 2 0 014 19zM4 11A10 10 0 0114 21m-10-5A5 5 0 019 21" /></svg>
-                <span className="text-[10px] font-bold tracking-tight">Feed</span>
-              </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                <span className="text-[10px] font-medium tracking-tight">Events</span>
-              </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" /></svg>
-                <span className="text-[10px] font-medium tracking-tight">Tickets</span>
-              </div>
-              <div className="flex flex-col items-center justify-center w-[25%] h-full text-white/90 hover:text-white transition cursor-pointer">
-                <svg className="w-[22px] h-[22px] mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <span className="text-[10px] font-medium tracking-tight">Members</span>
-              </div>
-            </div>
+          {/* Floating Mobile UI Mockup */}
+          <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] shrink-0 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[10px] border-[#18181b] ring-1 ring-inset ring-white/10 rounded-[2.25rem] overflow-hidden z-10 scale-[0.9] md:scale-[0.75] lg:scale-[0.75] origin-top md:origin-left">
+            {/* Dynamic Island */}
+            <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100]" />
+            <img src="/association-newsfeed.png" alt="Association NewsFeed" className="w-full h-auto block" />
           </div>
         </div>
         {/* Decorative background shapes */}
@@ -818,7 +679,7 @@ export default function HomePage() {
               >
                 <div className="absolute left-0 top-0 w-12 h-full bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 w-12 h-full bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
-                <div ref={localContentRef} className="flex gap-6 px-3 py-2">
+                <div ref={localContentRef} className="flex gap-6 px-3 py-2 justify-center">
                   {localPartners.map((partner, idx) => {
                     const logoUrl = partner.logo?.url
                       ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
@@ -927,172 +788,20 @@ export default function HomePage() {
               </ul>
             </div>
 
-            <div className="w-full md:w-1/2 relative">
-              <div className="w-full aspect-square bg-[#f8fafc] rounded-[40px] border border-gray-200 shadow-2xl relative overflow-hidden flex items-center justify-center">
-                <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-blue-50 to-brand-accent/10 rounded-full blur-2xl"></div>
+            <div className="w-full md:w-1/2 relative bg-[#f8fafc] rounded-[40px] p-8 aspect-square flex items-center justify-center border border-gray-200 shadow-2xl overflow-hidden">
+              <div className="absolute w-[120%] h-[120%] bg-gradient-to-tr from-blue-50 to-brand-accent/10 rounded-full blur-2xl"></div>
+              <div className="absolute inset-0">
 
                 {/* Directory Flow - Two Overlapping Phones */}
 
                 {/* Background Phone: Directory List */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-[75%] -translate-y-1/2 w-[240px] h-[500px] bg-[#fafafa] rounded-[24px] shadow-lg border-[4px] border-white ring-1 ring-gray-200 opacity-80 transform -rotate-6 flex flex-col overflow-hidden">
-                  <div className="flex items-center justify-between p-3 bg-white border-b border-gray-100">
-                    <div className="w-20 h-3 bg-gray-200 rounded"></div>
-                  </div>
-                  <div className="p-3">
-                    <div className="w-full h-8 bg-white border border-gray-200 rounded-lg mb-3"></div>
-                    <div className="flex flex-col gap-3">
-                      {[
-                        { name: 'Alex Mercer', c: 'bg-blue-600', l: 'AM' },
-                        { name: 'Sarah Jenkins', c: 'bg-emerald-600', l: 'SJ' },
-                        { name: 'Dr. Robert Clark', c: 'bg-gray-800', l: 'RC' },
-                        { name: 'Emily Chen', c: 'bg-orange-500', l: 'EC' },
-                      ].map((m, i) => (
-                        <div key={i} className="flex gap-2 items-center">
-                          <div className={`w-8 h-8 rounded-full ${m.c} text-white flex items-center justify-center text-xs font-bold`}>{m.l}</div>
-                          <div className="flex flex-col">
-                            <div className="text-xs font-bold text-gray-900">{m.name}</div>
-                            <div className="w-16 h-1.5 bg-gray-200 rounded mt-1"></div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                <div className="absolute left-1/2 top-1/2 -translate-x-[75%] -translate-y-1/2 w-[200px] rounded-[20px] shadow-lg border-[5px] border-[#18181b] ring-1 ring-inset ring-white/10 opacity-80 transform -rotate-6 overflow-hidden">
+                  <img src="/contact.png" alt="Member Directory" className="w-full h-auto block" />
                 </div>
 
                 {/* Foreground Phone: Digital Namecard */}
-                <div className="absolute left-1/2 top-1/2 -translate-x-[25%] -translate-y-[45%] w-[260px] h-[540px] bg-[#f4f7fb] rounded-[32px] shadow-2xl border-[6px] border-white ring-1 ring-gray-200 z-10 flex flex-col overflow-hidden transform rotate-3 hover:rotate-0 transition duration-500">
-                  {/* Header */}
-                  <div className="bg-blue-600 pt-8 pb-10 px-5 relative z-0 shadow-sm border-b-[20px] border-blue-600 rounded-b-[24px]">
-                    <div className="flex items-center gap-3 text-white">
-                      <div className="w-10 h-10 rounded-full border-2 border-white object-cover bg-white flex items-center justify-center overflow-hidden">
-                        <div className="w-10 h-10 bg-gradient-to-tr from-brand-accent to-blue-400 flex items-center justify-center text-white font-bold tracking-widest text-[10px]">AM</div>
-                      </div>
-                      <span className="font-bold text-[15px] tracking-wide">Alex Mercer</span>
-                    </div>
-                  </div>
-
-                  {/* Cards Container */}
-                  <div className="flex-1 px-3 -mt-4 relative z-10 flex flex-col gap-3 overflow-hidden">
-
-                    {/* Primary Card */}
-                    <div className="bg-white rounded-[16px] shadow-sm border border-gray-100 relative overflow-hidden flex-shrink-0 flex flex-col">
-                      <div className="flex p-0 relative">
-                        {/* Left Graphic */}
-                        <div className="w-24 bg-blue-600 rounded-br-[60px] rounded-tr-[5px] flex items-center justify-center py-6">
-                          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-100">
-                            <div className="text-[10px] font-black text-blue-800 text-center leading-tight">GLOBAL<br />TRADE</div>
-                          </div>
-                        </div>
-
-                        {/* Right Details */}
-                        <div className="flex-1 p-3 pl-4 pr-2">
-                          <div className="font-bold text-gray-900 text-[14px] leading-tight mb-1">Alex Mercer</div>
-                          <div className="text-gray-500 text-[11px] font-medium mb-2">VP</div>
-
-                          <div className="w-full h-px bg-[#facc15] mb-2 opacity-50"></div>
-
-                          <div className="flex flex-col gap-1.5 text-[10px] text-gray-600 font-medium whitespace-nowrap overflow-hidden text-ellipsis">
-                            <div className="flex items-center gap-2">
-                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                              <span className="w-full overflow-hidden text-ellipsis">Global Trade Network</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                              <span>+66 802139500</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <svg className="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                              <span className="w-[100px] overflow-hidden text-ellipsis">alex.m@gmail.com</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-[12px] text-gray-700 px-1 mb-1">
-                      <div className="w-4 h-4 rounded-full border-2 border-gray-400 bg-transparent flex items-center justify-center">
-                      </div>
-                      Set as primary card
-                    </div>
-
-                    {/* Secondary Card */}
-                    <div className="bg-white rounded-[16px] shadow-sm border border-gray-100 flex-shrink-0 relative overflow-hidden flex flex-col pt-3">
-                      {/* Decorative Shapes left & right */}
-                      <div className="absolute top-0 left-12 w-8 h-12 bg-blue-600 rounded-b-full"></div>
-                      <div className="absolute bottom-0 left-0 w-16 h-16 bg-blue-600 rounded-tr-full"></div>
-                      <div className="absolute bottom-4 left-0 w-8 h-12 bg-amber-400 rounded-r-full"></div>
-
-                      <div className="p-4 relative z-10 flex flex-col">
-                        <div className="flex gap-3 mb-4">
-                          <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center flex-shrink-0 border border-gray-100 shadow-sm">
-                            <div className="flex -space-x-1">
-                              <div className="w-4 h-4 rounded-sm bg-[#facc15] rotate-45"></div>
-                              <div className="w-4 h-4 rounded-sm bg-[#1e3a8a] rotate-45"></div>
-                            </div>
-                          </div>
-                          <div>
-                            <div className="font-bold text-gray-900 text-[14px] leading-tight mb-0.5">Alex Mercer</div>
-                            <div className="text-gray-500 text-[11px] font-medium leading-tight">Business Dev (TactLink)</div>
-                          </div>
-                        </div>
-
-                        <div className="pl-14 flex flex-col gap-2 text-[10px] text-gray-700 font-medium">
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
-                            </div>
-                            TactLink
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
-                            </div>
-                            +66 903304415
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                            </div>
-                            alex@tactlink.com
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-                              <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" /></svg>
-                            </div>
-                            www.tactlink.com
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-[12px] text-gray-700 px-1 pb-2">
-                      <div className="w-4 h-4 rounded-full border-2 border-blue-600 bg-white flex items-center justify-center">
-                        <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                      </div>
-                      Set as primary card
-                    </div>
-                  </div>
-
-                  {/* Bottom Nav */}
-                  <div className="bg-white border-t border-gray-200 flex justify-between px-6 py-3 relative z-20 mt-auto">
-                    <div className="flex flex-col items-center gap-1">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                      <span className="text-[9px] text-gray-500 font-medium">Home</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m9-1.13a4 4 0 10-8 0 4 4 0 008 0z" /></svg>
-                      <span className="text-[9px] text-gray-500 font-medium">Contacts</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1 relative">
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-10 h-0.5 bg-blue-600 rounded-full"></div>
-                      <svg className="w-5 h-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" /></svg>
-                      <span className="text-[9px] text-blue-600 font-bold">My Cards</span>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" /></svg>
-                      <span className="text-[9px] text-gray-500 font-medium">More</span>
-                    </div>
-                  </div>
+                <div className="absolute left-1/2 top-1/2 -translate-x-[25%] -translate-y-[45%] w-[220px] rounded-[24px] shadow-2xl border-[6px] border-[#18181b] ring-1 ring-inset ring-white/10 z-10 overflow-hidden transform rotate-3 hover:rotate-0 transition duration-500">
+                  <img src="/card.jpg" alt="Digital Namecard" className="w-full h-auto block" />
                 </div>
               </div>
             </div>
@@ -1132,73 +841,9 @@ export default function HomePage() {
             </div>
 
             <div className="w-full md:w-1/2 relative bg-gray-50 rounded-[40px] p-8 aspect-square flex items-center justify-center border border-gray-100 shadow-inner">
-              {/* Event QR Mockup */}
-              <div className="relative w-[280px] h-[580px] bg-white rounded-[32px] shadow-2xl border-[6px] border-white ring-1 ring-gray-200 z-10 flex flex-col overflow-hidden transform -rotate-2 hover:rotate-0 transition duration-500">
-                {/* Top Nav */}
-                <div className="flex items-center justify-between p-4 bg-white border-b border-gray-50">
-                  <svg className="w-5 h-5 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-                  <span className="text-sm font-medium text-gray-800 absolute left-1/2 -translate-x-1/2">Event QR code</span>
-                </div>
-
-                <div className="flex-1 flex flex-col items-center pt-8 px-6">
-                  {/* Fake Logo */}
-                  <div className="flex -space-x-3 mb-2">
-                    <div className="w-10 h-10 rounded-lg bg-[#eab308] rotate-45 flex items-center justify-center ring-2 ring-white z-10">
-                      <div className="w-3 h-3 bg-white rounded-sm"></div>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg bg-[#1e3a8a] rotate-45 flex items-center justify-center ring-2 ring-white z-0">
-                      <div className="w-3 h-3 bg-white rounded-sm"></div>
-                    </div>
-                  </div>
-                  <div className="text-[10px] font-bold text-gray-600 tracking-[0.2em] mb-6">GLOBAL TRADE</div>
-
-                  <h4 className="text-sm font-bold text-center text-gray-900 mb-1 leading-tight">Annual Leaders Summit 2026</h4>
-                  <p className="text-xs text-gray-500 mb-8">15 Oct 2026 | 6:00 pm</p>
-
-                  {/* Fake QR pattern using grid */}
-                  <div className="w-52 h-52 bg-white p-2 relative flex flex-wrap content-start">
-                    {/* Generative blocks for a mock QR */}
-                    {[...Array(400)].map((_, i) => {
-                      // Some deterministic randomness
-                      const isDark = (Math.sin(i * 13.5) * Math.cos(i * 7.1)) > 0.1;
-                      // Corner squares
-                      const isTL = (i % 20 < 4) && (Math.floor(i / 20) < 4);
-                      const isTR = (i % 20 > 15) && (Math.floor(i / 20) < 4);
-                      const isBL = (i % 20 < 4) && (Math.floor(i / 20) > 15);
-
-                      // force empty corners so we can overlay clear squares
-                      if (isTL || isTR || isBL) return <div key={i} className="w-[5%] h-[5%] bg-white"></div>;
-
-                      return <div key={i} className={`w-[5%] h-[5%] ${isDark ? 'bg-gray-900' : 'bg-white'}`}></div>;
-                    })}
-
-                    {/* Corner markers */}
-                    <div className="absolute top-2 left-2 w-10 h-10 border-4 border-gray-900">
-                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
-                    </div>
-                    <div className="absolute top-2 right-2 w-10 h-10 border-4 border-gray-900">
-                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
-                    </div>
-                    <div className="absolute bottom-2 left-2 w-10 h-10 border-4 border-gray-900">
-                      <div className="absolute top-1.5 left-1.5 right-1.5 bottom-1.5 bg-gray-900"></div>
-                    </div>
-
-                    {/* Center Avatar */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full flex items-center justify-center border border-gray-100 shadow-sm">
-                      <div className="flex -space-x-1">
-                        <div className="w-3 h-3 rounded bg-[#eab308] rotate-45"></div>
-                        <div className="w-3 h-3 rounded bg-[#1e3a8a] rotate-45"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-auto border-t border-gray-100 pt-6 pb-8 flex justify-center">
-                  <button className="flex items-center gap-2 text-brand-primary text-sm font-bold">
-                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-                    Download now
-                  </button>
-                </div>
+              <div className="relative w-[280px] shrink-0 shadow-2xl border-[8px] border-[#18181b] ring-1 ring-inset ring-white/10 rounded-[2.25rem] overflow-hidden transform -rotate-2 hover:rotate-0 transition duration-500">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#18181b] rounded-full z-[100]" />
+                <img src="/association-events-discover.png" alt="Events Discover" className="w-full h-auto block" />
               </div>
             </div>
           </div>
