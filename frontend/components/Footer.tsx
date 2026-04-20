@@ -17,7 +17,7 @@ export default function Footer() {
           {/* Logo & Info */}
           <div className="flex flex-col items-start gap-6">
             <a href="/" className="flex items-center gap-2">
-              <img src="/TactLink-Logo-core.png" alt="TactLink" className="h-8 w-auto object-contain brightness-0 invert" />
+              <img src="/TactLink-Logo-core.webp" alt="TactLink" className="h-8 w-auto object-contain brightness-0 invert" />
               <span className="font-[family-name:var(--font-montserrat)] font-extrabold text-xl tracking-tight text-white">TACTLINK</span>
             </a>
             <p className="text-white/60 leading-relaxed font-light text-[14px] max-w-xs">

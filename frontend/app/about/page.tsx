@@ -85,7 +85,7 @@ export default function AboutPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-brand-accent/20 blur-[100px] rounded-full z-0" />
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl border border-white/10 w-full max-w-lg mx-auto">
               <Image
-                src="/people.png"
+                src="/people.webp"
                 alt="TactLink team at events and partnerships"
                 width={600}
                 height={480}
@@ -113,17 +113,17 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                icon: "/value1.png",
+                icon: "/value1.webp",
                 title: "Strengthen Internal Bonds",
                 desc: "Our smart directory is tailor-made for professional associations, creating a vibrant, accessible internal network where members can easily find and connect with each other."
               },
               {
-                icon: "/value2.png",
+                icon: "/value2.webp",
                 title: "Supercharge Your Events",
                 desc: "Transform any gathering with powerful networking tools. Using simple QR codes, attendees can exchange information instantly, creating a dynamic and engaging experience."
               },
               {
-                icon: "/value3.png",
+                icon: "/value3.webp",
                 title: "Unlock Global Collaboration",
                 desc: "Break down geographical barriers. TactLink provides the readily accessible information needed to foster crucial business connections on an international scale."
               }
@@ -172,10 +172,10 @@ export default function AboutPage() {
             <div className="absolute inset-0 bg-green-500/10 blur-[100px] z-0 rounded-full" />
             
             {[
-              { src: "/sdg12.png", alt: "SDG 12: Responsible Consumption and Production" },
-              { src: "/sdg13.png", alt: "SDG 13: Climate Action" },
-              { src: "/sdg15.png", alt: "SDG 15: Life on Land" },
-              { src: "/sdg17.png", alt: "SDG 17: Partnerships for the Goals" },
+              { src: "/sdg12.webp", alt: "SDG 12: Responsible Consumption and Production" },
+              { src: "/sdg13.webp", alt: "SDG 13: Climate Action" },
+              { src: "/sdg15.webp", alt: "SDG 15: Life on Land" },
+              { src: "/sdg17.webp", alt: "SDG 17: Partnerships for the Goals" },
             ].map((img, idx) => (
               <div key={idx} className="relative z-10 bg-white/5 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-white/10 transform hover:scale-105 transition-transform duration-300 hover:border-white/30 flex items-center justify-center">
                 <Image src={img.src} alt={img.alt} width={130} height={130} className="w-full max-w-[130px] h-auto rounded-lg mix-blend-screen" />
@@ -208,19 +208,19 @@ export default function AboutPage() {
                 name: "Danny Ong",
                 role: "CEO & Founder",
                 bio: 'Managing Partner at GDPS International and recognized in "Successful People in Malaysia and Singapore" by British Publishing House.',
-                img: "/cdanny.jpg"
+                img: "/cdanny.webp"
               },
               {
                 name: "Jeremy Ong",
                 role: "CTO",
                 bio: 'A Deep Learning Expert from Neura Robotics GmbH with a Ph.D. from Monash University who secured pre-seed funding from Nvidia & Cradle Fund.',
-                img: "/cjeremy.jpg"
+                img: "/cjeremy.webp"
               },
               {
                 name: "Goh Chen Yi",
                 role: "CFO",
                 bio: 'Audit Partner at Thelyx and a MOF Licensed Tax Agent & Auditor holding multiple fellowships including MIA, MICPA, FCCA, and ASEAN CPA.',
-                img: "/cgoh.jpg"
+                img: "/cgoh.webp"
               }
             ].map((member, idx) => (
               <div key={idx} className="flex flex-col items-center text-center bg-[#0d122b] rounded-[2rem] border border-white/10 p-10 hover:border-brand-accent/40 hover:bg-[#131b40] hover:-translate-y-2 transition-all duration-300 group shadow-2xl relative overflow-hidden">

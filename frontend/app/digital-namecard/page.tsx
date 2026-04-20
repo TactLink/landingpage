@@ -64,15 +64,15 @@ export default function DigitalNamecardPage() {
                         </p>
                         <div className="flex flex-row items-center gap-3">
                             <a href="https://apps.apple.com/vn/app/tactlink/id1469516661" target="_blank" rel="noopener noreferrer" className="transition-all hover:scale-105 hover:opacity-90">
-                                <Image src="/appstorelink.png" alt="Download on the App Store" width={140} height={42} className="h-[42px] w-auto object-contain" />
+                                <Image src="/appstorelink.webp" alt="Download on the App Store" width={140} height={42} className="h-[42px] w-auto object-contain" />
                             </a>
                             <a href="https://play.google.com/store/apps/details?id=com.tactlink.app&pli=1" target="_blank" rel="noopener noreferrer" className="transition-all hover:scale-105 hover:opacity-90">
-                                <Image src="/googleplaylink.png" alt="Get it on Google Play" width={140} height={42} className="h-[42px] w-auto object-contain" />
+                                <Image src="/googleplaylink.webp" alt="Get it on Google Play" width={140} height={42} className="h-[42px] w-auto object-contain" />
                             </a>
                         </div>
                         <div className="mt-6 flex items-center gap-3 opacity-80">
                             <div className="flex -space-x-2">
-                                {['/user1.png','/user2.png','/user3.png','/user4.png','/cdanny.jpg'].map((src, i) => (
+                                {['/user1.webp','/user2.webp','/user3.webp','/user4.webp','/cdanny.webp'].map((src, i) => (
                                     <div key={i} className="w-7 h-7 rounded-full border-2 border-[#0A0D1E] overflow-hidden">
                                         <img src={src} alt="user" className="w-full h-full object-cover" />
                                     </div>
@@ -119,15 +119,15 @@ export default function DigitalNamecardPage() {
                         {/* Compact side-by-side badges */}
                         <div className="flex flex-row gap-3 mb-6">
                             <a href="https://apps.apple.com/vn/app/tactlink/id1469516661" target="_blank" rel="noopener noreferrer" className="transition-all hover:scale-105 hover:opacity-90">
-                                <Image src="/appstorelink.png" alt="Download on the App Store" width={130} height={38} className="h-[38px] w-auto object-contain" />
+                                <Image src="/appstorelink.webp" alt="Download on the App Store" width={130} height={38} className="h-[38px] w-auto object-contain" />
                             </a>
                             <a href="https://play.google.com/store/apps/details?id=com.tactlink.app&pli=1" target="_blank" rel="noopener noreferrer" className="transition-all hover:scale-105 hover:opacity-90">
-                                <Image src="/googleplaylink.png" alt="Get it on Google Play" width={130} height={38} className="h-[38px] w-auto object-contain" />
+                                <Image src="/googleplaylink.webp" alt="Get it on Google Play" width={130} height={38} className="h-[38px] w-auto object-contain" />
                             </a>
                         </div>
                         <div className="flex items-center gap-3 opacity-80">
                             <div className="flex -space-x-2">
-                                {['/user1.png','/user2.png','/user3.png','/user4.png','/cdanny.jpg'].map((src, i) => (
+                                {['/user1.webp','/user2.webp','/user3.webp','/user4.webp','/cdanny.webp'].map((src, i) => (
                                     <div key={i} className="w-6 h-6 rounded-full border-2 border-[#0A0D1E] overflow-hidden">
                                         <img src={src} alt="user" className="w-full h-full object-cover" />
                                     </div>
@@ -246,7 +246,7 @@ export default function DigitalNamecardPage() {
                             <div className="absolute inset-0 bg-gradient-to-br from-green-100/50 to-brand-accent/10 rounded-[3rem] transform -rotate-2 scale-105 z-0" />
                             <div className="relative z-10 w-full max-w-[240px] lg:max-w-[260px] aspect-[305/678] overflow-hidden rounded-[2rem] shadow-2xl border border-gray-100 bg-gray-100 group">
                                 <Image
-                                    src="/mockups/directory-global.png"
+                                    src="/mockups/directory-global.webp"
                                     alt="Smart Directory"
                                     fill
                                     className="object-cover object-top transition-all duration-500 group-hover:scale-105"
@@ -396,10 +396,10 @@ export default function DigitalNamecardPage() {
                     <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">Download the TactLink app today and create your first dynamic digital identity in less than 2 minutes.</p>
                     <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
                         <a href="https://apps.apple.com/vn/app/tactlink/id1469516661" className="h-[60px] transition-transform hover:scale-105">
-                            <Image src="/appstorelink.png" alt="Download for iOS" width={200} height={60} className="h-full w-auto object-contain" />
+                            <Image src="/appstorelink.webp" alt="Download for iOS" width={200} height={60} className="h-full w-auto object-contain" />
                         </a>
                         <a href="https://play.google.com/store/apps/details?id=com.tactlink.app&pli=1" className="h-[60px] transition-transform hover:scale-105">
-                            <Image src="/googleplaylink.png" alt="Download for Android" width={200} height={60} className="h-full w-auto object-contain" />
+                            <Image src="/googleplaylink.webp" alt="Download for Android" width={200} height={60} className="h-full w-auto object-contain" />
                         </a>
                     </div>
                 </div>

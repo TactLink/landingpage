@@ -128,7 +128,7 @@ export default function Navbar() {
         {/* Logo */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/TactLink-Logo-core.png" alt="TactLink Logo" width={120} height={40} className="h-8 w-auto object-contain" priority />
+            <Image src="/TactLink-Logo-core.webp" alt="TactLink Logo" width={120} height={40} className="h-8 w-auto object-contain" priority />
             <span className={`font-[family-name:var(--font-montserrat)] font-extrabold text-xl tracking-tight transition-colors duration-500 ${navTheme === 'light' ? 'text-brand-primary' : 'text-white'}`}>TACTLINK</span>
           </Link>
         </div>
@@ -218,7 +218,7 @@ export default function Navbar() {
             {/* Header with logo */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100">
               <Link href="/" className="flex items-center gap-2" onClick={closeMenu}>
-                <Image src="/TactLink-Logo-core.png" alt="TactLink" width={28} height={28} className="h-7 w-auto object-contain" />
+                <Image src="/TactLink-Logo-core.webp" alt="TactLink" width={28} height={28} className="h-7 w-auto object-contain" />
                 <span className="font-[family-name:var(--font-montserrat)] font-extrabold text-brand-primary text-base tracking-tight">TACTLINK</span>
               </Link>
               <button onClick={closeMenu} aria-label="Close menu" className="p-1 rounded-lg hover:bg-gray-100 transition-colors">

@@ -233,7 +233,7 @@ export default function HomePage() {
             <div className="w-full h-14 bg-white border-b border-gray-200 flex items-center px-4 justify-between shrink-0">
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <img src="/TactLink-Logo-core.png" alt="TactLink" className="h-6 w-auto object-contain" />
+                  <img src="/TactLink-Logo-core.webp" alt="TactLink" className="h-6 w-auto object-contain" />
                   <span className="font-bold text-gray-800 text-sm">Platform Admin</span>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function HomePage() {
           <div className="relative md:absolute md:left-2 lg:left-6 md:top-1/2 md:-translate-y-1/2 w-[320px] shrink-0 shadow-[0_40px_80px_rgba(0,0,0,0.6)] border-[10px] border-[#18181b] ring-1 ring-inset ring-white/10 rounded-[2.25rem] overflow-hidden z-10 scale-[0.9] md:scale-[0.75] lg:scale-[0.75] origin-top md:origin-left">
             {/* Dynamic Island */}
             <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[90px] h-[24px] bg-[#18181b] rounded-full z-[100]" />
-            <img src="/association-newsfeed.png" alt="Association NewsFeed" className="w-full h-auto block" />
+            <img src="/association-newsfeed.webp" alt="Association NewsFeed" className="w-full h-auto block" />
           </div>
         </div>
         {/* Decorative background shapes */}
@@ -494,7 +494,7 @@ export default function HomePage() {
               {/* TactLink header */}
               <div className="bg-brand-accent/10 backdrop-blur-xl flex items-center gap-3 py-5 px-8 relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-brand-accent/10 pointer-events-none" />
-                <img src="/TactLink-Logo-core.png" alt="TactLink" className="h-6 w-auto object-contain relative z-10 shrink-0" />
+                <img src="/TactLink-Logo-core.webp" alt="TactLink" className="h-6 w-auto object-contain relative z-10 shrink-0" />
                 <div className="relative z-10">
                   <p className="font-[family-name:var(--font-montserrat)] font-extrabold text-brand-accent tracking-widest uppercase text-lg">TACTLINK WAY</p>
                   <p className="text-xs text-brand-accent/50 mt-0.5">How TactLink associations work</p>
@@ -796,12 +796,12 @@ export default function HomePage() {
 
                 {/* Background Phone: Directory List */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-[75%] -translate-y-1/2 w-[200px] rounded-[20px] shadow-lg border-[5px] border-[#18181b] ring-1 ring-inset ring-white/10 opacity-80 transform -rotate-6 overflow-hidden">
-                  <img src="/contact.png" alt="Member Directory" className="w-full h-auto block" />
+                  <img src="/contact.webp" alt="Member Directory" className="w-full h-auto block" />
                 </div>
 
                 {/* Foreground Phone: Digital Namecard */}
                 <div className="absolute left-1/2 top-1/2 -translate-x-[25%] -translate-y-[45%] w-[220px] rounded-[24px] shadow-2xl border-[6px] border-[#18181b] ring-1 ring-inset ring-white/10 z-10 overflow-hidden transform rotate-3 hover:rotate-0 transition duration-500">
-                  <img src="/card.jpg" alt="Digital Namecard" className="w-full h-auto block" />
+                  <img src="/card.webp" alt="Digital Namecard" className="w-full h-auto block" />
                 </div>
               </div>
             </div>
@@ -843,7 +843,7 @@ export default function HomePage() {
             <div className="w-full md:w-1/2 relative bg-gray-50 rounded-[40px] p-8 aspect-square flex items-center justify-center border border-gray-100 shadow-inner">
               <div className="relative w-[280px] shrink-0 shadow-2xl border-[8px] border-[#18181b] ring-1 ring-inset ring-white/10 rounded-[2.25rem] overflow-hidden transform -rotate-2 hover:rotate-0 transition duration-500">
                 <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[70px] h-[18px] bg-[#18181b] rounded-full z-[100]" />
-                <img src="/association-events-discover.png" alt="Events Discover" className="w-full h-auto block" />
+                <img src="/association-events-discover.webp" alt="Events Discover" className="w-full h-auto block" />
               </div>
             </div>
           </div>

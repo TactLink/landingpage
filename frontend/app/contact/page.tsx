@@ -18,7 +18,7 @@ export default function ContactPage() {
       {/* Full-bleed map image at the top with overlay and hero text */}
       <div className="relative w-full h-[350px] md:h-[450px] mb-12 z-10 overflow-hidden pt-20">
         <Image
-          src="/map.png"
+          src="/map.webp"
           alt="TactLink Map"
           layout="fill"
           objectFit="cover"
