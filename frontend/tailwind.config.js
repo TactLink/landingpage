@@ -1,19 +1,20 @@
+const path = require('path')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./app/\\[locale\\]/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}"
+    path.join(__dirname, 'app/**/*.{js,ts,jsx,tsx}').replace(/\\/g, '/'),
+    path.join(__dirname, 'components/**/*.{js,ts,jsx,tsx}').replace(/\\/g, '/'),
+    path.join(__dirname, 'pages/**/*.{js,ts,jsx,tsx}').replace(/\\/g, '/'),
   ],
   theme: {
     extend: {
       colors: {
         brand: {
-          primary: "#3a4887", // New primary blue
-          accent: "#efc94a", // New accent yellow
-          white: "#ffffff", // Pure white
-          light: "#f5f6fa", // Subtle light grey/off-white
+          primary: "#3a4887",
+          accent: "#efc94a",
+          white: "#ffffff",
+          light: "#f5f6fa",
         }
       },
       fontFamily: {
@@ -43,4 +44,3 @@ module.exports = {
   },
   plugins: [],
 }
-
