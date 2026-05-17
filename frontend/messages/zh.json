@@ -153,7 +153,7 @@
     "sol1Desc": "通过强大的社交工具改变任何聚会。使用简单的二维码，与会者可以即时交换信息，创造动态而引人入胜的体验。",
     "sol2Title": "解锁全球合作",
     "sol2Desc": "打破地理障碍。TactLink提供随时可用的信息，以促进国际规模上的关键商业连接。",
-    "conscienceTitle": "有责任感的社交",
+    "conscienceTitle": "有<highlight>责任感</highlight>的社交",
     "conscienceDesc": "我们相信进步不应以牺牲地球为代价。通过以卓越的数字工具替代纸质名片，TactLink在赋能每段专业关系的同时，也在为可持续发展而努力。",
     "sdg0Goal": "目标12",
     "sdg0Label": "负责任消费",
@@ -199,7 +199,9 @@
     "generalTitle": "一般问题",
     "generalDesc": "任何您想了解的其他问题。",
     "hqTitle": "总部",
-    "hqBadge": "总部"
+    "hqBadge": "总部",
+    "address": "14 Arumugam Road, #03-06 LTC Building C",
+    "city": "Singapore 409959"
   },
   "Namecard": {
     "lastNamecardBadge": "您最后一张名片",

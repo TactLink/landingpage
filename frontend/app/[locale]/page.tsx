@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { fetchStrapiCollection, STRAPI_URL } from "@/lib/strapi";
 import ReactMarkdown from "react-markdown";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 function useInView(ref: { current: Element | null }): boolean {
   const [inView, setInView] = useState(false);
@@ -42,6 +42,7 @@ const FAQItem = memo(function FAQItem({ idx, faq, isOpen, onToggle }: {
 
 export default function HomePage() {
   const t = useTranslations("Home");
+  const locale = useLocale();
 
   const [localPartners, setLocalPartners] = useState<any[]>([]);
   const [globalPartners, setGlobalPartners] = useState<any[]>([]);
@@ -129,12 +130,12 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
+    fetchStrapiCollection("faqs", { locale, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   useEffect(() => {
     const check = () => {

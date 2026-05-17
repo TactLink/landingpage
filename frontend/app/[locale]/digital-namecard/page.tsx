@@ -4,10 +4,11 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { fetchStrapiCollection } from "@/lib/strapi";
 import ReactMarkdown from "react-markdown";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function DigitalNamecardPage() {
   const t = useTranslations("Namecard");
+  const locale = useLocale();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
@@ -22,12 +23,12 @@ export default function DigitalNamecardPage() {
   ];
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
+    fetchStrapiCollection("faqs", { locale, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
       .catch(() => {});
-  }, []);
+  }, [locale]);
 
   const feat1Bullets = [
     { icon: "M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2", label: t("feat1Bullet0") },

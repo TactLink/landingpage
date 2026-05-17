@@ -153,7 +153,7 @@
     "sol1Desc": "Transformasikan setiap pertemuan dengan alat jaringan yang powerful. Menggunakan kode QR sederhana, peserta dapat bertukar informasi secara instan, menciptakan pengalaman yang dinamis dan menarik.",
     "sol2Title": "Buka Kolaborasi Global",
     "sol2Desc": "Hancurkan hambatan geografis. TactLink menyediakan informasi yang mudah diakses untuk mendorong koneksi bisnis penting dalam skala internasional.",
-    "conscienceTitle": "Jaringan dengan Nurani",
+    "conscienceTitle": "Jaringan dengan <highlight>Nurani</highlight>",
     "conscienceDesc": "Kami percaya kemajuan tidak boleh datang dengan mengorbankan planet kita. Dengan mengganti kartu kertas dengan alat digital yang lebih baik, TactLink mendukung keberlanjutan sambil memberdayakan setiap hubungan profesional.",
     "sdg0Goal": "Tujuan 12",
     "sdg0Label": "Konsumsi Bertanggung Jawab",
@@ -199,7 +199,9 @@
     "generalTitle": "Pertanyaan Umum",
     "generalDesc": "Hal lain yang ingin Anda ketahui.",
     "hqTitle": "Kantor Pusat",
-    "hqBadge": "HQ"
+    "hqBadge": "HQ",
+    "address": "14 Arumugam Road, #03-06 LTC Building C",
+    "city": "Singapore 409959"
   },
   "Namecard": {
     "lastNamecardBadge": "Kartu Nama Terakhir yang Anda Butuhkan",

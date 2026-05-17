@@ -133,7 +133,7 @@ export default async function AboutPage() {
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 flex flex-col items-start lg:pr-10">
             <h2 className="text-[32px] md:text-[40px] font-extrabold text-white mb-6 leading-tight tracking-tight">
-              {t("conscienceTitle").split(" ").slice(0, -1).join(" ")} <span className="text-[#4CAF50]">{t("conscienceTitle").split(" ").slice(-1)[0]}</span>
+              {t.rich("conscienceTitle", { highlight: (c) => <span className="text-[#4CAF50]">{c}</span> })}
             </h2>
             <p className="text-lg text-white/70 mb-8 font-light leading-relaxed">
               {t("conscienceDesc")}

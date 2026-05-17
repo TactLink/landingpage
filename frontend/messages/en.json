@@ -153,7 +153,7 @@
     "sol1Desc": "Transform any gathering with powerful networking tools. Using simple QR codes, attendees can exchange information instantly, creating a dynamic and engaging experience.",
     "sol2Title": "Unlock Global Collaboration",
     "sol2Desc": "Break down geographical barriers. TactLink provides the readily accessible information needed to foster crucial business connections on an international scale.",
-    "conscienceTitle": "Networking with a Conscience",
+    "conscienceTitle": "Networking with a <highlight>Conscience</highlight>",
     "conscienceDesc": "We believe progress should not come at the expense of our planet. By replacing paper cards with a superior digital tool, TactLink champions sustainability while empowering every professional relationship.",
     "sdg0Goal": "Goal 12",
     "sdg0Label": "Responsible Consumption",
@@ -199,7 +199,9 @@
     "generalTitle": "General Questions",
     "generalDesc": "Anything else you'd like to know.",
     "hqTitle": "Headquarters",
-    "hqBadge": "HQ"
+    "hqBadge": "HQ",
+    "address": "14 Arumugam Road, #03-06 LTC Building C",
+    "city": "Singapore 409959"
   },
   "Namecard": {
     "lastNamecardBadge": "The Last Namecard You'll Need",
