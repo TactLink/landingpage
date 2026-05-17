@@ -1,11 +1,7 @@
 import createMiddleware from "next-intl/middleware";
-import { locales } from "./i18n/navigation";
+import { routing } from "./i18n/routing";
 
-export default createMiddleware({
-  locales,
-  defaultLocale: "en",
-  localeDetection: true,
-});
+export default createMiddleware(routing);
 
 export const config = {
   matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
