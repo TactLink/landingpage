@@ -46,7 +46,7 @@
     "stayGlobal": "Stay on Global",
     "langSuggestion": "Also switch to {language} for a better experience?",
     "switchLang": "Switch to {language}",
-    "keepLang": "Keep English"
+    "keepLang": "Not now"
   },
   "Home": {
     "trustedBy": "Trusted by 20+ leading organizations",

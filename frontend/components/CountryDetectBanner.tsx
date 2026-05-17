@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useRouter, usePathname } from "@/i18n/navigation";
+import { locales } from "@/i18n/navigation";
 
 const COUNTRY_MAP: Record<string, string> = {
   TH: "Thailand", SG: "Singapore", ID: "Indonesia",
@@ -13,9 +14,22 @@ const COUNTRY_FLAGS: Record<string, string> = {
   Malaysia: "🇲🇾", Cambodia: "🇰🇭", Vietnam: "🇻🇳", Philippines: "🇵🇭", Bangladesh: "🇧🇩",
 };
 
-// Country code → locale suggestion
-const LANG_MAP: Record<string, string> = { ID: "id" };
-const LANG_NAMES: Record<string, string> = { id: "Bahasa Indonesia" };
+const LANG_NAMES: Record<string, string> = {
+  en: "English",
+  zh: "中文",
+  id: "Bahasa Indonesia",
+};
+
+// Find first browser-preferred locale that's supported and differs from current
+function detectBrowserLocale(current: string): string | null {
+  if (typeof navigator === "undefined") return null;
+  const prefs = navigator.languages?.length ? navigator.languages : [navigator.language];
+  for (const pref of prefs) {
+    const base = pref.toLowerCase().split("-")[0];
+    if ((locales as readonly string[]).includes(base) && base !== current) return base;
+  }
+  return null;
+}
 
 type Step = 'country' | 'lang';
 
@@ -28,11 +42,27 @@ export default function CountryDetectBanner() {
   const [step, setStep] = useState<Step>('country');
   const [detected, setDetected] = useState<string | null>(null);
   const [detectedCode, setDetectedCode] = useState<string | null>(null);
+  const [suggestedLocale, setSuggestedLocale] = useState<string | null>(null);
   const [visible, setVisible] = useState(false);
   const [gone, setGone] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("tactlink_country")) return;
+    const hasCountry = !!localStorage.getItem("tactlink_country");
+    const hasLang = !!localStorage.getItem("tactlink_lang");
+
+    const browserLocale = hasLang ? null : detectBrowserLocale(locale);
+    if (browserLocale) setSuggestedLocale(browserLocale);
+
+    if (hasCountry) {
+      if (browserLocale) {
+        setStep('lang');
+        const timer = setTimeout(() => {
+          requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+        }, 1000);
+        return () => clearTimeout(timer);
+      }
+      return;
+    }
 
     const timer = setTimeout(() => {
       fetch("https://ipapi.co/json/")
@@ -44,26 +74,29 @@ export default function CountryDetectBanner() {
             setDetected(country);
             setDetectedCode(code);
             requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+          } else if (browserLocale) {
+            setStep('lang');
+            requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          if (browserLocale) {
+            setStep('lang');
+            requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
+          }
+        });
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [locale]);
 
   const dismiss = (afterFn?: () => void) => {
     setVisible(false);
     setTimeout(() => {
       afterFn?.();
-      if (step === 'country') {
-        const targetLocale = detectedCode ? LANG_MAP[detectedCode] : null;
-        if (targetLocale && targetLocale !== locale) {
-          setStep('lang');
-          requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
-        } else {
-          setGone(true);
-        }
+      if (step === 'country' && suggestedLocale) {
+        setStep('lang');
+        requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));
       } else {
         setGone(true);
       }
@@ -83,17 +116,21 @@ export default function CountryDetectBanner() {
   };
 
   const switchLang = () => {
-    const targetLocale = detectedCode ? LANG_MAP[detectedCode] : null;
     dismiss(() => {
-      if (targetLocale) router.replace(pathname, { locale: targetLocale });
+      localStorage.setItem("tactlink_lang", suggestedLocale ?? "");
+      if (suggestedLocale) router.replace(pathname, { locale: suggestedLocale });
     });
   };
 
-  const keepLang = () => dismiss();
+  const keepLang = () => {
+    dismiss(() => localStorage.setItem("tactlink_lang", locale));
+  };
 
-  if (gone || !detected) return null;
+  if (gone) return null;
+  if (step === 'country' && !detected) return null;
+  if (step === 'lang' && !suggestedLocale) return null;
 
-  const langName = detectedCode && LANG_MAP[detectedCode] ? LANG_NAMES[LANG_MAP[detectedCode]] : "";
+  const langName = suggestedLocale ? LANG_NAMES[suggestedLocale] : "";
 
   return (
     <div
@@ -104,7 +141,7 @@ export default function CountryDetectBanner() {
       }}
     >
       <div className="pointer-events-auto bg-white rounded-3xl shadow-2xl border border-gray-100 px-7 py-6 flex flex-col gap-5">
-        {step === 'country' ? (
+        {step === 'country' && detected ? (
           <>
             <div className="flex items-center gap-4">
               <span className="text-5xl shrink-0">{COUNTRY_FLAGS[detected]}</span>
