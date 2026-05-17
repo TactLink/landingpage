@@ -4,9 +4,5 @@
       "src": "frontend/package.json",
       "use": "@vercel/next"
     }
-  ],
-  "routes": [
-    { "src": "/", "status": 307, "headers": { "Location": "/en" } },
-    { "src": "/(.*)", "dest": "frontend/$1" }
   ]
 }
