@@ -43,7 +43,7 @@ export default async function LocaleLayout({
     <html lang={locale}>
       <body className={`${roboto.variable} ${montserrat.variable}`}>
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          src="https://www.googletagmanager.com/gtag/js?id=G-X0L7QG0PLB"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
@@ -51,7 +51,7 @@ export default async function LocaleLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-XXXXXXXXXX');
+            gtag('config', 'G-X0L7QG0PLB');
           `}
         </Script>
         <NextIntlClientProvider messages={messages}>
