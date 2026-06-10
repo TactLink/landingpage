@@ -1,7 +1,12 @@
 export default ({ env }) => ({
-  // Email configuration removed to avoid nodemailer dependency issues
-  // Add email configuration later if needed
-  
+  i18n: {
+    enabled: true,
+    config: {
+      defaultLocale: 'en',
+      locales: ['en', 'zh', 'id'],
+    },
+  },
+
   upload: {
     config: {
       provider: env('CLOUDINARY_NAME') ? '@strapi/provider-upload-cloudinary' : '@strapi/provider-upload-local',

@@ -1,61 +1,63 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 import { Mail, Phone, MapPin, LifeBuoy, Newspaper, MessageCircle, Send } from "lucide-react";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return {
+    title: t("contactTitle"),
+    description: t("contactDesc"),
+  };
+}
 
-export const metadata: Metadata = {
-  title: "Contact Us | TactLink",
-  description: "Have questions or want to partner with us? Get in touch with the TactLink team. We're here to help you revolutionize your professional networking.",
-};
+export default async function ContactPage() {
+  const t = await getTranslations("Contact");
 
-export default function ContactPage() {
   return (
     <main className="w-full min-h-screen bg-[#0A0D1E] text-white relative selection:bg-brand-accent selection:text-brand-primary">
-      {/* Background Gradients */}
       <div className="absolute top-[10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-brand-accent/10 blur-[120px] mix-blend-screen pointer-events-none" />
       <div className="absolute bottom-[-10%] right-0 w-[50%] h-[50%] rounded-full bg-[#374085]/20 blur-[150px] mix-blend-screen pointer-events-none" />
 
-      {/* Full-bleed map image at the top with overlay and hero text */}
       <div className="relative w-full h-[350px] md:h-[450px] mb-12 z-10 overflow-hidden pt-20">
         <Image
           src="/map.webp"
           alt="TactLink Map"
-          layout="fill"
-          objectFit="cover"
+          fill
+          style={{ objectFit: "cover" }}
           className="rounded-none object-center mix-blend-screen opacity-50"
           priority
         />
-        {/* Soft fade-out overlay that merges into the background */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A0D1E]/40 via-[#0A0D1E]/60 to-[#0A0D1E]" />
-        
-        {/* Hero text */}
+
         <div className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4 mt-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-6">
             <span className="flex h-2 w-2 rounded-full bg-brand-accent animate-pulse" />
-            <span className="text-sm font-medium text-white tracking-widest uppercase">Contact Us</span>
+            <span className="text-sm font-medium text-white tracking-widest uppercase">{t("badge")}</span>
           </div>
           <h1 className="font-extrabold mb-4 text-4xl md:text-5xl lg:text-6xl text-white text-center tracking-tight">
-            Let's <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-[#f8cdab]">Connect</span>
+            {t("heroTitle")} <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-[#f8cdab]">{t("heroTitleAccent")}</span>
           </h1>
           <p className="max-w-2xl text-lg md:text-xl text-white/70 text-center font-light leading-relaxed">
-            Ready to upgrade your association's network, or just have a question? <br className="hidden md:block"/>
-            We're here to help you grow across Southeast Asia.
+            {t("heroDesc")}
           </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 pb-24 flex flex-col lg:flex-row gap-12 lg:gap-16 relative z-20">
 
-        {/* Left Column: Partnership Email CTA */}
+        {/* Left Column */}
         <div className="flex-1 lg:max-w-2xl flex flex-col gap-8">
           <div>
-            <h2 className="text-[32px] font-extrabold text-white mb-2 tracking-tight">Partner with TactLink</h2>
-            <p className="text-white/60 mb-6 font-light leading-relaxed">
-              Looking to implement TactLink for your association or enterprise? Reach out to our regional business development team directly — we respond within 24 hours.
-            </p>
+            <h2 className="text-[32px] font-extrabold text-white mb-2 tracking-tight">{t("partnerTitle")}</h2>
+            <p className="text-white/60 mb-6 font-light leading-relaxed">{t("partnerDesc")}</p>
           </div>
 
-          {/* Direct Email CTA Card */}
           <div className="bg-white/5 backdrop-blur-xl rounded-3xl p-8 md:p-10 shadow-2xl border border-white/10 flex flex-col gap-6 relative overflow-hidden">
             <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand-accent/20 blur-[60px] rounded-full pointer-events-none" />
 
@@ -64,7 +66,7 @@ export default function ContactPage() {
                 <Mail size={26} className="text-brand-accent" />
               </div>
               <div>
-                <p className="text-white/50 text-sm font-medium uppercase tracking-widest">Drop us a line</p>
+                <p className="text-white/50 text-sm font-medium uppercase tracking-widest">{t("dropUsLine")}</p>
                 <p className="text-white font-extrabold text-xl">info@tactlink.com</p>
               </div>
             </div>
@@ -72,9 +74,7 @@ export default function ContactPage() {
             <div className="w-full h-px bg-white/10 relative z-10" />
 
             <div className="flex flex-col gap-3 relative z-10">
-              <p className="text-white/60 text-sm font-light leading-relaxed">
-                Select your country and we will route your email to the right regional team:
-              </p>
+              <p className="text-white/60 text-sm font-light leading-relaxed">{t("emailRoutingDesc")}</p>
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { country: 'Singapore', email: 'info@tactlink.com' },
@@ -102,26 +102,24 @@ export default function ContactPage() {
               href="mailto:info@tactlink.com?subject=Partnership Inquiry"
               className="mt-2 bg-brand-accent hover:bg-white text-brand-primary font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.02] relative z-10"
             >
-              Email Us Now <Send size={18} />
+              {t("emailNow")} <Send size={18} />
             </a>
-            <p className="text-xs text-white/30 text-center relative z-10">We typically respond within 1 business day.</p>
+            <p className="text-xs text-white/30 text-center relative z-10">{t("respondTime")}</p>
           </div>
         </div>
 
-        {/* Right Column: Other Inquiries + Headquarters */}
+        {/* Right Column */}
         <div className="flex-1 flex flex-col gap-10 lg:pt-8">
-
-          {/* Other Inquiries */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-extrabold text-white">Other Inquiries</h2>
+            <h2 className="text-2xl font-extrabold text-white">{t("otherInquiries")}</h2>
             <div className="flex flex-col gap-4">
               <a href="mailto:info@tactlink.com?subject=App Support Request" className="group bg-[#0d122b]/60 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 hover:border-brand-accent/40 hover:bg-[#151b3b]/80 hover:-translate-y-1 transition-all duration-300 flex items-center gap-5">
                 <div className="w-12 h-12 rounded-full bg-brand-accent/10 text-brand-accent flex flex-shrink-0 items-center justify-center group-hover:scale-110 group-hover:bg-brand-accent/20 transition-all">
                   <LifeBuoy size={22} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">App Support</h3>
-                  <p className="text-white/50 text-sm font-light">Facing issues with the mobile app? We can help.</p>
+                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">{t("appSupportTitle")}</h3>
+                  <p className="text-white/50 text-sm font-light">{t("appSupportDesc")}</p>
                 </div>
               </a>
 
@@ -130,8 +128,8 @@ export default function ContactPage() {
                   <Newspaper size={22} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">Press & Media</h3>
-                  <p className="text-white/50 text-sm font-light">Story angles, media assets, and PR.</p>
+                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">{t("pressTitle")}</h3>
+                  <p className="text-white/50 text-sm font-light">{t("pressDesc")}</p>
                 </div>
               </a>
 
@@ -140,8 +138,8 @@ export default function ContactPage() {
                   <MessageCircle size={22} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">General Questions</h3>
-                  <p className="text-white/50 text-sm font-light">Anything else you'd like to know.</p>
+                  <h3 className="font-bold text-white mb-1 group-hover:text-brand-accent transition-colors">{t("generalTitle")}</h3>
+                  <p className="text-white/50 text-sm font-light">{t("generalDesc")}</p>
                 </div>
               </a>
             </div>
@@ -149,15 +147,14 @@ export default function ContactPage() {
 
           <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-          {/* Headquarters */}
           <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-extrabold text-white">Headquarters</h2>
+            <h2 className="text-2xl font-extrabold text-white">{t("hqTitle")}</h2>
             <div className="bg-gradient-to-br from-[#374085]/40 to-[#0A0D1E] rounded-2xl p-8 shadow-2xl border border-white/10 text-white relative overflow-hidden group">
               <div className="absolute right-[-20px] top-[-20px] opacity-[0.03] group-hover:scale-110 transition-transform duration-700 pointer-events-none">
                 <MapPin size={150} />
               </div>
               <h3 className="font-bold text-2xl mb-6 relative z-10 flex items-center gap-2">
-                Singapore <span className="px-2.5 py-1 bg-white/10 rounded-lg font-medium text-xs tracking-widest uppercase ml-2">HQ</span>
+                Singapore <span className="px-2.5 py-1 bg-white/10 rounded-lg font-medium text-xs tracking-widest uppercase ml-2">{t("hqBadge")}</span>
               </h3>
               <div className="flex flex-col gap-4 relative z-10 text-[15px] text-white/80">
                 <div className="flex items-center gap-4">
@@ -176,16 +173,13 @@ export default function ContactPage() {
                   <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 border border-white/10">
                     <MapPin size={14} className="text-brand-accent" />
                   </div>
-                  <span className="leading-relaxed font-light">14 Arumugam Road, #03-06<br/>LTC Building C<br/>Singapore 409959</span>
+                  <span className="leading-relaxed font-light">{t("address")}<br/>{t("city")}</span>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </div>
-        
-        {/* Left Column: Partnership CTA */}
     </main>
   );
 }
