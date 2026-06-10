@@ -197,7 +197,7 @@ export default function HomePage() {
                 {keywords[currentKeywordIndex]}
               </span>
             </span>
-            {t("heroTitleSuffix")}
+            <span className="block">{t("heroTitleSuffix")}</span>
           </h1>
 
           <p className="mb-6 max-w-xl text-[15px] md:text-[16px] xl:text-[18px] text-white/90 leading-relaxed font-light animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: "0.35s" }}>
@@ -510,7 +510,7 @@ export default function HomePage() {
               >
                 <div className="absolute left-0 top-0 w-12 h-full bg-gradient-to-r from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
                 <div className="absolute right-0 top-0 w-12 h-full bg-gradient-to-l from-[#f8f9fc] to-transparent z-10 pointer-events-none" />
-                <div ref={localContentRef} className="flex gap-6 px-3 py-2 justify-center">
+                <div ref={localContentRef} className={`flex gap-6 py-2 ${localShouldScroll ? "justify-start px-12" : "justify-center px-3"}`}>
                   {localPartners.map((partner, idx) => {
                     const logoUrl = partner.logo?.url
                       ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
