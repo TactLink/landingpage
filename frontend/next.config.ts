@@ -7,6 +7,20 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: "/", destination: "/en", permanent: false }];
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/aaf2026",
+          destination: `${process.env.AAF_ZONE_URL}/aaf2026`,
+        },
+        {
+          source: "/aaf2026/:path*",
+          destination: `${process.env.AAF_ZONE_URL}/aaf2026/:path*`,
+        },
+      ],
+    };
+  },
 };
 
 export default withNextIntl(nextConfig);
