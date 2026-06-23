@@ -18,6 +18,14 @@ const nextConfig: NextConfig = {
           source: "/aaf2026/:path*",
           destination: `${process.env.AAF_ZONE_URL}/aaf2026/:path*`,
         },
+        {
+          source: "/festivalcisadane",
+          destination: `${process.env.CISADANE_ZONE_URL}/festivalcisadane`,
+        },
+        {
+          source: "/festivalcisadane/:path*",
+          destination: `${process.env.CISADANE_ZONE_URL}/festivalcisadane/:path*`,
+        },
       ],
     };
   },
