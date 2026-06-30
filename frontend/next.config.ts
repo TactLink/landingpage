@@ -26,6 +26,14 @@ const nextConfig: NextConfig = {
           source: "/festivalcisadane/:path*",
           destination: `${process.env.CISADANE_ZONE_URL}/festivalcisadane/:path*`,
         },
+        {
+          source: "/links",
+          destination: `${process.env.LINKS_ZONE_URL}/links`,
+        },
+        {
+          source: "/links/:path*",
+          destination: `${process.env.LINKS_ZONE_URL}/links/:path*`,
+        },
       ],
     };
   },
