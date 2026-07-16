@@ -185,9 +185,14 @@ export default function HomePage() {
       {/* HERO SECTION */}
       <section data-navbar-theme="dark" className="w-full bg-gradient-to-br from-[#1A1F4C] via-[#374085] to-[#cfa086] text-brand-white flex flex-col md:flex-row items-center justify-between px-6 md:px-12 lg:px-16 pt-24 pb-16 relative overflow-hidden min-h-screen">
         <div className="w-full md:w-[45%] lg:w-[48%] z-10 md:pr-8 lg:pr-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-6 animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: "0.05s" }}>
-            <span className="flex items-center text-yellow-400 text-sm">★★★★★</span>
-            <span className="text-sm font-medium text-white/90 tracking-wide">{t("trustedBy")}</span>
+          <div className="flex flex-wrap items-center gap-3 mb-6 animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: "0.05s" }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20">
+              <span className="flex items-center text-yellow-400 text-sm">★★★★★</span>
+              <span className="text-sm font-medium text-white/90 tracking-wide">{t("trustedBy")}</span>
+            </div>
+            <div className="inline-flex items-center px-3 py-1.5 rounded-full bg-white">
+              <img src="/sme500-award-badge.png" alt="Singapore SME 500 Award 2026" className="h-14 w-auto object-contain" />
+            </div>
           </div>
 
           <h1 className="font-extrabold mb-3 leading-[1.1] text-[32px] md:text-[42px] lg:text-[48px] xl:text-[64px] text-white min-h-[80px] md:min-h-[100px] xl:min-h-[140px] animate-[fade-up_0.6s_ease_both]" style={{ animationDelay: "0.2s" }}>
