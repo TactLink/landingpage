@@ -300,7 +300,7 @@ export default function DigitalNamecardPage() {
       </section>
 
       {/* BOTTOM CTA */}
-      <section data-navbar-theme="light" className="py-24 bg-gray-50 text-center">
+      <section id="download" data-navbar-theme="light" className="py-24 bg-gray-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-[32px] md:text-[48px] font-extrabold text-brand-primary mb-6 tracking-tight">{t("ctaTitle")}</h2>
           <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">{t("ctaDesc")}</p>

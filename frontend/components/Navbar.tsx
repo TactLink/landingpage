@@ -3,6 +3,7 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import Image from 'next/image';
 import { useState, useEffect, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
+import { getMobileAppStoreUrl } from "@/lib/appStore";
 
 const COUNTRIES = ["Global", "Thailand", "Singapore", "Indonesia", "Malaysia", "Cambodia", "Vietnam", "Philippines", "Bangladesh"];
 
@@ -23,6 +24,14 @@ export default function Navbar() {
 
   const openMenu = () => { setMobileOpen(true); requestAnimationFrame(() => setMenuVisible(true)); };
   const closeMenu = () => { setMenuVisible(false); setTimeout(() => setMobileOpen(false), 300); };
+
+  const handleDownloadClick = (e: React.MouseEvent) => {
+    const storeUrl = getMobileAppStoreUrl();
+    if (storeUrl) {
+      e.preventDefault();
+      window.open(storeUrl, "_blank", "noopener,noreferrer");
+    }
+  };
 
   useEffect(() => {
     const savedCountry = localStorage.getItem('tactlink_country');
@@ -198,9 +207,9 @@ export default function Navbar() {
                     {t("becomePartner")}
                   </Link>
                 ) : (
-                  <a href="#download" className="bg-brand-accent text-brand-primary hover:bg-white px-6 py-2.5 rounded-full font-bold text-[14px] shadow-lg shadow-brand-accent/20 transition-all transform hover:scale-[1.03]">
+                  <Link href="/digital-namecard#download" onClick={handleDownloadClick} className="bg-brand-accent text-brand-primary hover:bg-white px-6 py-2.5 rounded-full font-bold text-[14px] shadow-lg shadow-brand-accent/20 transition-all transform hover:scale-[1.03]">
                     {t("downloadApp")}
-                  </a>
+                  </Link>
                 )
               )}
             </div>
@@ -214,9 +223,9 @@ export default function Navbar() {
                   {t("partnerShort")}
                 </Link>
               ) : (
-                <a href="#download" className="bg-brand-accent text-brand-primary px-4 py-1.5 rounded-full font-bold text-[13px]">
+                <Link href="/digital-namecard#download" onClick={handleDownloadClick} className="bg-brand-accent text-brand-primary px-4 py-1.5 rounded-full font-bold text-[13px]">
                   {t("downloadShort")}
-                </a>
+                </Link>
               )
             )}
             <div className="flex items-center justify-end">
@@ -277,9 +286,9 @@ export default function Navbar() {
                     {t("becomePartner")}
                   </Link>
                 ) : (
-                  <a href="#download" onClick={closeMenu} className="block w-full text-center bg-brand-accent text-brand-primary font-bold text-[15px] py-3 rounded-xl shadow-md shadow-brand-accent/20 hover:bg-yellow-300 transition-colors">
+                  <Link href="/digital-namecard#download" onClick={(e) => { handleDownloadClick(e); closeMenu(); }} className="block w-full text-center bg-brand-accent text-brand-primary font-bold text-[15px] py-3 rounded-xl shadow-md shadow-brand-accent/20 hover:bg-yellow-300 transition-colors">
                     {t("downloadApp")}
-                  </a>
+                  </Link>
                 )}
               </div>
             )}
