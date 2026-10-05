@@ -103,7 +103,7 @@ export default function HomePage() {
         setLoading(true);
         const country = localStorage.getItem("tactlink_country") || "Global";
         setActiveCountry(country);
-        const data = await fetchStrapiCollection("partners", { populate: "*" });
+        const data = await fetchStrapiCollection("partners", { populate: "*", "pagination[pageSize]": 100, "sort[0]": "id:asc" });
         const locals: any[] = [];
         const globals: any[] = [];
         if (data && data.length > 0) {
