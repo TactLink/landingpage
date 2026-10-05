@@ -21,7 +21,7 @@ export default function RequestDemoPage() {
     fetch(`${STRAPI_URL}/api/countries?sort=name:asc&filters[publishedAt][$notNull]=true`)
       .then((r) => r.json())
       .then((json) => {
-        const names = (json.data ?? []).map((c: { attributes: { name: string } }) => c.attributes.name);
+        const names = (json.data ?? []).map((c: { name: string }) => c.name).filter((n: string) => n !== "Global");
         setCountries(names);
       })
       .catch(() => {});
@@ -34,13 +34,16 @@ export default function RequestDemoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus(t("sending"));
-    const res = await fetch(`${STRAPI_URL}/api/demo-requests`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ data: form }),
-    });
-    if (res.ok) setStatus(t("success"));
-    else setStatus(t("error"));
+    try {
+      const res = await fetch(`${STRAPI_URL}/api/demo-requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ data: form }),
+      });
+      setStatus(res.ok ? t("success") : t("error"));
+    } catch {
+      setStatus(t("error"));
+    }
   };
 
   return (

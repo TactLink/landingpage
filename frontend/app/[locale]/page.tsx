@@ -130,7 +130,7 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { locale, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
+    fetchStrapiCollection("faqs", { locale, "pagination[pageSize]": 100, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "homepage", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
@@ -516,7 +516,7 @@ export default function HomePage() {
                       ? partner.logo.url.startsWith("http") ? partner.logo.url : `${STRAPI_URL}${partner.logo.url}`
                       : undefined;
                     return (
-                      <a key={idx} href={partner.url || "#"} target="_blank" rel="noopener noreferrer"
+                      <a key={idx} href={partner.url || undefined} target="_blank" rel="noopener noreferrer"
                         className="flex-shrink-0 bg-white rounded-2xl shadow-md border border-gray-100 p-4 flex items-center justify-center w-32 h-32 hover:shadow-xl hover:scale-105 transition-all duration-300">
                         {logoUrl
                           ? <img src={logoUrl} alt={partner.name || "Partner"} className="h-20 w-20 object-contain" />
@@ -563,7 +563,7 @@ export default function HomePage() {
                           : undefined;
                         return (
                           <div key={`global-${half}-${copy}-${partner.id || idx}`} className="inline-flex shrink-0">
-                            <a href={partner.url || "#"} target="_blank" rel="noopener noreferrer"
+                            <a href={partner.url || undefined} target="_blank" rel="noopener noreferrer"
                               className="flex items-center justify-center w-20 h-20 opacity-60 hover:opacity-100 transition grayscale hover:grayscale-0 hover:scale-110 duration-300">
                               {logoUrl
                                 ? <img src={logoUrl} alt={partner.name || "Partner"} className="h-12 w-12 object-contain" />
@@ -778,7 +778,7 @@ export default function HomePage() {
       </section>
 
       {/* FAQ SECTION */}
-      <section data-navbar-theme="light" className="w-full py-20 px-6 md:px-12 lg:px-16 bg-brand-light">
+      {faqs.length > 0 && <section data-navbar-theme="light" className="w-full py-20 px-6 md:px-12 lg:px-16 bg-brand-light">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-extrabold text-brand-primary mb-8 text-center text-[30px] text-black">{t("faqTitle")}</h2>
           <div className="space-y-4">
@@ -787,7 +787,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
     </main>
   );
 }
