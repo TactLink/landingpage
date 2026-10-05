@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto, Montserrat } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import ClientLayout from "@/components/ClientLayout";
@@ -20,9 +20,19 @@ const montserrat = Montserrat({
   variable: "--font-montserrat",
 });
 
-export const metadata: Metadata = {
-  icons: { icon: "/tactlink_favicon.ico" },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+  return {
+    title: t("homeTitle"),
+    description: t("homeDesc"),
+    icons: { icon: "/tactlink_favicon.ico" },
+  };
+}
 
 export default async function LocaleLayout({
   children,

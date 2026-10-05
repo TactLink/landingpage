@@ -271,5 +271,10 @@
     "sending": "Mengirim...",
     "success": "Permintaan terkirim!",
     "error": "Gagal mengirim permintaan."
+  },
+  "NotFound": {
+    "title": "Halaman tidak ditemukan",
+    "desc": "Halaman yang Anda cari tidak ada atau telah dipindahkan.",
+    "backHome": "Kembali ke beranda"
   }
 }

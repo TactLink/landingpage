@@ -271,5 +271,10 @@
     "sending": "Sending...",
     "success": "Request sent!",
     "error": "Error sending request."
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "desc": "The page you are looking for does not exist or has been moved.",
+    "backHome": "Back to home"
   }
 }

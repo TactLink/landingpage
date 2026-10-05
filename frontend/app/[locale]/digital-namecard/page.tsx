@@ -23,7 +23,7 @@ export default function DigitalNamecardPage() {
   ];
 
   useEffect(() => {
-    fetchStrapiCollection("faqs", { locale, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
+    fetchStrapiCollection("faqs", { locale, "pagination[pageSize]": 100, "sort[0]": "order:asc", "sort[1]": "id:asc", "filters[page][$in][0]": "namecard", "filters[page][$in][1]": "both" })
       .then((data) => {
         if (data) setFaqs(data.map((f: any) => ({ q: f.question, a: f.answer })));
       })
@@ -261,7 +261,7 @@ export default function DigitalNamecardPage() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-[#f8cdab]">{t("referralTitleAccent")}</span>
           </h2>
           <p className="text-[18px] md:text-[20px] text-white/90 mb-10 leading-relaxed max-w-2xl mx-auto font-light">{t("referralDesc")}</p>
-          <a href="/contact?subject=Association+Referral" className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
+          <a href="mailto:info@tactlink.com?subject=Association Referral" className="inline-flex px-8 py-4 bg-brand-accent text-brand-primary rounded-full font-bold text-lg items-center gap-2 shadow-xl shadow-brand-accent/20 hover:scale-[1.03] hover:bg-white hover:text-brand-primary transition-all duration-300">
             {t("referralCta")}
             <svg className="w-5 h-5 text-brand-primary" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </a>
@@ -300,7 +300,7 @@ export default function DigitalNamecardPage() {
       </section>
 
       {/* BOTTOM CTA */}
-      <section data-navbar-theme="light" className="py-24 bg-gray-50 text-center">
+      <section id="download" data-navbar-theme="light" className="py-24 bg-gray-50 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-[32px] md:text-[48px] font-extrabold text-brand-primary mb-6 tracking-tight">{t("ctaTitle")}</h2>
           <p className="text-xl text-gray-500 mb-10 max-w-2xl mx-auto">{t("ctaDesc")}</p>
@@ -316,7 +316,7 @@ export default function DigitalNamecardPage() {
       </section>
 
       {/* FAQ */}
-      <section data-navbar-theme="light" className="w-full py-24 px-4 bg-white border-t border-gray-100">
+      {faqs.length > 0 && <section data-navbar-theme="light" className="w-full py-24 px-4 bg-white border-t border-gray-100">
         <div className="max-w-3xl mx-auto">
           <h2 className="font-extrabold text-brand-primary mb-12 text-center text-[32px] md:text-[40px] tracking-tight">{t("faqTitle")}</h2>
           <div className="space-y-4">
@@ -336,7 +336,7 @@ export default function DigitalNamecardPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section>}
     </main>
   );
 }
